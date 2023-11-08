@@ -38,6 +38,14 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Please permit the app access to the Photo Library Additions</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please permit the app access to the Photo Library</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Please permit the app access to the Camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Please permit the app access to the Microphone</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
