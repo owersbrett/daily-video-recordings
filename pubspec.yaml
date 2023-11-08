@@ -1,0 +1,40 @@
+name: daily_video_reminders
+description: A new Flutter project for daily video reminders.
+version: 1.0.0+1
+publish_to: 'none' # Prevent accidental publishing to pub.dev
+
+environment:
+  sdk: '>=3.1.5 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  intl: ^0.17.0 # For date formatting.
+  sqflite: any # It's better to specify a version number for production apps.
+  path_provider: any # Used for finding commonly used locations on the filesystem.
+  flutter_ffmpeg: any # A package that might be used for video processing.
+  # Add other dependencies you might need for your project.
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Include any assets like fonts, images, and videos.
+  # assets:
+  #   - assets/videos/
+  #   - assets/images/
+
+  # fonts:
+  #   - family: MyCustomFont
+  #     fonts:
+  #       - asset: fonts/MyCustomFont-Regular.ttf
+  #       - asset: fonts/MyCustomFont-Italic.ttf
+  #         style: italic
+
+# For iOS, you might need to add permissions in the Info.plist file for camera, microphone, and photo library usage.
+# For Android, you might need to add permissions in the AndroidManifest.xml for storage and camera.

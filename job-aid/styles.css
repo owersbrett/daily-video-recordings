@@ -1,0 +1,15 @@
+html, body {
+    height: 100%;
+}
+
+.install-flutter {
+    min-height: 100px;
+    /* Use the background-image property to set your image */
+    background-image: url('./install-flutter.png');
+  }
+
+.image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
