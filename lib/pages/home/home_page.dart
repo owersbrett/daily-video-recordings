@@ -4,6 +4,8 @@ import 'package:daily_video_reminders/data/db.dart';
 import 'package:daily_video_reminders/dropdown_chip.dart';
 import 'package:daily_video_reminders/habit_card.dart';
 import 'package:daily_video_reminders/habit_grid.dart';
+import 'package:daily_video_reminders/navigation/navigation.dart';
+import 'package:daily_video_reminders/pages/create_habit/create_habit_page.dart';
 import 'package:daily_video_reminders/report_app_bar.dart';
 import 'package:daily_video_reminders/pages/report/report_page.dart';
 import 'package:daily_video_reminders/pages/settings/settings_page.dart';
@@ -27,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int pageIndex = 0;
+  int pageIndex = 2;
   DateTime get now => DateTime.now();
   DateTime get fourDaysAgo => now.subtract(const Duration(days: 4));
   DateTime get threeDaysAgo => now.subtract(const Duration(days: 3));
@@ -156,6 +158,7 @@ class CupertinoIconButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Icon(CupertinoIcons.add),
       onPressed: () {
+        Navigation.createRoute(CreateHabitPage(), context);
         // Handle the plus icon action
       },
     );
