@@ -31,7 +31,7 @@ class WeekdayHero extends StatelessWidget {
                 dayOfWeek,
                 style: TextStyle(fontSize: expanded ? 20 : 16, fontWeight: expanded ? FontWeight.bold : FontWeight.normal),
               ),
-              SizedBox(height: 8), //
+              const SizedBox(height: 8), //
               CustomProgressIndicator(
                 size: expanded ? ProgressIndicatorSize.large : ProgressIndicatorSize.small,
                   value: score.toDouble(), label: dayOfMonth),

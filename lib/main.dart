@@ -1,10 +1,7 @@
 import 'package:daily_video_reminders/home_page.dart';
 import 'package:daily_video_reminders/theme.dart';
-import 'package:daily_video_reminders/today_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'dropdown_chip.dart';
 
 void main() {
   runApp(const MyApp());

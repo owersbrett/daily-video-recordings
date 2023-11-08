@@ -47,11 +47,11 @@ class _DropdownChipState<T> extends State<DropdownChip<T>> {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: _borderColor,
             border: Border.all(color: _borderColor),
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(50),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<T>(
