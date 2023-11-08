@@ -1,9 +1,10 @@
 import 'package:daily_video_reminders/dropdown_chip.dart';
-import 'package:daily_video_reminders/home_page.dart';
-import 'package:daily_video_reminders/today_is_widget.dart';
+import 'package:daily_video_reminders/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+
+import 'today_is_widget.dart';
 
 class TodayWidget extends StatelessWidget {
   @override

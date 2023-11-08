@@ -5,6 +5,7 @@ enum UnitType {
   words,
   prep,
   learn,
+  boolean,
   distance,
   minutes,
   weight,

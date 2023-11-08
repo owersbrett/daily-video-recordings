@@ -1,6 +1,7 @@
 import 'package:daily_video_reminders/data/habit.dart';
-import 'package:daily_video_reminders/stylized_checkbox.dart';
 import 'package:flutter/material.dart';
+
+import 'widgets/stylized_checkbox.dart';
 
 class HabitCard extends StatefulWidget {
   const HabitCard({super.key, required this.habit});

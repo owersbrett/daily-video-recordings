@@ -1,5 +1,5 @@
 import 'package:daily_video_reminders/dropdown_chip.dart';
-import 'package:daily_video_reminders/home_page.dart';
+import 'package:daily_video_reminders/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,7 +17,7 @@ class ReportAppBar extends StatelessWidget {
           children: [
             Text(
               "Weekly",
-              style: TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
             ),
             SizedBox(width: 4,),
             Text(

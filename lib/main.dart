@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/home_page.dart';
-import 'package:daily_video_reminders/theme.dart';
+import 'package:daily_video_reminders/pages/home/home_page.dart';
+import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 

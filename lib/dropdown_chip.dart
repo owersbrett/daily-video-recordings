@@ -47,7 +47,7 @@ class _DropdownChipState<T> extends State<DropdownChip<T>> {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             color: _borderColor,
             border: Border.all(color: _borderColor),

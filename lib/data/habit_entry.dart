@@ -48,6 +48,16 @@ class HabitEntry {
     };
   }
 
+  factory HabitEntry.bool(int id, int habitId, bool value, [int daysFromNow = 0]) {
+    return HabitEntry(
+      id: id,
+      habitId: habitId,
+      value: value,
+      unitType: UnitType.boolean,
+      createDate: DateTime.now().add(Duration(days: daysFromNow)),
+      updateDate: DateTime.now().add(Duration(days: daysFromNow)),
+    );
+  }
   factory HabitEntry.fromMap(Map<String, dynamic> map) {
     return HabitEntry(
       id: map['id'] as int,

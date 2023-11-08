@@ -1,18 +1,21 @@
+import 'package:daily_video_reminders/custom_progress_indicator.dart';
 import 'package:daily_video_reminders/daily_app_bar.dart';
 import 'package:daily_video_reminders/data/db.dart';
 import 'package:daily_video_reminders/dropdown_chip.dart';
 import 'package:daily_video_reminders/habit_card.dart';
 import 'package:daily_video_reminders/habit_grid.dart';
 import 'package:daily_video_reminders/report_app_bar.dart';
-import 'package:daily_video_reminders/today_is_widget.dart';
-import 'package:daily_video_reminders/today_widget.dart';
-import 'package:daily_video_reminders/weekday_hero.dart';
+import 'package:daily_video_reminders/pages/report/report_page.dart';
+import 'package:daily_video_reminders/pages/settings/settings_page.dart';
+import 'package:daily_video_reminders/pages/video_swipe/video_swipe_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'data/habit.dart';
-import 'data/habit_entry.dart';
+import '../../data/habit.dart';
+import '../../data/habit_entry.dart';
+import '../../widgets/weekday_hero.dart';
+import '../video_upload/video_upload_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -57,6 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _body() {
     if (pageIndex == 0) {
       return Center(
+        child: SettingsPage(),
+      );
+    } else if (pageIndex == 1) {
+      return ReportPage(
+        habitGridData: habitGridData,
+      );
+    } else if (pageIndex == 2) {
+      return Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -69,27 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ));
-    } else if (pageIndex == 1) {
-      return Center(
-        child: Text("Video"),
-      );
-    } else if (pageIndex == 2) {
-      return Center(
-        child: Text("Recordings"),
-      );
     } else if (pageIndex == 3) {
-      return Center(
-        child: Column(
-          children: [
-            TodayIsWidget(),
-            Expanded(child: HabitGrid(habits: Database.habits)),
-          ],
-        ),
-      );
+      return Center(child: VideoUploadPage());
     } else if (pageIndex == 4) {
-      return Center(
-        child: Text("Settings"),
-      );
+      return VideoSwipePage();
     } else {
       return Center(
         child: Text("Error"),
@@ -97,30 +91,28 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  List<List<Habit>> get habitGridData {
-    Map<Habit, List<HabitEntry>> habitEntries = new Map<Habit, List<HabitEntry>>();
-
-    Database.habitEntries.forEach((element) {
-      if (habitEntries.containsKey(element.habit)) {
-        habitEntries[element.habit]!.add(element);
-      } else {
-        habitEntries[element.habit] = [element];
-      }
-    });
-    return habitGridData;
+  Map<int, List<HabitEntry>> get habitGridData {
+    Map<int, List<HabitEntry>> habitEntries = <int, List<HabitEntry>>{};
+    for (var element in Database.habits) {
+      habitEntries[element.id] = [];
+    }
+    for (var element in Database.habitEntries) {
+      habitEntries[element.habitId]!.add(element);
+    }
+    return habitEntries;
   }
 
   Widget get appBarTitle {
     if (pageIndex == 0) {
-      return DailyAppBar();
-    } else if (pageIndex == 1) {
-      return Text("Video");
-    } else if (pageIndex == 2) {
-      return Text("Recordings");
-    } else if (pageIndex == 3) {
-      return ReportAppBar();
-    } else if (pageIndex == 4) {
       return Text("Settings");
+    } else if (pageIndex == 1) {
+      return ReportAppBar();
+    } else if (pageIndex == 2) {
+      return DailyAppBar();
+    } else if (pageIndex == 3) {
+      return Text("Upload Video");
+    } else if (pageIndex == 4) {
+      return Text("Watch");
     } else {
       return Text("Error");
     }
@@ -142,15 +134,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Theme.of(context).colorScheme.surfaceVariant.withOpacity(.3),
         items: [
           BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Reports'),
+          BottomNavigationBarItem(
             icon: Icon(Icons.repeat),
             label: 'Daily',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.video_call), label: 'Video'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.video_chat), label: 'Recordings'),
-          BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Reports'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
+              icon: Icon(Icons.remove_red_eye), label: 'Watch'),
         ],
       ),
     );

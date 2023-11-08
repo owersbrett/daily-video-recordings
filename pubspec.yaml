@@ -10,6 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  image_picker: 
+  video_player:
+
   intl: ^0.17.0 # For date formatting.
   sqflite: any # It's better to specify a version number for production apps.
   path_provider: any # Used for finding commonly used locations on the filesystem.
