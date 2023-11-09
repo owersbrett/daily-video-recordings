@@ -62,9 +62,14 @@ final ThemeData theme = ThemeData(
     labelStyle:
         const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
     focusedBorder: OutlineInputBorder(
+      gapPadding: 0,
       borderSide: BorderSide(color: Colors.black, width: 3),
     ),
+    disabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.black, width: 2),
+    ),
     enabledBorder: OutlineInputBorder(
+      gapPadding: 0,
       borderSide: BorderSide(color: Colors.black, width: 2),
     ),
     floatingLabelBehavior: FloatingLabelBehavior.always,

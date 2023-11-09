@@ -1,11 +1,15 @@
 import 'package:daily_video_reminders/data/habit.dart';
+import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+import 'custom_progress_indicator.dart';
 import 'widgets/stylized_checkbox.dart';
 
 class HabitCard extends StatefulWidget {
-  const HabitCard({super.key, required this.habit, this.voidCallback});
+  const HabitCard(
+      {super.key, required this.habit, this.voidCallback, this.progress = 100});
   final Habit habit;
+  final int progress;
 
   final VoidCallback? voidCallback;
   @override
@@ -13,6 +17,8 @@ class HabitCard extends StatefulWidget {
 }
 
 class _HabitCardState extends State<HabitCard> {
+  String get habitString =>
+      habit.verb + " " + habit.valueGoal.toString() + " " + habit.suffix;
   Habit get habit => widget.habit;
   bool _completed = false;
   void _onCheck(bool? value) {
@@ -66,46 +72,44 @@ class _HabitCardState extends State<HabitCard> {
                 children: [
                   Row(
                     children: [
+                      SizedBox(
+                        width: 16,
+                      ),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, top: 4),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(),
-                                  ),
-                                  Text("")
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 6.0),
-                                child: _titleRow(),
-                              ),
-                            ],
-                          ),
+                        child: Container(
+                          child: _titleRow(),
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(),
-                      ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 4, bottom: 16),
-                        child: StylizedCheckbox(
-                            isChecked: _completed,
-                            color: HexColor.fromHex(habit.hexColor),
-                            onTap: () => _onCheck(_completed)),
+                        padding: const EdgeInsets.only(
+                            right: 16, top: 16, bottom: 16),
+                        child: widget.progress == 100
+                            ? StylizedCheckbox(
+                                isChecked: _completed,
+                                color: HexColor.fromHex(habit.hexColor),
+                                onTap: () => _onCheck(_completed))
+                            : CustomProgressIndicator(
+                                size: ProgressIndicatorSize.medium,
+                                value: widget.progress.toDouble(),
+                                label: widget.progress.toStringAsPrecision(3) +
+                                    "%",
+                              ),
                       ),
                     ],
                   ),
                 ],
               ),
               starAndStreakRow(),
+              Positioned(
+                  left: 8,
+                  bottom: 8,
+                  child: Text(
+                    habit.frequencyType.toPrettyString(),
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
+                  )),
             ],
           ),
         ),
@@ -134,21 +138,14 @@ class _HabitCardState extends State<HabitCard> {
   Row _titleRow() {
     return Row(
       children: [
+        Text(habit.emoji, style: TextStyle(fontSize: 24)),
+        SizedBox(width: 8),
         Text(
-          habit.emoji,
-          style: TextStyle(fontSize: 24),
-        ),
-        SizedBox(
-          width: 8,
-        ),
-        Text(
-          habit.title,
+          habitString,
           style: TextStyle(
-              fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
         ),
-        Expanded(
-          child: Container(),
-        ),
+        Expanded(child: Container()),
       ],
     );
   }

@@ -19,7 +19,7 @@ class CustomProgressIndicator extends StatelessWidget {
       case ProgressIndicatorSize.small:
         return 32;
       case ProgressIndicatorSize.medium:
-        return 80;
+        return 65;
       case ProgressIndicatorSize.large:
         return 100;
     }
@@ -30,7 +30,7 @@ class CustomProgressIndicator extends StatelessWidget {
       case ProgressIndicatorSize.small:
         return 12;
       case ProgressIndicatorSize.medium:
-        return 18;
+        return 14;
       case ProgressIndicatorSize.large:
         return 24;
     }

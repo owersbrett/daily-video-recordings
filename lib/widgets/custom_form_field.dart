@@ -3,16 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-class CustomFormField extends StatelessWidget {
-  const CustomFormField({
-    super.key,
-    required this.focusNode,
-    required this.label,
-    required this.onChanged,
-    required this.validator,
-    required this.onEditingComplete
+class CustomFormField extends StatefulWidget {
+  const CustomFormField(
+      {super.key,
+      required this.focusNode,
+      required this.label,
+      required this.onChanged,
+      required this.validator,
+      required this.onEditingComplete,
+      this.keyboardType = TextInputType.text,
+      this.initialValue,
+      this.value,
+      this.enabled = true});
+  final TextEditingController? value;
+  final bool enabled;
+  final TextInputType keyboardType;
+  final String? initialValue;
 
-  });
   final FocusNode focusNode;
   final String label;
   final Function(String) onChanged;
@@ -20,9 +27,34 @@ class CustomFormField extends StatelessWidget {
   final Function? onEditingComplete;
 
   @override
+  State<CustomFormField> createState() => _CustomFormFieldState();
+}
+
+class _CustomFormFieldState extends State<CustomFormField> {
+  bool cleared = false;
+  TextEditingController controller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.value ?? TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-        focusNode: focusNode,
+        enabled: widget.enabled,
+        initialValue: widget.initialValue,
+        onTap: () {
+          if (!cleared) {
+            setState(() {
+              cleared = true;
+              controller.clear();
+            });
+          }
+        },
+        controller: controller,
+        keyboardType: widget.keyboardType,
+        focusNode: widget.focusNode,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           label: Container(
@@ -33,7 +65,7 @@ class CustomFormField extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Text(
-                label,
+                widget.label,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -46,18 +78,17 @@ class CustomFormField extends StatelessWidget {
         inputFormatters: [
           SentenceCaseInputFormatter(),
         ],
-        onChanged: onChanged,
+        onChanged: widget.onChanged,
         cursorColor: Colors.black,
         style: TextStyle(
           color: Colors.black,
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
-
-        validator: validator,
+        validator: widget.validator,
         onEditingComplete: () {
-          if (onEditingComplete != null) {
-            onEditingComplete!();
+          if (widget.onEditingComplete != null) {
+            widget.onEditingComplete!();
           }
         });
   }

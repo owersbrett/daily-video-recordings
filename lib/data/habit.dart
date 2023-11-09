@@ -4,16 +4,18 @@ import 'dart:convert';
 import 'package:daily_video_reminders/data/frequency_type.dart';
 import 'package:daily_video_reminders/habit_card.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:flutter/material.dart';
 
 import 'unit_type.dart';
 
 class Habit {
   final int id;
-  final String title;
+  final String verb;
   final int value;
   final int unitIncrement;
   final int valueGoal;
-  final String description;
+
+  final String suffix;
   final UnitType unitType;
   final FrequencyType frequencyType;
   final String emoji;
@@ -23,11 +25,11 @@ class Habit {
   final DateTime updateDate;
   Habit({
     required this.id,
-    required this.title,
+    required this.verb,
     required this.value,
     required this.unitIncrement,
     required this.valueGoal,
-    required this.description,
+    required this.suffix,
     required this.unitType,
     required this.frequencyType,
     required this.emoji,
@@ -39,11 +41,11 @@ class Habit {
 
   Habit copyWith({
     int? id,
-    String? title,
+    String? verb,
     int? value,
     int? unitIncrement,
     int? valueGoal,
-    String? description,
+    String? suffix,
     UnitType? unitType,
     FrequencyType? frequencyType,
     String? emoji,
@@ -54,11 +56,11 @@ class Habit {
   }) {
     return Habit(
       id: id ?? this.id,
-      title: title ?? this.title,
+      verb: verb ?? this.verb,
       value: value ?? this.value,
       unitIncrement: unitIncrement ?? this.unitIncrement,
       valueGoal: valueGoal ?? this.valueGoal,
-      description: description ?? this.description,
+      suffix: suffix ?? this.suffix,
       unitType: unitType ?? this.unitType,
       frequencyType: frequencyType ?? this.frequencyType,
       emoji: emoji ?? this.emoji,
@@ -72,11 +74,11 @@ class Habit {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'title': title,
+      'verb': verb,
       'value': value,
       'unitIncrement': unitIncrement,
       'valueGoal': valueGoal,
-      'description': description,
+      'suffix': suffix,
       'unitType': unitType.toMap(),
       'frequencyType': frequencyType.toMap(),
       'emoji': emoji,
@@ -89,16 +91,16 @@ class Habit {
 
   factory Habit.empty() {
     return Habit(
-      unitIncrement: 0,
+      unitIncrement: 1,
       id: -1,
-      title: "",
+      verb: "",
       value: 0,
-      valueGoal: 0,
-      description: "",
+      valueGoal: 1,
+      suffix: "",
       unitType: UnitType.count,
       emoji: "",
       streakEmoji: "",
-      hexColor: emerald.toHex(),
+      hexColor: Colors.black.toHex(),
       createDate: DateTime.now(),
       updateDate: DateTime.now(),
       frequencyType: FrequencyType.daily,
@@ -108,13 +110,14 @@ class Habit {
   factory Habit.fromMap(Map<String, dynamic> map) {
     return Habit(
       id: map['id'] as int,
-      title: map['title'] as String,
+      verb: map['verb'] as String,
       value: map['value'] as int,
       unitIncrement: map['unitIncrement'] as int,
       valueGoal: map['valueGoal'] as int,
-      description: map['description'] as String,
-      unitType: UnitType.fromMap(map['unitType'] as Map<String,dynamic>),
-      frequencyType: FrequencyType.fromMap(map['frequencyType'] as Map<String,dynamic>),
+      suffix: map['suffix'] as String,
+      unitType: UnitType.fromMap(map['unitType'] as Map<String, dynamic>),
+      frequencyType:
+          FrequencyType.fromMap(map['frequencyType'] as Map<String, dynamic>),
       emoji: map['emoji'] as String,
       streakEmoji: map['streakEmoji'] as String,
       hexColor: map['hexColor'] as String,
@@ -130,43 +133,42 @@ class Habit {
 
   @override
   String toString() {
-    return 'Habit(id: $id, title: $title, value: $value, unitIncrement: $unitIncrement, valueGoal: $valueGoal, description: $description, unitType: $unitType, frequencyType: $frequencyType, emoji: $emoji, streakEmoji: $streakEmoji, hexColor: $hexColor, createDate: $createDate, updateDate: $updateDate)';
+    return 'Habit(id: $id, verb: $verb, value: $value, unitIncrement: $unitIncrement, valueGoal: $valueGoal, suffix: $suffix, unitType: $unitType, frequencyType: $frequencyType, emoji: $emoji, streakEmoji: $streakEmoji, hexColor: $hexColor, createDate: $createDate, updateDate: $updateDate)';
   }
 
   @override
   bool operator ==(covariant Habit other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.title == title &&
-      other.value == value &&
-      other.unitIncrement == unitIncrement &&
-      other.valueGoal == valueGoal &&
-      other.description == description &&
-      other.unitType == unitType &&
-      other.frequencyType == frequencyType &&
-      other.emoji == emoji &&
-      other.streakEmoji == streakEmoji &&
-      other.hexColor == hexColor &&
-      other.createDate == createDate &&
-      other.updateDate == updateDate;
+
+    return other.id == id &&
+        other.verb == verb &&
+        other.value == value &&
+        other.unitIncrement == unitIncrement &&
+        other.valueGoal == valueGoal &&
+        other.suffix == suffix &&
+        other.unitType == unitType &&
+        other.frequencyType == frequencyType &&
+        other.emoji == emoji &&
+        other.streakEmoji == streakEmoji &&
+        other.hexColor == hexColor &&
+        other.createDate == createDate &&
+        other.updateDate == updateDate;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      title.hashCode ^
-      value.hashCode ^
-      unitIncrement.hashCode ^
-      valueGoal.hashCode ^
-      description.hashCode ^
-      unitType.hashCode ^
-      frequencyType.hashCode ^
-      emoji.hashCode ^
-      streakEmoji.hashCode ^
-      hexColor.hashCode ^
-      createDate.hashCode ^
-      updateDate.hashCode;
+        verb.hashCode ^
+        value.hashCode ^
+        unitIncrement.hashCode ^
+        valueGoal.hashCode ^
+        suffix.hashCode ^
+        unitType.hashCode ^
+        frequencyType.hashCode ^
+        emoji.hashCode ^
+        streakEmoji.hashCode ^
+        hexColor.hashCode ^
+        createDate.hashCode ^
+        updateDate.hashCode;
   }
 }
