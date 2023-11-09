@@ -19,7 +19,7 @@ class CustomProgressIndicator extends StatelessWidget {
       case ProgressIndicatorSize.small:
         return 32;
       case ProgressIndicatorSize.medium:
-        return 72;
+        return 80;
       case ProgressIndicatorSize.large:
         return 100;
     }
@@ -78,6 +78,7 @@ class CustomProgressIndicator extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
+            color: Colors.black,
             fontSize: _textSize.toDouble(), // Size of the text
             fontWeight: FontWeight.bold,
           ),

@@ -2,8 +2,8 @@ import 'package:daily_video_reminders/pages/home/home_page.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -15,15 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        appBarTheme: const AppBarTheme(
-          color: Colors.white,
-        ),
-        colorScheme: myColorScheme,
-        useMaterial3: true,
-      ),
+      theme: theme,
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

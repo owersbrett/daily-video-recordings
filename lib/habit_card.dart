@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'widgets/stylized_checkbox.dart';
 
 class HabitCard extends StatefulWidget {
-  const HabitCard({super.key, required this.habit});
+  const HabitCard({super.key, required this.habit, this.voidCallback});
   final Habit habit;
 
+  final VoidCallback? voidCallback;
   @override
   State<HabitCard> createState() => _HabitCardState();
 }
@@ -15,9 +16,13 @@ class _HabitCardState extends State<HabitCard> {
   Habit get habit => widget.habit;
   bool _completed = false;
   void _onCheck(bool? value) {
-    setState(() {
-      _completed = !_completed;
-    });
+    if (widget.voidCallback != null) {
+      widget.voidCallback!();
+    } else {
+      setState(() {
+        _completed = !_completed;
+      });
+    }
   }
 
   String get _starBuilder {
@@ -39,74 +44,70 @@ class _HabitCardState extends State<HabitCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          gradient: LinearGradient(
-            colors: [
-              HexColor.fromHex(habit.hexColor).withOpacity(.3),
-              HexColor.fromHex(habit.hexColor).withOpacity(.1),
-            ],
-            stops: [_completed ? .5 : 0.5, gradientStop],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return Material(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              colors: [
+                HexColor.fromHex(habit.hexColor).withOpacity(.3),
+                HexColor.fromHex(habit.hexColor).withOpacity(.1),
+              ],
+              stops: [_completed ? .5 : 0.5, gradientStop],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 8.0, top: 4, bottom: 4),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                Text("")
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 6.0),
-                              child: _titleRow(),
-                            ),
-                          ],
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0, top: 4),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(),
+                                  ),
+                                  Text("")
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 6.0),
+                                child: _titleRow(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 4),
-                      child: Text(habit.metricThree),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16,  bottom: 16),
-                      child: StylizedCheckbox(
-                          isChecked: _completed,
-                          onTap: () => _onCheck(_completed)),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            starAndStreakRow(),
-          ],
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 4, bottom: 16),
+                        child: StylizedCheckbox(
+                            isChecked: _completed,
+                            color: HexColor.fromHex(habit.hexColor),
+                            onTap: () => _onCheck(_completed)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              starAndStreakRow(),
+            ],
+          ),
         ),
       ),
     );
@@ -123,10 +124,6 @@ class _HabitCardState extends State<HabitCard> {
             ),
             Expanded(
               child: Container(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-              child: Text(habit.metricTwo),
             ),
           ],
         ),

@@ -34,7 +34,7 @@ class _DropdownChipState<T> extends State<DropdownChip<T>> {
   Color get _borderColor =>
       widget.borderColor ?? Theme.of(context).colorScheme.outline;
   Color get _backgroundColor =>
-      widget.backgroundColor ?? Theme.of(context).colorScheme.onSurfaceVariant;
+      widget.backgroundColor ?? Theme.of(context).colorScheme.outline;
   @override
   void initState() {
     super.initState();
@@ -49,7 +49,7 @@ class _DropdownChipState<T> extends State<DropdownChip<T>> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            color: _borderColor,
+            color: _backgroundColor,
             border: Border.all(color: _borderColor),
             borderRadius: BorderRadius.circular(50),
           ),

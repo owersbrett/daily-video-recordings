@@ -3,6 +3,7 @@ enum UnitType {
   actions,
   time,
   words,
+  count,
   prep,
   learn,
   boolean,

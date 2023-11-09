@@ -11,6 +11,12 @@
             "deviceId": "00008120-0018096A14D8C01E"
         },
         {
+            "name": "old_iphone",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "00008030-001C35E02232402E"
+        },
+        {
             "name": "daily_video_reminders (profile mode)",
             "request": "launch",
             "type": "dart",

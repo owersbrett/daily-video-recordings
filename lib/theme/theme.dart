@@ -1,4 +1,3 @@
-
 // Define your custom colors
 import 'package:flutter/material.dart';
 
@@ -17,7 +16,8 @@ const Color goldDark = Color(0xFFA78B2C); // A darker shade of gold
 final ColorScheme myColorScheme = ColorScheme(
   brightness: Brightness.light,
   primary: ruby, // Use ruby as the primary color
-  outlineVariant: rubyDark, // Use a darker shade of ruby for the outline variant
+  outlineVariant:
+      rubyDark, // Use a darker shade of ruby for the outline variant
   surfaceVariant: rubyLight,
   secondary: emerald, // Use emerald as the secondary color
   outline: emeraldDark,
@@ -28,6 +28,46 @@ final ColorScheme myColorScheme = ColorScheme(
   onPrimary: gold, // Text color on top of the primary color
   onSecondary: goldLight, // Text color on top of the secondary color
   onSurface: goldDark, // Typically the text color for inputs, cards, etc.
-  onBackground: Colors.black, // Typically the background color for pages or cards
+  onBackground:
+      Colors.black, // Typically the background color for pages or cards
   onError: Colors.white, // Text color on top of the error color
+);
+
+final ThemeData theme = ThemeData(
+  // This is the theme of your application.
+  //
+  appBarTheme: const AppBarTheme(
+    color: Colors.white,
+  ),
+  dropdownMenuTheme:
+      DropdownMenuThemeData(textStyle: TextStyle(color: Colors.white)),
+  textTheme: TextTheme(
+    bodyLarge: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 18,
+      color: Colors.black,
+    ),
+    bodySmall: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+  ),
+  colorScheme: myColorScheme,
+  inputDecorationTheme: InputDecorationTheme(
+    labelStyle:
+        const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.black, width: 3),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.black, width: 2),
+    ),
+    floatingLabelBehavior: FloatingLabelBehavior.always,
+  ),
+  useMaterial3: true,
 );

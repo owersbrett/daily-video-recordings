@@ -1,5 +1,6 @@
 import 'package:daily_video_reminders/dropdown_chip.dart';
 import 'package:daily_video_reminders/pages/home/home_page.dart';
+import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,8 @@ class TodayWidget extends StatelessWidget {
                 items: ["All", "Good", "Bad"],
                 onSelected: (String? value) {},
                 selectedItem: "All",
+                backgroundColor: emeraldLight,
+                borderColor: emeraldLight,
                 textColor: Colors.white,
               ),
             ),
