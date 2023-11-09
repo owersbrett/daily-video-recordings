@@ -6,6 +6,7 @@ import 'package:daily_video_reminders/habit_card.dart';
 import 'package:daily_video_reminders/habit_grid.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
 import 'package:daily_video_reminders/pages/create_habit/create_habit_page.dart';
+import 'package:daily_video_reminders/pages/video/raw.dart';
 import 'package:daily_video_reminders/report_app_bar.dart';
 import 'package:daily_video_reminders/pages/report/report_page.dart';
 import 'package:daily_video_reminders/pages/settings/settings_page.dart';
@@ -94,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ));
     } else if (pageIndex == 3) {
-      return Center(child: VideoUploadPage());
+      return CameraExampleHome();
     } else if (pageIndex == 4) {
       return VideoSwipePage();
     } else {

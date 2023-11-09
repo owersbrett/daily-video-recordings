@@ -26,7 +26,7 @@ class _VideoCameraState extends State<VideoCamera> {
   void initState() {
     super.initState();
     availableCameras().then((_cameras) {
-      controller = CameraController(_cameras[0], ResolutionPreset.max);
+      controller = CameraController(_cameras[1], ResolutionPreset.max);
       controller.initialize().then((_) {
         if (!mounted) {
           return;
@@ -53,22 +53,17 @@ class _VideoCameraState extends State<VideoCamera> {
       appBar: AppBar(title: Text('Record Video')),
       // The CameraPreview widget displays the live camera feed to the user
       body: CameraPreview(controller),
-      floatingActionButton: Column(
-        children: [
-          FloatingActionButton(
-            child: Icon(Icons.videocam),
-            // Provide an onPressed callback
-            onPressed: controller.value.isRecordingVideo ? () {} : (){},
-          ),
-          FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
             child: Icon(Icons.videocam),
             // Provide an onPressed callback
             onPressed: controller.value.isRecordingVideo
-                ? (){}
-                : (){},
+                ? () {
+                    controller.prepareForVideoRecording().then((_)=>controller.resumeVideoRecording());
+                  }
+                : () {
+                    controller.pauseVideoRecording();
+                  },
           ),
-        ],
-      ),
     );
   }
 }
