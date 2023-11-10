@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:daily_video_reminders/data/db.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
-import 'package:daily_video_reminders/pages/video/video_camera.dart';
+import 'package:daily_video_reminders/pages/video/record_video_page.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +57,16 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Container(),
+        actions: [
+          CloseButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: rubyLight.withOpacity(.5),
         child: Container(
@@ -73,16 +83,7 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
             ),
           ),
         ),
-        onPressed: () {
-          Navigation.createRoute(
-              VideoCamera(
-                camera: CameraDescription(
-                    name: "Video Note",
-                    lensDirection: CameraLensDirection.front,
-                    sensorOrientation: 0),
-              ),
-              context);
-        },
+        onPressed: () {},
       ),
       body: Stack(
         children: [

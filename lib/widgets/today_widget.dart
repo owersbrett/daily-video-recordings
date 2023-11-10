@@ -1,6 +1,8 @@
 import 'package:daily_video_reminders/dropdown_chip.dart';
 import 'package:daily_video_reminders/pages/home/home_page.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:daily_video_reminders/widgets/nav_dropdown.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -33,8 +35,27 @@ class TodayWidget extends StatelessWidget {
             Expanded(
               child: Container(),
             ),
-
-            CupertinoIconButton(), // Top right corner
+            IconButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return Positioned(
+                          child: Dialog(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("Me"),
+                                Text("You"),
+                              ],
+                            ),
+                          ),
+                          top: 0,
+                          right: 0,
+                        );
+                      });
+                },
+                icon: Icon(CupertinoIcons.add))
           ],
         ),
       ],

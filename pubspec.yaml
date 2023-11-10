@@ -13,6 +13,10 @@ dependencies:
   image_picker: 
   emoji_picker_flutter:
   flutter_colorpicker:
+  bloc:
+  logging:
+  hydrated_bloc:
+  flutter_bloc:
   video_player:
   camera:
 

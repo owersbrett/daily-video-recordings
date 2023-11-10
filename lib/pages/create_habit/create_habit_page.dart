@@ -8,10 +8,13 @@ import 'package:daily_video_reminders/pages/create_habit/selector_dialog.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:daily_video_reminders/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:logging/logging.dart';
 
 import '../../data/habit.dart';
 import '../../data/unit_type.dart';
+import '../../util/string_util.dart';
 import '../../validators/form_validator.dart'; // Include this package for color picker
 
 class CreateHabitPage extends StatefulWidget {
@@ -21,31 +24,21 @@ class CreateHabitPage extends StatefulWidget {
 
 class _CreateHabitPageState extends State<CreateHabitPage> {
   final _formKey = GlobalKey<FormState>();
+
+  bool hasFocusedOnVerb = false;
+  bool hasFocusedOnQuantity = false;
+  bool hasFocusedOnSuffix = false;
+  bool hasFocusedOnFrequency = false;
+  bool hasFocusedOnColor = false;
   Habit habit = Habit.empty();
   bool get complete => progress == 100;
   int get progress {
-    int _progress = 100;
-    if (habit.verb.isEmpty) {
-      _progress -= 40;
-    }
-    if (habit.suffix.isEmpty) {
-      _progress -= 20;
-    }
-    if (habit.valueGoal == 0) {
-      _progress -= 10;
-    }
-    if (habit.unitIncrement == 0) {
-      _progress -= 10;
-    }
-    if (habit.emoji.isEmpty) {
-      _progress -= 10;
-    }
-    if (habit.streakEmoji.isEmpty) {
-      _progress -= 5;
-    }
-    if (habit.hexColor.isEmpty) {
-      _progress -= 5;
-    }
+    int _progress = 0;
+    if (hasFocusedOnColor) _progress += 20;
+    if (hasFocusedOnVerb) _progress += 20;
+    if (hasFocusedOnQuantity) _progress += 20;
+    if (hasFocusedOnSuffix) _progress += 20;
+    if (hasFocusedOnFrequency) _progress += 20;
 
     return _progress;
   }
@@ -84,38 +77,28 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors
-                  .lightBlue, // Color of the border when the TextFormField is focused
-              width:
-                  2.5, // Width of the border when the TextFormField is focused
+              color: Colors.lightBlue, // Color of the border when the TextFormField is focused
+              width: 2.5, // Width of the border when the TextFormField is focused
             ),
-            borderRadius: BorderRadius.circular(
-                15.0), // Border corner radius when the TextFormField is focused
+            borderRadius: BorderRadius.circular(15.0), // Border corner radius when the TextFormField is focused
           ),
           errorBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors
-                  .red, // Color of the border when the TextFormField has an error
-              width:
-                  2.0, // Width of the border when the TextFormField has an error
+              color: Colors.red, // Color of the border when the TextFormField has an error
+              width: 2.0, // Width of the border when the TextFormField has an error
             ),
-            borderRadius: BorderRadius.circular(
-                10.0), // Border corner radius when the TextFormField has an error
+            borderRadius: BorderRadius.circular(10.0), // Border corner radius when the TextFormField has an error
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.red
-                  .shade700, // Color of the border when the TextFormField is focused and has an error
-              width:
-                  2.5, // Width of the border when the TextFormField is focused and has an error
+              color: Colors.red.shade700, // Color of the border when the TextFormField is focused and has an error
+              width: 2.5, // Width of the border when the TextFormField is focused and has an error
             ),
-            borderRadius: BorderRadius.circular(
-                15.0), // Border corner radius when the TextFormField is focused and has an error
+            borderRadius: BorderRadius.circular(15.0), // Border corner radius when the TextFormField is focused and has an error
           ),
           filled: true, // If true, the text field will be filled with fillColor
           fillColor: Colors.blue.shade50, // The color of the fill when enabled
-          contentPadding:
-              EdgeInsets.all(16.0), // Inner padding of the TextFormField
+          contentPadding: EdgeInsets.all(16.0), // Inner padding of the TextFormField
         ),
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.done,
@@ -123,7 +106,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   }
 
   final FocusNode _verbFocus = FocusNode();
-  final FocusNode _unitsFocus = FocusNode();
+  final FocusNode _quantityFocus = FocusNode();
   final FocusNode _suffixFocus = FocusNode();
   final FocusNode _unitTypeFocus = FocusNode();
   final FocusNode _frequencyFocus = FocusNode();
@@ -139,8 +122,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
 
   void onPickColor(Color color) {
     setState(() {
-      habit = habit.copyWith(
-          hexColor: '#${color.value.toRadixString(16).padLeft(8, '0')}');
+      habit = habit.copyWith(hexColor: '#${color.value.toRadixString(16).padLeft(8, '0')}');
     });
     Navigator.of(context).pop();
   }
@@ -150,6 +132,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     super.initState();
     _frequencyController.text = "Daily";
     habit = habit.copyWith(verb: _verbController.text, valueGoal: 10, suffix: "Pages", frequencyType: FrequencyType.daily);
+    _verbFocus.requestFocus();
   }
 
   void setHabit(Habit habit) {
@@ -167,10 +150,11 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     );
   }
 
+  bool get focused => _verbFocus.hasFocus || _quantityFocus.hasFocus || _suffixFocus.hasFocus;
+
   TextEditingController _verbController = TextEditingController(text: "Read");
   TextEditingController _quantityController = TextEditingController(text: "10");
-  TextEditingController _suffixController =
-      TextEditingController(text: "Pages");
+  TextEditingController _suffixController = TextEditingController(text: "Pages");
   TextEditingController _frequencyController = TextEditingController();
 
   @override
@@ -189,10 +173,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                 ),
                 Text(
                   "Track a Habit",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24),
+                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 Expanded(
                   child: Container(),
@@ -219,16 +200,20 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
-                        FocusScope.of(context).unfocus();
+                        if (focused) {
+                          FocusScope.of(context).unfocus();
+                        } else {
+                          setState(() {
+                            hasFocusedOnColor = true;
+                          });
+                          pickColor();
+                        }
                       },
-                      child: HabitCard(habit: habit, progress: progress),
+                      child: HabitCard(habit: habit, progress: progress, checkable: false),
                     ),
                     _verbField(context),
-
                     _quantityField(context),
-
                     _suffixField(context),
-
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
@@ -237,20 +222,14 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                               context: context,
                               builder: (ctx) {
                                 return SelectorDialog(
-                                  values: FrequencyType.values
-                                      .map((e) => e.toPrettyString())
-                                      .toList(),
+                                  values: FrequencyType.values.map((e) => e.toPrettyString()).toList(),
                                   onSelect: (String prettyString) {
                                     setState(() {
                                       _frequencyController.text = prettyString;
                                     });
                                     setHabit(
                                       habit.copyWith(
-                                          frequencyType: FrequencyType.values
-                                              .where((element) =>
-                                                  element.toPrettyString() ==
-                                                  prettyString)
-                                              .first),
+                                          frequencyType: FrequencyType.values.where((element) => element.toPrettyString() == prettyString).first),
                                     );
                                     Navigator.of(context).pop();
                                   },
@@ -261,59 +240,52 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           focusNode: _frequencyFocus,
                           label: "Frequency",
                           enabled: false,
-                          onChanged: (val) =>
-                              setHabit(habit.copyWith(verb: val)),
-                          validator: (str) =>
-                              FormValidator.nonEmpty(str, "Frequency"),
-                          onEditingComplete: () =>
-                              FocusScope.of(context).unfocus(),
+                          onChanged: (val) {
+                            setState(() {
+                              hasFocusedOnFrequency = true;
+                            });
+                            setHabit(habit.copyWith(verb: val));
+                          },
+                          validator: (str) => FormValidator.nonEmpty(str, "Frequency"),
+                          onEditingComplete: () => FocusScope.of(context).unfocus(),
                           value: _frequencyController,
                         ),
                       ),
                     ),
-
-                    SizedBox(
-                      height: 32,
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: GestureDetector(
-                    //     onTap: () {
-                    //       showDialog(
-                    //           context: context,
-                    //           builder: (ctx) {
-                    //             return SelectorDialog(
-                    //               values: UnitType.values
-                    //                   .map((e) => e.toPrettyString())
-                    //                   .toList(),
-                    //               onSelect: (String prettyString) {
-                    //                 setHabit(
-                    //                   habit.copyWith(
-                    //                       unitType: UnitType.values
-                    //                           .where((element) =>
-                    //                               element.toPrettyString() ==
-                    //                               prettyString)
-                    //                           .first),
-                    //                 );
-                    //                 Navigator.of(context).pop();
-                    //               },
-                    //             );
-                    //           });
-                    //     },
-                    //     child: CustomFormField(
-                    //       focusNode: _incrementFocus,
-                    //       label: "Unit",
-                    //       onChanged: (val) =>
-                    //           setHabit(habit.copyWith(title: val)),
-                    //       validator: (str) =>
-                    //           FormValidator.nonEmpty(str, "Unit"),
-                    //       onEditingComplete: () =>
-                    //           FocusScope.of(context).requestFocus(_goalFocus),
-                    //       value: TextEditingController(
-                    //           text: habit.unitType.toPrettyString()),
-                    //     ),
-                    //   ),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Visibility(
+                              visible: progress >= 80,
+                              child: InkWell(
+                                onTap: () {
+                                  Logger.root.info("Habit: $habit");
+                                  // BlocProvider.of<HabitBloc>(context).add(HabitAdded(habit));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.black, width: 2),
+                                      color: emeraldLight),
+                                  height: MediaQuery.of(context).size.height * .2,
+                                  child: Center(
+                                      child: Text(
+                                    "Add",
+                                    style: TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        shadows: StringUtil.outlinedText(strokeWidth: 1)),
+                                  )),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -331,9 +303,19 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
           focusNode: _suffixFocus,
           value: _suffixController,
           label: "Suffix",
-          onChanged: (val) => setHabit(habit.copyWith(suffix: val)),
+          onChanged: (val) {
+            setState(() {
+              hasFocusedOnSuffix = true;
+            });
+            setHabit(habit.copyWith(suffix: val));
+          },
           validator: (str) => FormValidator.nonEmpty(str, "Suffix"),
-          onEditingComplete: () => FocusScope.of(context).unfocus()),
+          onEditingComplete: () {
+            setState(() {
+              hasFocusedOnFrequency = true;
+            });
+            FocusScope.of(context).unfocus();
+          }),
     );
   }
 
@@ -341,14 +323,22 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CustomFormField(
-        focusNode: _unitsFocus,
+        focusNode: _quantityFocus,
         label: "Quantity",
         value: _quantityController,
-        onChanged: (val) =>
-            setHabit(habit.copyWith(valueGoal: int.tryParse(val))),
+        onChanged: (val) {
+          setState(() {
+            hasFocusedOnQuantity = true;
+          });
+          setHabit(habit.copyWith(valueGoal: int.tryParse(val)));
+        },
         validator: (str) => FormValidator.mustBeAnInt(str, "Quantity"),
-        onEditingComplete: () =>
-            FocusScope.of(context).requestFocus(_suffixFocus),
+        onEditingComplete: () {
+          setState(() {
+            hasFocusedOnSuffix = true;
+          });
+          FocusScope.of(context).requestFocus(_suffixFocus);
+        },
       ),
     );
   }
@@ -360,10 +350,19 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         value: _verbController,
         focusNode: _verbFocus,
         label: "Verb",
-        onChanged: (val) => setHabit(habit.copyWith(verb: val)),
-        validator: (str) => FormValidator.nonEmpty(str, "Habit"),
-        onEditingComplete: () =>
-            FocusScope.of(context).requestFocus(_unitsFocus),
+        onChanged: (val) {
+          setState(() {
+            hasFocusedOnVerb = true;
+          });
+          setHabit(habit.copyWith(verb: val));
+        },
+        validator: (str) => FormValidator.nonEmpty(str, "Verb"),
+        onEditingComplete: () {
+          setState(() {
+            hasFocusedOnQuantity = true;
+          });
+          FocusScope.of(context).requestFocus(_quantityFocus);
+        },
       ),
     );
   }

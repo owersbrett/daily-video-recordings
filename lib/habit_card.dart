@@ -7,9 +7,14 @@ import 'widgets/stylized_checkbox.dart';
 
 class HabitCard extends StatefulWidget {
   const HabitCard(
-      {super.key, required this.habit, this.voidCallback, this.progress = 100});
+      {super.key,
+      required this.habit,
+      this.voidCallback,
+      this.progress = 100,
+      this.checkable = true});
   final Habit habit;
   final int progress;
+  final bool checkable;
 
   final VoidCallback? voidCallback;
   @override
@@ -51,19 +56,23 @@ class _HabitCardState extends State<HabitCard> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                color: HexColor.fromHex(habit.hexColor).withOpacity(.5),
+                width: 2),
             gradient: LinearGradient(
               colors: [
+                HexColor.fromHex(habit.hexColor).withOpacity(.5),
                 HexColor.fromHex(habit.hexColor).withOpacity(.3),
-                HexColor.fromHex(habit.hexColor).withOpacity(.1),
               ],
               stops: [_completed ? .5 : 0.5, gradientStop],
               begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              end: Alignment.centerRight,
             ),
           ),
           child: Stack(
@@ -85,7 +94,7 @@ class _HabitCardState extends State<HabitCard> {
                             right: 16, top: 16, bottom: 16),
                         child: widget.progress == 100
                             ? StylizedCheckbox(
-                                isChecked: _completed,
+                                isChecked: widget.checkable ? _completed : true,
                                 color: HexColor.fromHex(habit.hexColor),
                                 onTap: () => _onCheck(_completed))
                             : CustomProgressIndicator(
@@ -107,8 +116,8 @@ class _HabitCardState extends State<HabitCard> {
                     habit.frequencyType.toPrettyString(),
                     style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey),
+                        fontWeight: FontWeight.w300,
+                        color: Colors.black),
                   )),
             ],
           ),

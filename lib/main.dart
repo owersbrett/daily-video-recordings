@@ -2,10 +2,16 @@ import 'package:camera/camera.dart';
 import 'package:daily_video_reminders/pages/home/home_page.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
+
 List<CameraDescription> cameras = <CameraDescription>[];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
   cameras = await availableCameras();
   runApp(const MyApp());
 }

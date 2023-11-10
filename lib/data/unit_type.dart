@@ -1,4 +1,4 @@
-import 'package:daily_video_reminders/util/StringUtil.dart';
+import 'package:daily_video_reminders/util/string_util.dart';
 
 enum UnitType {
   fluidOunce,

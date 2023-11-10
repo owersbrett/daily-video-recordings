@@ -56,12 +56,19 @@ class _CustomFormFieldState extends State<CustomFormField> {
         keyboardType: widget.keyboardType,
         focusNode: widget.focusNode,
         decoration: InputDecoration(
+          suffixIcon: GestureDetector(
+            onTap: () {
+              controller.clear();
+            },
+            child: Icon(
+              Icons.close,
+              color: Colors.black,
+            ),
+          ),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           label: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 1, color: Colors.black),
-                color: Colors.black),
+            decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 1, color: Colors.black), color: Colors.black),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Text(
@@ -96,8 +103,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
 
 class SentenceCaseInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // Capitalize the first letter of each sentence
     final text = _capitalizeSentences(newValue.text);
     return TextEditingValue(
@@ -110,8 +116,7 @@ class SentenceCaseInputFormatter extends TextInputFormatter {
     if (input.isEmpty) return input;
 
     final sentences = input.split(RegExp(r'(?<=[.!?])\s+'));
-    final capitalizedSentences =
-        sentences.map((sentence) => _capitalizeFirstLetter(sentence));
+    final capitalizedSentences = sentences.map((sentence) => _capitalizeFirstLetter(sentence));
     return capitalizedSentences.join(' ');
   }
 

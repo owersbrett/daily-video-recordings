@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
-class VideoCamera extends StatefulWidget {
+class RecordVideoPage extends StatefulWidget {
   final CameraDescription camera;
 
-  const VideoCamera({required this.camera});
+  const RecordVideoPage({required this.camera});
 
   @override
-  _VideoCameraState createState() => _VideoCameraState();
+  _RecordVideoPageState createState() => _RecordVideoPageState();
 }
 
-class _VideoCameraState extends State<VideoCamera> {
+class _RecordVideoPageState extends State<RecordVideoPage> {
   late CameraController controller;
   late Future<void> _initializeControllerFuture;
 
@@ -50,20 +50,24 @@ class _VideoCameraState extends State<VideoCamera> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Record Video')),
+
       // The CameraPreview widget displays the live camera feed to the user
       body: CameraPreview(controller),
       floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.videocam),
-            // Provide an onPressed callback
-            onPressed: controller.value.isRecordingVideo
-                ? () {
-                    controller.prepareForVideoRecording().then((_)=>controller.resumeVideoRecording());
-                  }
-                : () {
-                    controller.pauseVideoRecording();
-                  },
-          ),
+        child: Icon(Icons.videocam),
+        // Provide an onPressed callback
+        onPressed: controller.value.isRecordingVideo
+            ? () {
+                controller
+                    .prepareForVideoRecording()
+                    .then((_) => controller.resumeVideoRecording());
+              }
+            : () {
+                controller.pauseVideoRecording();
+              },
+      ),
     );
   }
 }
+
+

@@ -1,11 +1,14 @@
 import 'package:daily_video_reminders/dropdown_chip.dart';
 import 'package:daily_video_reminders/pages/home/home_page.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:daily_video_reminders/widgets/nav_dropdown.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DailyAppBar extends StatelessWidget {
-  const DailyAppBar({super.key});
+  const DailyAppBar({super.key, required this.icon});
+  final IconButton icon;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +46,7 @@ class DailyAppBar extends StatelessWidget {
                 onSelected: (String? value) {},
                 selectedItem: "All",
                 backgroundColor: emeraldLight,
-                                borderColor: emeraldLight,
-
+                borderColor: emeraldLight,
                 textColor: Colors.white,
               ),
             ),
@@ -54,8 +56,7 @@ class DailyAppBar extends StatelessWidget {
             Expanded(
               child: Container(),
             ),
-
-            CupertinoIconButton(), // Top right corner
+            icon
           ],
         ),
       ],
