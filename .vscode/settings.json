@@ -1,6 +1,7 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
     "dart.lineLength": 150,
+    "dart.evaluateGettersInDebugViews": false,
     "[dart]":{
         "editor.tabSize": 2,
         "editor.rulers": [

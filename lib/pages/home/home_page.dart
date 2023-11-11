@@ -129,7 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (pageIndex == 2) {
       return DailyAppBar(
           icon: IconButton(
-        icon: Icon(CupertinoIcons.add),
+        icon: Icon(Icons.add_circle_outline_sharp),
+        iconSize: 32,
+        color: emeraldDark,
         onPressed: () {
           setState(() {
             showCreateDropdown = true;

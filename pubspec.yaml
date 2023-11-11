@@ -13,9 +13,14 @@ dependencies:
   image_picker: 
   emoji_picker_flutter:
   flutter_colorpicker:
+  equatable:
   bloc:
   logging:
+  swipable_stack:
+
+  flutter_slidable:
   hydrated_bloc:
+  uuid:
   flutter_bloc:
   video_player:
   camera:
