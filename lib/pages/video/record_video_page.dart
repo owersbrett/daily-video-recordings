@@ -37,7 +37,6 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   @override
   void initState() {
     super.initState();
-    _aspectRatio =  MediaQuery.of(context).size.aspectRatio;
     _initCamera();
     _videoPlayerController = VideoPlayerController.asset(
       "",
