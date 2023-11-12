@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:daily_video_reminders/data/db.dart';
+import 'package:daily_video_reminders/data/multimedia_file.dart';
+import 'package:daily_video_reminders/main.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
 import 'package:daily_video_reminders/pages/video/record_video_page.dart';
+import 'package:daily_video_reminders/service/file_directories_service.dart';
+import 'package:daily_video_reminders/service/media_service.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +20,8 @@ class VideoUploadPage extends StatefulWidget {
 }
 
 class _VideoUploadPageState extends State<VideoUploadPage> {
+  Future<List<MultimediaFile>>? _multimediaFiles;
+
   VideoPlayerController? _controller;
 
   XFile? _videoFile;
@@ -51,63 +59,91 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize the controller with a video asset or network URL
+    _multimediaFiles = MediaService.retrieveMultimediaFiles();
+  }
+
+  void refreshData() {
+    setState(() {
+      _multimediaFiles = MediaService.retrieveMultimediaFiles();
+    });
+  }
+
+  Widget gridItem(MultimediaFile file, int i, bool hasThumbnail) {
+    return GridTile(
+      child: GestureDetector(
+        onTap: () {
+          if (hasThumbnail) {
+            log(file.videoFile!.path);
+          } else {
+            MediaService.setThumbnail(file.videoFile!)
+                .then((value) => refreshData());
+          }
+        },
+        child: Image.file(
+          file.photoFile ?? File(""),
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return GestureDetector(
+              onTap: () {},
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.grey,
+                    size: 50,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      footer: Container(
+        padding: EdgeInsets.all(8.0),
+        color: Colors.black54,
+        child: Text(
+          "Video ${i + 1}",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Container(),
-        actions: [
-          CloseButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: rubyLight.withOpacity(.5),
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Icon(
-              CupertinoIcons.circle_fill,
-              size: 36,
-              color: rubyLight,
-            ),
-          ),
-        ),
-        onPressed: () {},
-      ),
       body: Stack(
         children: [
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: _pickVideo,
-                  child: Text('Pick Video'),
-                ),
-                SizedBox(height: 20),
-                _videoFile != null
-                    ? Text('Selected video: ${_videoFile!.name}')
-                    : Text('No video selected.'),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _videoFile != null ? _uploadVideo : null,
-                  child: Text('Upload'),
-                  style: ElevatedButton.styleFrom(
-                    primary: _videoFile != null ? Colors.blue : Colors.grey,
-                  ),
-                ),
-              ],
+            child: FutureBuilder(
+              future: _multimediaFiles,
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasData) {
+                  var files = snapshot.data as List<MultimediaFile>;
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 9 / 19.5 * 1.5,
+                    ),
+                    itemCount: files.length,
+                    itemBuilder: (ctx, i) {
+                      return gridItem(files[i], i, files[i].photoFile != null);
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("Error loading videos"));
+                }
+                return Center(
+                  child: Text("No videos found"),
+                );
+              },
             ),
           ),
         ],

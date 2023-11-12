@@ -120,7 +120,7 @@ class Database {
       verb: "Exercise",
       value: 12,
       valueGoal: 30,
-      suffix: "30 minutes",
+      suffix: "minutes",
       unitType: UnitType.minutes,
       emoji: "🏋️‍♂️",
       hexColor: "#ff5733",

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
+import 'package:daily_video_reminders/data/multimedia_file.dart';
 import 'package:daily_video_reminders/main.dart';
 import 'package:daily_video_reminders/service/media_service.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
@@ -36,6 +37,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   @override
   void initState() {
     super.initState();
+    _aspectRatio =  MediaQuery.of(context).size.aspectRatio;
     _initCamera();
     _videoPlayerController = VideoPlayerController.asset(
       "",
@@ -89,7 +91,8 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     });
   }
 
-  Widget _videoPlayerAndRecorder() => _isPreviewingVideo ? _videoPlayer() : _videoRecorder();
+  Widget _videoPlayerAndRecorder() =>
+      _isPreviewingVideo ? _videoPlayer() : _videoRecorder();
   Widget _videoPlayer() => GestureDetector(
         onTap: _toggleVideoPlayer,
         child: AspectRatio(
@@ -166,7 +169,9 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                       ))),
               Center(
                 child: GestureDetector(
-                  onTap: _isPreviewingVideo ? _toggleVideoPlayer : _toggleRecording,
+                  onTap: _isPreviewingVideo
+                      ? _toggleVideoPlayer
+                      : _toggleRecording,
                   child: Container(
                     height: _isRecording ? 75 : 65,
                     width: _isRecording ? 75 : 65,
@@ -191,7 +196,8 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
               ),
               Expanded(
                 child: Visibility(
-                  visible: clips.length > 0 && !_isRecording && !_isPreviewingVideo,
+                  visible:
+                      clips.length > 0 && !_isRecording && !_isPreviewingVideo,
                   child: IconButton(
                     onPressed: () {
                       _toggleBetweenRecordingAndPreviewing();
@@ -212,10 +218,21 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   }
 
   Future<File> _saveVideos() async {
-    File file = await MediaService.saveVideoClipsToOneFile(clips, Uuid().v4());
-    Navigator.of(context).popUntil((route) => route.isFirst);
-    log(file.path);
-    return file;
+    MultimediaFile multimediaFile =
+        await MediaService.saveVideoClipsToOneFile(clips, Uuid().v4());
+    if (multimediaFile.videoFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Video file is null"),
+        ),
+      );
+      throw Exception("Video file is null");
+    } else {
+      File file = multimediaFile.videoFile!;
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      log(file.path);
+      return file;
+    }
   }
 
   Widget _savingControls() {
@@ -240,7 +257,8 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                           if (clips.isEmpty) {
                             _isPreviewingVideo = false;
                           } else {
-                            _videoPlayerController = VideoPlayerController.asset(clips.last.path);
+                            _videoPlayerController =
+                                VideoPlayerController.asset(clips.last.path);
                           }
                         }
                       });
@@ -252,7 +270,9 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
               )),
               Center(
                 child: GestureDetector(
-                  onTap: _isPreviewingVideo ? _toggleVideoPlayer : _toggleRecording,
+                  onTap: _isPreviewingVideo
+                      ? _toggleVideoPlayer
+                      : _toggleRecording,
                   child: Container(
                     height: _isRecording ? 75 : 65,
                     width: _isRecording ? 75 : 65,

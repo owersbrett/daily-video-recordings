@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 List<CameraDescription> cameras = <CameraDescription>[];
 
 void main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
   await FileDirectoriesService().init();
   Logger.root.level = Level.ALL; // defaults to Level.INFO

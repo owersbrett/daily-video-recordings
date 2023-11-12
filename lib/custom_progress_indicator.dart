@@ -1,3 +1,4 @@
+import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 enum ProgressIndicatorSize { small, medium, large }
@@ -41,7 +42,7 @@ class CustomProgressIndicator extends StatelessWidget {
     if (value < 10) {
       return cs.outlineVariant;
     } else if (value < 20) {
-      return cs.primary;
+      return rubyLight;
     } else if (value < 30) {
       return cs.surfaceVariant;
     } else if (value < 40) {

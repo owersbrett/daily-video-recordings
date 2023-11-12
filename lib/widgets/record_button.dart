@@ -1,0 +1,29 @@
+import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class RecordingButton extends StatelessWidget {
+  const RecordingButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  FloatingActionButton(
+      backgroundColor: rubyLight.withOpacity(.5),
+      child: Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Icon(
+            CupertinoIcons.circle_fill,
+            size: 36,
+            color: rubyLight,
+          ),
+        ),
+      ),
+      onPressed: () {},
+    );
+  }
+}

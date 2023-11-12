@@ -73,8 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       );
-  List<Widget> habits =
-      Database.habits.map((e) => HabitCard(habit: e)).toList();
+  List<Widget> habits = Database.habits.map((e) => HabitCard(habit: e)).toList();
 
   Widget _body() {
     if (pageIndex == 0) {
@@ -128,6 +127,19 @@ class _MyHomePageState extends State<MyHomePage> {
       return ReportAppBar();
     } else if (pageIndex == 2) {
       return DailyAppBar(
+        icon: IconButton(
+          icon: Icon(Icons.add_circle_outline_sharp),
+          iconSize: 32,
+          color: emeraldDark,
+          onPressed: () {
+            setState(() {
+              showCreateDropdown = true;
+            });
+          },
+        ),
+      );
+    } else if (pageIndex == 3) {
+      return DailyAppBar(
           icon: IconButton(
         icon: Icon(Icons.add_circle_outline_sharp),
         iconSize: 32,
@@ -138,11 +150,8 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
       ));
-    } else if (pageIndex == 3) {
-      return Text("");
-      // return Text("Upload Video");
     } else if (pageIndex == 4) {
-      return Text("Watch");
+      return Text("");
     } else {
       return Text("Error");
     }
@@ -163,8 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
             FocusScope.of(context).unfocus();
           },
           child: Scaffold(
+
             appBar: AppBar(
-              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
               title: appBarTitle,
             ),
             body: _body(),
@@ -172,21 +182,16 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: (value) => setState(() => pageIndex = value),
               currentIndex: pageIndex,
               selectedItemColor: Theme.of(context).colorScheme.secondary,
-              unselectedItemColor:
-                  Theme.of(context).colorScheme.surfaceVariant.withOpacity(.3),
+              unselectedItemColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(.3),
               items: [
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.settings), label: 'Settings'),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.check), label: 'Reports'),
+                BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+                BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Reports'),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.repeat),
                   label: 'Daily',
                 ),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.video_call), label: 'Video'),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.remove_red_eye), label: 'Watch'),
+                BottomNavigationBarItem(icon: Icon(Icons.video_call), label: 'Video'),
+                BottomNavigationBarItem(icon: Icon(Icons.remove_red_eye), label: 'Watch'),
               ],
             ),
           ),
@@ -237,7 +242,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         showCreateDropdown = false;
                       });
-                      Navigation.createRoute(RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)), context, AnimationEnum.pageAscend);
+                      Navigation.createRoute(
+                          RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
+                          context,
+                          AnimationEnum.pageAscend);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
@@ -248,8 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           SizedBox(
                             width: 4,
                           ),
-                          Text("Video",
-                              style: Theme.of(context).textTheme.bodyMedium),
+                          Text("Video", style: Theme.of(context).textTheme.bodyMedium),
                         ],
                       ),
                     ),

@@ -15,7 +15,7 @@ const Color goldDark = Color(0xFFA78B2C); // A darker shade of gold
 // Define the color scheme
 final ColorScheme myColorScheme = ColorScheme(
   brightness: Brightness.light,
-  primary: ruby, // Use ruby as the primary color
+  primary: Colors.white, // Use ruby as the primary color
   outlineVariant:
       rubyDark, // Use a darker shade of ruby for the outline variant
   surfaceVariant: rubyLight,
@@ -36,8 +36,8 @@ final ColorScheme myColorScheme = ColorScheme(
 final ThemeData theme = ThemeData(
   // This is the theme of your application.
   //
-  appBarTheme: const AppBarTheme(
-    color: Colors.white,
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.white
   ),
   dropdownMenuTheme:
       DropdownMenuThemeData(textStyle: TextStyle(color: Colors.white)),
