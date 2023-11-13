@@ -12,7 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:logging/logging.dart';
 
+import '../../data/db.dart';
 import '../../data/habit.dart';
+import '../../data/habit_entity.dart';
 import '../../data/unit_type.dart';
 import '../../util/string_util.dart';
 import '../../validators/form_validator.dart'; // Include this package for color picker
@@ -209,7 +211,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           pickColor();
                         }
                       },
-                      child: HabitCard(habit: habit, progress: progress, checkable: false),
+                      child: HabitCard(habitEntity: HabitEntity( habit, Database.habitEntries), progress: progress, checkable: false),
                     ),
                     _verbField(context),
                     _quantityField(context),

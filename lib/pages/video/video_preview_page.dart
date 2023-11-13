@@ -14,12 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoUploadPage extends StatefulWidget {
+class VideoPreviewPage extends StatefulWidget {
   @override
-  _VideoUploadPageState createState() => _VideoUploadPageState();
+  _VideoPreviewPageState createState() => _VideoPreviewPageState();
 }
 
-class _VideoUploadPageState extends State<VideoUploadPage> {
+class _VideoPreviewPageState extends State<VideoPreviewPage> {
   Future<List<MultimediaFile>>? _multimediaFiles;
 
   VideoPlayerController? _controller;
@@ -45,8 +45,7 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
   // Function to enter full-screen mode
   void _goFullScreen() {
     Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => FullScreenVideo(controller: _controller!)),
+      MaterialPageRoute(builder: (context) => FullScreenVideo(controller: _controller!)),
     );
   }
 
@@ -75,8 +74,7 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
           if (hasThumbnail) {
             log(file.videoFile!.path);
           } else {
-            MediaService.setThumbnail(file.videoFile!)
-                .then((value) => refreshData());
+            MediaService.setThumbnail(file.videoFile!).then((value) => refreshData());
           }
         },
         child: Image.file(
@@ -116,6 +114,7 @@ class _VideoUploadPageState extends State<VideoUploadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           Center(

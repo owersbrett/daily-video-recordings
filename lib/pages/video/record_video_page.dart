@@ -90,8 +90,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     });
   }
 
-  Widget _videoPlayerAndRecorder() =>
-      _isPreviewingVideo ? _videoPlayer() : _videoRecorder();
+  Widget _videoPlayerAndRecorder() => _isPreviewingVideo ? _videoPlayer() : _videoRecorder();
   Widget _videoPlayer() => GestureDetector(
         onTap: _toggleVideoPlayer,
         child: AspectRatio(
@@ -142,83 +141,75 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
         ),
       );
   Widget _recordingControls() {
-    return Container(
-      color: Colors.black,
-      child: Column(
-        children: [
-          Expanded(
-            child: Container(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: IconButton(
-                      onPressed: () {
-                        Logger.root.info("Delete the most recent clip");
-                        if (clips.length > 0) {
-                          setState(() {
-                            clips.removeLast();
-                          });
-                        }
-                      },
-                      icon: Icon(
-                        Icons.delete,
-                        color: clips.length == 0 ? Colors.grey : Colors.red,
-                      ))),
-              Center(
-                child: GestureDetector(
-                  onTap: _isPreviewingVideo
-                      ? _toggleVideoPlayer
-                      : _toggleRecording,
-                  child: Container(
-                    height: _isRecording ? 75 : 65,
-                    width: _isRecording ? 75 : 65,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: _isRecording ? 3 : 5,
-                      ),
-                    ),
-                    child: Container(
-                      height: 55,
-                      width: 55,
-                      child: Icon(
-                        _isRecording ? Icons.stop : Icons.circle,
-                        color: _isRecording ? Colors.red : Colors.red,
-                        size: _isRecording ? 35 : 55,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Visibility(
-                  visible:
-                      clips.length > 0 && !_isRecording && !_isPreviewingVideo,
-                  child: IconButton(
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: kToolbarHeight * 2,
+        color: Colors.black,
+        
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+                child: IconButton(
                     onPressed: () {
-                      _toggleBetweenRecordingAndPreviewing();
+                      Logger.root.info("Delete the most recent clip");
+                      if (clips.length > 0) {
+                        setState(() {
+                          clips.removeLast();
+                        });
+                      }
                     },
-                    icon: Icon(Icons.check),
+                    icon: Icon(
+                      Icons.delete,
+                      color: clips.length == 0 ? Colors.grey : Colors.red,
+                    ))),
+            Center(
+              child: GestureDetector(
+                onTap: _isPreviewingVideo ? _toggleVideoPlayer : _toggleRecording,
+                child: Container(
+                  height: _isRecording ? 75 : 65,
+                  width: _isRecording ? 75 : 65,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: _isRecording ? 3 : 5,
+                    ),
+                  ),
+                  child: Container(
+                    height: 55,
+                    width: 55,
+                    child: Icon(
+                      _isRecording ? Icons.stop : Icons.circle,
+                      color: _isRecording ? Colors.red : Colors.red,
+                      size: _isRecording ? 35 : 55,
+                    ),
                   ),
                 ),
               ),
-            ],
-          ),
-          Expanded(
-            child: Container(),
-            flex: 2,
-          ),
-        ],
+            ),
+            Expanded(
+              child: Visibility(
+                visible: clips.length > 0 && !_isRecording && !_isPreviewingVideo,
+                child: IconButton(
+                  onPressed: () {
+                    _toggleBetweenRecordingAndPreviewing();
+                  },
+                  icon: Icon(Icons.check),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Future<File> _saveVideos() async {
-    MultimediaFile multimediaFile =
-        await MediaService.saveVideoClipsToOneFile(clips, Uuid().v4());
+    MultimediaFile multimediaFile = await MediaService.saveVideoClipsToOneFile(clips, Uuid().v4());
     if (multimediaFile.videoFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -235,103 +226,96 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   }
 
   Widget _savingControls() {
-    return Container(
-      color: Colors.black,
-      child: Column(
-        children: [
-          Expanded(
-            child: Container(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                  child: Visibility(
-                visible: !_isRecording,
-                child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        if (clips.isNotEmpty) {
-                          clips.removeLast();
-                          if (clips.isEmpty) {
-                            _isPreviewingVideo = false;
-                          } else {
-                            _videoPlayerController =
-                                VideoPlayerController.asset(clips.last.path);
-                          }
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      child: Container(
+        height: kToolbarHeight * 2,
+        color: Colors.black,
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+                child: Visibility(
+              visible: !_isRecording,
+              child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (clips.isNotEmpty) {
+                        clips.removeLast();
+                        if (clips.isEmpty) {
+                          _isPreviewingVideo = false;
+                        } else {
+                          _videoPlayerController = VideoPlayerController.asset(clips.last.path);
                         }
-                      });
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: rubyLight,
-                    )),
-              )),
-              Center(
-                child: GestureDetector(
-                  onTap: _isPreviewingVideo
-                      ? _toggleVideoPlayer
-                      : _toggleRecording,
-                  child: Container(
-                    height: _isRecording ? 75 : 65,
-                    width: _isRecording ? 75 : 65,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Container(
-                      height: 55,
-                      width: 55,
-                      child: Icon(
-                        videoPlaying ? Icons.stop : Icons.play_arrow,
-                        color: videoPlaying ? rubyLight : emeraldLight,
-                        size: 55,
-                      ),
-                    ),
+                      }
+                    });
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: rubyLight,
+                  )),
+            )),
+            GestureDetector(
+              onTap: _isPreviewingVideo ? _toggleVideoPlayer : _toggleRecording,
+              child: Container(
+                height: _isRecording ? 75 : 65,
+                width: _isRecording ? 75 : 65,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Container(
+                  height: 55,
+                  width: 55,
+                  child: Icon(
+                    videoPlaying ? Icons.stop : Icons.play_arrow,
+                    color: videoPlaying ? rubyLight : emeraldLight,
+                    size: 55,
                   ),
                 ),
               ),
-              Expanded(
-                child: IconButton(
-                  onPressed: () {
-                    _saveVideos();
-                  },
-                  icon: Icon(Icons.save),
-                ),
+            ),
+            Expanded(
+              child: IconButton(
+                onPressed: () {
+                  _saveVideos();
+                },
+                icon: Icon(Icons.save),
               ),
-            ],
-          ),
-          Expanded(
-            child: Container(),
-            flex: 2,
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _controls() {
-    return !_isPreviewingVideo ? _recordingControls() : _savingControls();
+    Widget controls = Container();
+    if (_isPreviewingVideo) controls = _savingControls();
+    if (!_isPreviewingVideo) controls = _recordingControls();
+    return controls;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: Scaffold(
-        // The CameraPreview widget displays the live camera feed to the user
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                _videoPlayerAndRecorder(),
-                Expanded(
-                  child: _controls(),
-                ),
-              ],
-            ),
-            _closeButton(),
-          ],
+    return Scaffold(
+      body: Container(
+        color: Colors.black,
+        child: Scaffold(
+          // The CameraPreview widget displays the live camera feed to the user
+          body: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(child: _videoPlayerAndRecorder()),
+                ],
+              ),
+              _closeButton(),
+              _controls()
+            ],
+          ),
         ),
       ),
     );

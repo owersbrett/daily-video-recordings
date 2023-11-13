@@ -3,18 +3,20 @@ import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_progress_indicator.dart';
+import 'data/habit_entity.dart';
 import 'widgets/stylized_checkbox.dart';
 
 class HabitCard extends StatefulWidget {
   const HabitCard(
       {super.key,
-      required this.habit,
+      required this.habitEntity,
       this.voidCallback,
       this.progress = 100,
       this.checkable = true});
-  final Habit habit;
+  final HabitEntity habitEntity;
   final int progress;
   final bool checkable;
+  Habit get habit => habitEntity.habit;
 
   final VoidCallback? voidCallback;
   @override
