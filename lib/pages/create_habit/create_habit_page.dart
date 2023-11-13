@@ -5,6 +5,7 @@ import 'package:daily_video_reminders/habit_card.dart';
 import 'package:daily_video_reminders/pages/create_habit/color_picker_dialog.dart';
 import 'package:daily_video_reminders/pages/create_habit/custom_slider.dart';
 import 'package:daily_video_reminders/pages/create_habit/selector_dialog.dart';
+import 'package:daily_video_reminders/pages/video/dvr_close_button.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:daily_video_reminders/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
@@ -180,15 +181,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                 Expanded(
                   child: Container(),
                 ),
-                CloseButton(
-                  color: rubyDark,
-                  style: ButtonStyle(
-                    iconSize: MaterialStateProperty.all(32),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
+                DVRCloseButton(onPressed: () => Navigator.of(context).pop()),
                 SizedBox(
                   width: 4,
                 ),
@@ -211,7 +204,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           pickColor();
                         }
                       },
-                      child: HabitCard(habitEntity: HabitEntity( habit, Database.habitEntries), progress: progress, checkable: false),
+                      child: HabitCard(habitEntity: HabitEntity(habit, Database.habitEntries), progress: progress, checkable: false),
                     ),
                     _verbField(context),
                     _quantityField(context),

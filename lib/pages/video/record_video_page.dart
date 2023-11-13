@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:daily_video_reminders/data/multimedia_file.dart';
 import 'package:daily_video_reminders/main.dart';
+import 'package:daily_video_reminders/pages/video/dvr_close_button.dart';
 import 'package:daily_video_reminders/service/media_service.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:daily_video_reminders/service/file_directories_service.dart';
@@ -114,31 +115,20 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     });
   }
 
-  Widget _closeButton() => Positioned(
-        right: 8,
-        top: kToolbarHeight,
-        child: Container(
-          height: 60,
-          width: 60,
-          child: IconButton(
-            onPressed: () async {
-              if (_isPreviewingVideo) {
-                setState(() {
-                  _isPreviewingVideo = false;
-                });
-              } else if (_isRecording) {
-                setState(() {
-                  _isRecording = false;
-                });
-              } else {
-                Navigator.of(context).pop();
-              }
-            },
-            icon: Icon(Icons.close),
-            color: Colors.white,
-            iconSize: 35,
-          ),
-        ),
+  Widget _closeButton() => DVRCloseButton(
+        onPressed: () {
+          if (_isPreviewingVideo) {
+            setState(() {
+              _isPreviewingVideo = false;
+            });
+          } else if (_isRecording) {
+            setState(() {
+              _isRecording = false;
+            });
+          } else {
+            Navigator.of(context).pop();
+          }
+        },
       );
   Widget _recordingControls() {
     return Positioned(
@@ -148,7 +138,6 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
         width: MediaQuery.of(context).size.width,
         height: kToolbarHeight * 2,
         color: Colors.black,
-        
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

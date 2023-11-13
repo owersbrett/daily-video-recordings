@@ -6,6 +6,7 @@ import 'package:daily_video_reminders/data/multimedia_file.dart';
 import 'package:daily_video_reminders/main.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
 import 'package:daily_video_reminders/pages/video/record_video_page.dart';
+import 'package:daily_video_reminders/pages/video/video_swipe_page.dart';
 import 'package:daily_video_reminders/service/file_directories_service.dart';
 import 'package:daily_video_reminders/service/media_service.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
@@ -71,11 +72,7 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
     return GridTile(
       child: GestureDetector(
         onTap: () {
-          if (hasThumbnail) {
-            log(file.videoFile!.path);
-          } else {
-            MediaService.setThumbnail(file.videoFile!).then((value) => refreshData());
-          }
+          Navigation.createRoute(VideoSwipePage(multimediaFile: file), context);
         },
         child: Image.file(
           file.photoFile ?? File(""),
@@ -133,7 +130,14 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
                     ),
                     itemCount: files.length,
                     itemBuilder: (ctx, i) {
-                      return gridItem(files[i], i, files[i].photoFile != null);
+                      return GestureDetector(
+                        onTap: () {
+                          log(files[i].videoFile!.path);
+                          log("What");
+                          Navigation.createRoute(VideoSwipePage(multimediaFile: files[i]), context);
+                        },
+                        child: gridItem(files[i], i, files[i].photoFile != null),
+                      );
                     },
                   );
                 } else if (snapshot.hasError) {

@@ -16,7 +16,7 @@ class VideoSwipePage extends StatefulWidget {
 class _VideoSwipePageState extends State<VideoSwipePage> {
   PageController pageController = PageController(initialPage: 0, viewportFraction: 1);
 
-  List<File> videos = [];
+  Future<List<File>> videosFuture = MediaService.retrieveVideoClips();
   buildMusicAlbum(String profilePhoto) {
     return SizedBox(
       width: 60,
@@ -81,16 +81,6 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
   @override
   void initState() {
     super.initState();
-    _initializeVideos();
-  }
-
-  Future<void> _initializeVideos() async {
-    var videoFiles = await MediaService.retrieveVideoClips();
-
-    setState(() {
-      isLoading = false;
-      videos = videoFiles;
-    });
   }
 
   Widget actionColumn(Size size) {
@@ -246,29 +236,37 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    if (videos.isEmpty) {
-      return Scaffold(
-        body: Center(
-          child: Text("No videos found"),
-        ),
-      );
-    }
     return Scaffold(
-        body: PageView.builder(
-      itemCount: videos.length,
-      controller: pageController,
-      scrollDirection: Axis.vertical,
-      itemBuilder: (context, index) {
-        final data = videos[index];
-        log(index.toString());
-        return Stack(
-          children: [
-            VideoPlayerItem(path: data.path),
-            // overlay(size),
-          ],
-        );
-      },
-    ));
+      body: FutureBuilder(
+          future: videosFuture,
+          builder: (ctx, data) {
+            if (data.hasData) {
+              final videos = data.data as List<File>;
+              return PageView.builder(
+                itemCount: videos.length,
+                onPageChanged: (value) {
+                  //TODO
+                  // BlocProvider.of<HomePageBloc>(context).add(HomePageScrollEvent(value));
+                },
+                controller: pageController,
+                scrollDirection: Axis.vertical,
+                restorationId: "video_swipe_page",
+                itemBuilder: (context, index) {
+                  final data = videos[index];
+                  log(index.toString());
+                  return Stack(
+                    children: [
+                      VideoPlayerItem(path: data.path),
+                      // overlay(size),
+                    ],
+                  );
+                },
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
+    );
   }
 }
