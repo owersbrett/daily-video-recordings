@@ -11,8 +11,8 @@ class ReportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
+    return Scaffold(
+        body: Column(
           children: [
             TodayIsWidget(),
             SizedBox(height: 8,),

@@ -246,7 +246,7 @@ class Database {
       verb: "Digest",
       value: 0,
       valueGoal: 7,
-      suffix: "days of reflections",
+      suffix: "videos",
       unitType: UnitType.actions,
       emoji: "👫",
       hexColor: "#e91e63",

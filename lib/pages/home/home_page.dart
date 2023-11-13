@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:daily_video_reminders/daily_app_bar.dart';
 import 'package:daily_video_reminders/data/bottom_sheet_state.dart';
 import 'package:daily_video_reminders/data/db.dart';
+import 'package:daily_video_reminders/habit_grid.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
 import 'package:daily_video_reminders/pages/create_habit/create_habit_page.dart';
 import 'package:daily_video_reminders/pages/home/home_page_bottom.dart';
@@ -113,10 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() {
             if (bottomSheetState == BottomSheetState.hidden) {
               bottomSheetState = BottomSheetState.expanded;
-            } else if (bottomSheetState == BottomSheetState.collapsed) {
-              bottomSheetState = BottomSheetState.hidden;
             } else {
-              bottomSheetState = BottomSheetState.collapsed;
+              bottomSheetState = BottomSheetState.hidden;
             }
           });
         },
@@ -247,10 +246,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         showCreateDropdown = false;
                       });
-                      Navigation.createRoute(
-                          RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
-                          context,
-                          AnimationEnum.pageAscend);
+                      Navigation.createRoute(HabitGrid(
+                        habits: habitGridData,
+                      ), context, AnimationEnum.pageAscend);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),

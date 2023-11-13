@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:daily_video_reminders/data/habit.dart';
 import 'package:daily_video_reminders/data/habit_entry.dart';
 
+import 'pages/video/dvr_close_button.dart';
+
 class HabitGrid extends StatefulWidget {
   final Map<int, List<HabitEntry>> habits;
 
@@ -24,7 +26,7 @@ class _HabitGridState extends State<HabitGrid> {
           // border: Border.all(color: Theme.of(context).colorScheme.secondary),
           ),
       child: Center(
-        child: Text(value),
+        child: Text(value, style: TextStyle(color: Colors.white, fontSize: 16)),
       ),
     );
   }
@@ -49,57 +51,75 @@ class _HabitGridState extends State<HabitGrid> {
   @override
   Widget build(BuildContext context) {
     int i = 1;
-    return ListView(
-      children: [
-        Row(
-          children: daysOfWeek.map((day) => cell(day, i++ == 1)).toList(),
-        ),
-        for (List<Widget> row in habitRows())
-          Row(
-            children: row,
-          ),
-        SizedBox(
-          height: 16,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Scaffold(
+      body: Container(
+        color: Colors.black,
+        child: Stack(
           children: [
             Column(
               children: [
-                CustomProgressIndicator(
-                  value: 54,
-                  label: "54%",
-                  size: ProgressIndicatorSize.medium,
+                Expanded(
+                  child: ListView(
+                    children: [
+                      SizedBox(height: kToolbarHeight,),
+                      Row(
+                        children: daysOfWeek.map((day) => cell(day, i++ == 1)).toList(),
+                      ),
+                      for (List<Widget> row in habitRows())
+                        Row(
+                          children: row,
+                        ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              CustomProgressIndicator(
+                                value: 54,
+                                label: "54%",
+                                size: ProgressIndicatorSize.medium,
+                              ),
+                              SizedBox(height: 12,),
+                              Text("Begun", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),)
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              CustomProgressIndicator(
+                                value: 75,
+                                label: "75%",
+                                size: ProgressIndicatorSize.medium,
+                              ),
+                              SizedBox(height: 12,),
+                              Text("Complete", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),)
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              CustomProgressIndicator(
+                                value: 15,
+                                label: "33",
+                                size: ProgressIndicatorSize.medium,
+                              ),
+                              SizedBox(height: 12,),
+                              Text("Streak", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),)
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                SizedBox(height: 12,),
-                Text("Begun", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
               ],
             ),
-            Column(
-              children: [
-                CustomProgressIndicator(
-                  value: 75,
-                  label: "75%",
-                  size: ProgressIndicatorSize.medium,
-                ),
-                SizedBox(height: 12,),
-                Text("Complete", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
-              ],
-            ),
-            Column(
-              children: [
-                CustomProgressIndicator(
-                  value: 15,
-                  label: "33",
-                  size: ProgressIndicatorSize.medium,
-                ),
-                SizedBox(height: 12,),
-                Text("Streak", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
-              ],
-            )
+                        DVRCloseButton(onPressed: ()=>Navigator.of(context).pop()),
+
           ],
-        )
-      ],
+        ),
+      ),
     );
   }
 }

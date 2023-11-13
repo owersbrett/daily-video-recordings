@@ -9,7 +9,7 @@ class DVRCloseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 8,
-      top: kToolbarHeight,
+      top: kToolbarHeight / 2,
       child: Container(
         height: 60,
         width: 60,

@@ -64,16 +64,7 @@ class HomePageBottom extends StatelessWidget {
     }
   }
 
-  Map<int, List<HabitEntry>> get habitGridData {
-    Map<int, List<HabitEntry>> habitEntries = <int, List<HabitEntry>>{};
-    for (var element in Database.habits) {
-      habitEntries[element.id] = [];
-    }
-    for (var element in Database.habitEntries) {
-      habitEntries[element.habitId]!.add(element);
-    }
-    return habitEntries;
-  }
+
 
   Widget _list(BuildContext context) {
     if (!large) return Container();
@@ -100,11 +91,11 @@ class HomePageBottom extends StatelessWidget {
                 _buildHorizontalProgressBars(),
               ],
             ),
-            // flex: 4,
+            flex: 4,
           ),
-          // Expanded(
-          //   child: _buildVerticalProgressBars(),
-          // ),
+          Expanded(
+            child: _buildVerticalProgressBars(),
+          ),
         ],
       ),
     );
