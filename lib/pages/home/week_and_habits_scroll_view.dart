@@ -11,7 +11,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   final DateTime currentDay;
   final List<List<HabitEntity>> weekOfHabitEntities;
   final List<HabitEntity> todaysHabitEntities;
- DateTime get now => DateTime.now();
+  DateTime get now => DateTime.now();
   DateTime get yesterday => currentDay.subtract(const Duration(days: 1));
   DateTime get tomorrow => currentDay.add(const Duration(days: 1));
 
@@ -23,8 +23,8 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   List<Widget> days(BuildContext context) => [
         wdh(threeDaysAgo, 12, context),
         wdh(twoDaysAgo, 40, context),
-        wdh(yesterday, 50,  context),
-        wdh(currentDay, 100,  context),
+        wdh(yesterday, 50, context),
+        wdh(currentDay, 100, context),
         wdh(tomorrow, 80, context),
         wdh(twoDaysAhead, 100, context),
         wdh(threeDaysAhead, 54, context)
@@ -32,7 +32,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
 
   Widget wdh(DateTime weekdayDate, int score, BuildContext context) => GestureDetector(
         onTap: () {
-        //  BlocProvider.of<HomePageBloc>(context).add(HomePageEvent.selectDay(weekdayDate));
+          //  BlocProvider.of<HomePageBloc>(context).add(HomePageEvent.selectDay(weekdayDate));
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, bottom: 8),
@@ -45,8 +45,13 @@ class WeekAndHabitsScrollView extends StatelessWidget {
           ),
         ),
       );
-  List<Widget>  dayWidgets(BuildContext context) => days(context);
-  List<Widget> get habitWidgets => todaysHabitEntities.map((e) => HabitCard(habitEntity: e)).toList();
+  List<Widget> dayWidgets(BuildContext context) => days(context);
+  List<Widget> get habitWidgets {
+    List<Widget> widgets = [];
+    widgets = todaysHabitEntities.map((e) => HabitCard(habitEntity: e)).toList();
+    return widgets;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -58,7 +63,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         ),
         Expanded(
-          child: ListView(children: habitWidgets),
+          child: ListView(children: [...habitWidgets, SizedBox(height: kToolbarHeight,)],),
         ),
       ],
     ));

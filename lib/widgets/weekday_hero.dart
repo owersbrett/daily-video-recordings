@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class WeekdayHero extends StatelessWidget {
-  const WeekdayHero(
-      {super.key,
-      required this.date,
-      required this.expanded,
-      this.score = 100});
+  const WeekdayHero({super.key, required this.date, required this.expanded, this.score = 100, this.textColor = Colors.black});
   final int score;
   final bool expanded;
+  final Color textColor;
 
   final DateTime date;
 
@@ -24,17 +21,19 @@ class WeekdayHero extends StatelessWidget {
 
         return Center(
           child: Column(
-            mainAxisSize:
-                MainAxisSize.min, // Set the main axis size to the minimum
+            mainAxisSize: MainAxisSize.min, // Set the main axis size to the minimum
             children: <Widget>[
               Text(
                 dayOfWeek,
-                style: TextStyle(fontSize: expanded ? 20 : 16, fontWeight: expanded ? FontWeight.bold : FontWeight.normal),
+                style: TextStyle(fontSize: expanded ? 20 : 16, color: textColor, fontWeight: expanded ? FontWeight.bold : FontWeight.normal),
               ),
               const SizedBox(height: 8), //
               CustomProgressIndicator(
                 size: expanded ? ProgressIndicatorSize.large : ProgressIndicatorSize.small,
-                  value: score.toDouble(), label: dayOfMonth),
+                value: score.toDouble(),
+                label: dayOfMonth,
+                textColor: textColor,
+              ),
             ],
           ),
         );

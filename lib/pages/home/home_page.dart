@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:daily_video_reminders/daily_app_bar.dart';
 import 'package:daily_video_reminders/data/bottom_sheet_state.dart';
@@ -6,13 +8,10 @@ import 'package:daily_video_reminders/habit_grid.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
 import 'package:daily_video_reminders/pages/create_habit/create_habit_page.dart';
 import 'package:daily_video_reminders/pages/home/home_page_bottom.dart';
+import 'package:daily_video_reminders/pages/home/now_data.dart';
+
 import 'package:daily_video_reminders/pages/home/week_and_habits_scroll_view.dart';
 import 'package:daily_video_reminders/pages/video/record_video_page.dart';
-import 'package:daily_video_reminders/report_app_bar.dart';
-import 'package:daily_video_reminders/pages/report/report_page.dart';
-import 'package:daily_video_reminders/pages/settings/settings_page.dart';
-import 'package:daily_video_reminders/pages/video/video_swipe_page.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';
@@ -29,35 +28,40 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Timer? _timer;
+  NowData nowData = NowData();
+
   DateTime selectedDate = DateTime.now();
   bool showCreateDropdown = false;
-  int pageIndex = 2;
   BottomSheetState bottomSheetState = BottomSheetState.hidden;
+  @override
+  void initState() {
+    super.initState();
 
-  Widget _body(BuildContext context) {
-    if (pageIndex == 0) {
-      return Center(
-        child: SettingsPage(),
-      );
-    } else if (pageIndex == 1) {
-      return ReportPage(
-        habitGridData: habitGridData,
-      );
-    } else if (pageIndex == 2) {
-      return WeekAndHabitsScrollView(
-        todaysHabitEntities: Database.habits.map((e) => HabitEntity(e, Database.habitEntries)).toList(),
-        weekOfHabitEntities: [[], [], [], [], [], [], []],
-        currentDay: DateTime.now(),
-      );
-    } else if (pageIndex == 3) {
-      return VideoPreviewPage();
-    } else if (pageIndex == 4) {
-      return VideoSwipePage();
-    } else {
-      return Center(
-        child: Text("Error"),
-      );
-    }
+    _timer = Timer.periodic(const Duration(seconds: 1), minuteFunction);
+    log(monthlyValue.toString());
+  }
+
+  void minuteFunction(Timer t) {
+    setState(() {
+      if (nowData.currentTime.difference(nowData.startTime).inHours > 1) {
+        nowData.timeLimitReached();
+      }
+      nowData.elapsedTime = nowData.currentTime.difference(nowData.startTime);
+      nowData.currentTime = DateTime.now();
+    });
+  }
+
+  DateTime get now => nowData.currentTime;
+
+  double get dailyValue => (nowData.elapsedFractionOfHour);
+  double get monthlyValue => nowData.currentTime.day / DateTime(now.year, now.month + 1, 0).subtract(Duration(days: 1)).day;
+  double get annualValue => nowData.dayOfYearFraction;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   Map<int, List<HabitEntry>> get habitGridData {
@@ -70,77 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return habitEntries;
   }
-
-  Widget get appBarTitle {
-    if (pageIndex == 0) {
-      return Text("Settings");
-    } else if (pageIndex == 1) {
-      return ReportAppBar();
-    } else if (pageIndex == 2) {
-      return DailyAppBar(
-        icon: IconButton(
-          icon: Icon(Icons.add_circle),
-          iconSize: 32,
-          color: Colors.black,
-          onPressed: () {
-            setState(() {
-              showCreateDropdown = true;
-            });
-          },
-        ),
-      );
-    } else if (pageIndex == 3) {
-      return DailyAppBar(
-          icon: IconButton(
-        icon: Icon(Icons.add_circle),
-        iconSize: 32,
-        color: Colors.black,
-        onPressed: () {
-          setState(() {
-            showCreateDropdown = true;
-          });
-        },
-      ));
-    } else if (pageIndex == 4) {
-      return Text("");
-    } else {
-      return Text("Error");
-    }
-  }
-
-  Widget get bars => GestureDetector(
-        onDoubleTap: () {
-          log("double tapped");
-          setState(() {
-            if (bottomSheetState == BottomSheetState.hidden) {
-              bottomSheetState = BottomSheetState.expanded;
-            } else {
-              bottomSheetState = BottomSheetState.hidden;
-            }
-          });
-        },
-        onTap: () {
-          log("Tapped");
-          setState(() {
-            if (bottomSheetState == BottomSheetState.hidden) {
-              bottomSheetState = BottomSheetState.collapsed;
-            } else if (bottomSheetState == BottomSheetState.collapsed) {
-              bottomSheetState = BottomSheetState.expanded;
-            } else if (bottomSheetState == BottomSheetState.expanded) {
-              bottomSheetState = BottomSheetState.hidden;
-            }
-          });
-        },
-        child: HomePageBottom(
-          value1: 0.3,
-          value2: 0.5,
-          value3: 0.7,
-          value4: 0.2,
-          value5: 0.4,
-          value6: 0.6,
-          bottomSheetState: bottomSheetState,
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -161,9 +94,24 @@ class _MyHomePageState extends State<MyHomePage> {
               Scaffold(
                 appBar: AppBar(
                   backgroundColor: Colors.white,
-                  title: appBarTitle,
+                  title: DailyAppBar(
+                    icon: IconButton(
+                      icon: Icon(Icons.add_circle),
+                      iconSize: 32,
+                      color: Colors.black,
+                      onPressed: () {
+                        setState(() {
+                          showCreateDropdown = true;
+                        });
+                      },
+                    ),
+                  ),
                 ),
-                body: _body(context),
+                body: WeekAndHabitsScrollView(
+                  todaysHabitEntities: Database.habits.map((e) => HabitEntity(e, Database.habitEntries)).toList(),
+                  weekOfHabitEntities: [[], [], [], [], [], [], []],
+                  currentDay: DateTime.now(),
+                ),
                 bottomSheet: bottomBar(context),
 
                 // bottomNavigationBar: bottomBar(context),
@@ -246,9 +194,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         showCreateDropdown = false;
                       });
-                      Navigation.createRoute(HabitGrid(
-                        habits: habitGridData,
-                      ), context, AnimationEnum.pageAscend);
+                      Navigation.createRoute(
+                          HabitGrid(
+                            habits: habitGridData,
+                          ),
+                          context,
+                          AnimationEnum.pageAscend);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
@@ -274,22 +225,44 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget bottomBar(BuildContext context) {
-    return bars;
-    return BottomNavigationBar(
-      onTap: (value) => setState(() => pageIndex = value),
-      currentIndex: pageIndex,
-      selectedItemColor: Theme.of(context).colorScheme.secondary,
-      unselectedItemColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(.3),
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-        BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Reports'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.repeat),
-          label: 'Daily',
-        ),
-        BottomNavigationBarItem(icon: Icon(Icons.video_call), label: 'Video'),
-        BottomNavigationBarItem(icon: Icon(Icons.remove_red_eye), label: 'Watch'),
-      ],
+    return GestureDetector(
+      onDoubleTap: () {
+        log("double tapped");
+        setState(() {
+          if (bottomSheetState == BottomSheetState.hidden) {
+            bottomSheetState = BottomSheetState.expanded;
+          } else {
+            bottomSheetState = BottomSheetState.hidden;
+          }
+        });
+      },
+      onTap: () {
+        log("Tapped");
+        setState(() {
+          if (bottomSheetState == BottomSheetState.hidden) {
+            bottomSheetState = BottomSheetState.collapsed;
+          } else if (bottomSheetState == BottomSheetState.collapsed) {
+            bottomSheetState = BottomSheetState.expanded;
+          } else if (bottomSheetState == BottomSheetState.expanded) {
+            bottomSheetState = BottomSheetState.hidden;
+          }
+        });
+      },
+      child: HomePageBottom(
+        value1: dailyValue,
+        value2: monthlyValue,
+        value3: annualValue,
+        value4: nowData.currentTime.second / 60,
+        value5: monthlyValue,
+        value6: annualValue,
+        nowData: nowData,
+        bottomSheetState: bottomSheetState,
+        onStartTimer: () {
+          setState(() {
+            nowData.startTimerTimer = DateTime.now();
+          });
+        },
+      ),
     );
   }
 }

@@ -11,9 +11,11 @@ class CustomProgressIndicator extends StatelessWidget {
     Key? key,
     required this.value,
     required this.label,
+     this.textColor = Colors.black,
     this.size = ProgressIndicatorSize.small,
   }) : super(key: key);
   final ProgressIndicatorSize size;
+  final Color textColor;
 
   int get _size {
     switch (size) {
@@ -79,7 +81,7 @@ class CustomProgressIndicator extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: Colors.black,
+            color: textColor,
             fontSize: _textSize.toDouble(), // Size of the text
             fontWeight: FontWeight.bold,
           ),
