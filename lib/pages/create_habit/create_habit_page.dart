@@ -181,7 +181,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                 Expanded(
                   child: Container(),
                 ),
-                DVRCloseButton(onPressed: () => Navigator.of(context).pop()),
+                DVRCloseButton(onPressed: () => Navigator.of(context).pop(), positioned: false, color: Colors.black),
                 SizedBox(
                   width: 4,
                 ),
