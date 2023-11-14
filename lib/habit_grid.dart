@@ -1,9 +1,9 @@
 import 'package:daily_video_reminders/custom_progress_indicator.dart';
 import 'package:daily_video_reminders/data/db.dart';
 import 'package:flutter/material.dart';
-import 'package:daily_video_reminders/data/habit.dart';
-import 'package:daily_video_reminders/data/habit_entry.dart';
 
+import 'data/habit.dart';
+import 'data/habit_entry.dart';
 import 'pages/video/dvr_close_button.dart';
 
 class HabitGrid extends StatefulWidget {
@@ -34,15 +34,14 @@ class _HabitGridState extends State<HabitGrid> {
   List<Widget> habitCells(Habit entry) {
     List<HabitEntry> entries = widget.habits[entry.id]!;
     int i = 1;
-    List<Widget> cells =
-        entries.map((e) => cell((e.value as bool) ? "✅" : "❌")).toList();
+    List<Widget> cells = entries.map((e) => cell((e.value as bool) ? "✅" : "❌")).toList();
     cells.insert(0, cell(entry.emoji, true));
     return cells;
   }
 
   List<List<Widget>> habitRows() {
     List<List<Widget>> widgets = [];
-    for (var habit in Database.habits) {
+    for (var habit in CustomDatabase.habits) {
       widgets.add(habitCells(habit));
     }
     return widgets;
@@ -61,7 +60,9 @@ class _HabitGridState extends State<HabitGrid> {
                 Expanded(
                   child: ListView(
                     children: [
-                      SizedBox(height: kToolbarHeight,),
+                      SizedBox(
+                        height: kToolbarHeight,
+                      ),
                       Row(
                         children: daysOfWeek.map((day) => cell(day, i++ == 1)).toList(),
                       ),
@@ -82,8 +83,13 @@ class _HabitGridState extends State<HabitGrid> {
                                 label: "54%",
                                 size: ProgressIndicatorSize.medium,
                               ),
-                              SizedBox(height: 12,),
-                              Text("Begun", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),)
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                "Begun",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                              )
                             ],
                           ),
                           Column(
@@ -93,8 +99,13 @@ class _HabitGridState extends State<HabitGrid> {
                                 label: "75%",
                                 size: ProgressIndicatorSize.medium,
                               ),
-                              SizedBox(height: 12,),
-                              Text("Complete", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),)
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                "Complete",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                              )
                             ],
                           ),
                           Column(
@@ -104,8 +115,13 @@ class _HabitGridState extends State<HabitGrid> {
                                 label: "33",
                                 size: ProgressIndicatorSize.medium,
                               ),
-                              SizedBox(height: 12,),
-                              Text("Streak", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),)
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                "Streak",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                              )
                             ],
                           )
                         ],
@@ -115,8 +131,7 @@ class _HabitGridState extends State<HabitGrid> {
                 ),
               ],
             ),
-                        DVRCloseButton(onPressed: ()=>Navigator.of(context).pop()),
-
+            DVRCloseButton(onPressed: () => Navigator.of(context).pop()),
           ],
         ),
       ),

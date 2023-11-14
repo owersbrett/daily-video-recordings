@@ -2,15 +2,14 @@
 import 'dart:convert';
 
 import 'package:daily_video_reminders/data/frequency_type.dart';
-import 'package:daily_video_reminders/data/habit.dart';
 import 'package:daily_video_reminders/data/unit_type.dart';
+import "habit_entry.dart";
+import "habit.dart";
 
-import 'habit_entry.dart';
-
-class Database {
-  static final Database _instance = Database._internal();
-  factory Database() => _instance;
-  Database._internal() {}
+class CustomDatabase {
+  static final CustomDatabase _instance = CustomDatabase._internal();
+  factory CustomDatabase() => _instance;
+  CustomDatabase._internal() {}
   static List<HabitEntry> habitEntries = [
     // Today
     HabitEntry.bool(1, 1, true),

@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:daily_video_reminders/daily_app_bar.dart';
 import 'package:daily_video_reminders/data/bottom_sheet_state.dart';
 import 'package:daily_video_reminders/data/db.dart';
+import 'package:daily_video_reminders/data/repositories/user_repository.dart';
 import 'package:daily_video_reminders/habit_grid.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
 import 'package:daily_video_reminders/pages/create_habit/create_habit_page.dart';
@@ -15,19 +16,18 @@ import 'package:daily_video_reminders/pages/video/record_video_page.dart';
 import 'package:flutter/material.dart';
 import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';
+import '../../data/repositories/multimedia_repository.dart';
 import '../../main.dart';
 import '../video/video_preview_page.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   Timer? _timer;
   NowData nowData = NowData();
 
@@ -66,10 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Map<int, List<HabitEntry>> get habitGridData {
     Map<int, List<HabitEntry>> habitEntries = <int, List<HabitEntry>>{};
-    for (var element in Database.habits) {
+    for (var element in CustomDatabase.habits) {
       habitEntries[element.id] = [];
     }
-    for (var element in Database.habitEntries) {
+    for (var element in CustomDatabase.habitEntries) {
       habitEntries[element.habitId]!.add(element);
     }
     return habitEntries;
@@ -108,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 body: WeekAndHabitsScrollView(
-                  todaysHabitEntities: Database.habits.map((e) => HabitEntity(e, Database.habitEntries)).toList(),
+                  todaysHabitEntities: CustomDatabase.habits.map((e) => HabitEntity(e, CustomDatabase.habitEntries, [])).toList(),
                   weekOfHabitEntities: [[], [], [], [], [], [], []],
                   currentDay: DateTime.now(),
                 ),

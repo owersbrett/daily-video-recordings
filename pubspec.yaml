@@ -16,8 +16,8 @@ dependencies:
   equatable:
   bloc:
   logging:
+  shared_preferences:
   swipable_stack:
-
   flutter_slidable:
   hydrated_bloc:
   uuid:

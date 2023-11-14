@@ -63,7 +63,14 @@ class WeekAndHabitsScrollView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         ),
         Expanded(
-          child: ListView(children: [...habitWidgets, SizedBox(height: kToolbarHeight,)],),
+          child: ListView(
+            children: [
+              ...habitWidgets,
+              SizedBox(
+                height: kToolbarHeight,
+              )
+            ],
+          ),
         ),
       ],
     ));

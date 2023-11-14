@@ -128,11 +128,11 @@ class HomePageBottom extends StatelessWidget {
         _horizontalLabelText("Daily"),
 
         customSlider(value1, emerald),
-        SizedBox(height: mid || large? 4 : 8),
+        SizedBox(height: mid || large ? 4 : 8),
         // monthly
         _horizontalLabelText("Weekly"),
         customSlider(value2, emerald),
-        SizedBox(height: mid || large? 4 : 8),
+        SizedBox(height: mid || large ? 4 : 8),
         // annual
         _horizontalLabelText("Experience"),
         customSlider(value3, emerald),

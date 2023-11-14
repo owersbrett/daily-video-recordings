@@ -1,4 +1,3 @@
-
 import 'package:daily_video_reminders/data/habit_entry.dart';
 import 'package:daily_video_reminders/habit_grid.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +11,15 @@ class ReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          children: [
-            TodayIsWidget(),
-            SizedBox(height: 8,),
-            Expanded(child: HabitGrid(habits: habitGridData)),
-            
-          ],
-        ),
-      );
+      body: Column(
+        children: [
+          TodayIsWidget(),
+          SizedBox(
+            height: 8,
+          ),
+          Expanded(child: HabitGrid(habits: habitGridData)),
+        ],
+      ),
+    );
   }
 }

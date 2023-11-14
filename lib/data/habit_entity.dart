@@ -1,9 +1,12 @@
-import 'package:daily_video_reminders/data/habit.dart';
-import 'package:daily_video_reminders/data/habit_entry.dart';
+
+import 'habit.dart';
+import 'habit_entry.dart';
+import 'habit_entry_note.dart';
 
 class HabitEntity {
   final Habit habit;
   final List<HabitEntry> habitEntities;
+  final List<HabitEntryNote> habitEntryNotes;
 
-  HabitEntity(this.habit, this.habitEntities);
+  HabitEntity(this.habit, this.habitEntities, this.habitEntryNotes);
 }

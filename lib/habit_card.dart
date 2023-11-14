@@ -1,18 +1,12 @@
-import 'package:daily_video_reminders/data/habit.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_progress_indicator.dart';
+import 'data/habit.dart';
 import 'data/habit_entity.dart';
 import 'widgets/stylized_checkbox.dart';
 
 class HabitCard extends StatefulWidget {
-  const HabitCard(
-      {super.key,
-      required this.habitEntity,
-      this.voidCallback,
-      this.progress = 100,
-      this.checkable = true});
+  const HabitCard({super.key, required this.habitEntity, this.voidCallback, this.progress = 100, this.checkable = true});
   final HabitEntity habitEntity;
   final int progress;
   final bool checkable;
@@ -24,8 +18,7 @@ class HabitCard extends StatefulWidget {
 }
 
 class _HabitCardState extends State<HabitCard> {
-  String get habitString =>
-      habit.verb + " " + habit.valueGoal.toString() + " " + habit.suffix;
+  String get habitString => habit.verb + " " + habit.valueGoal.toString() + " " + habit.suffix;
   Habit get habit => widget.habit;
   bool _completed = false;
   void _onCheck(bool? value) {
@@ -58,15 +51,12 @@ class _HabitCardState extends State<HabitCard> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-                color: HexColor.fromHex(habit.hexColor).withOpacity(.5),
-                width: 2),
+            border: Border.all(color: HexColor.fromHex(habit.hexColor).withOpacity(.5), width: 2),
             gradient: LinearGradient(
               colors: [
                 HexColor.fromHex(habit.hexColor).withOpacity(.5),
@@ -92,8 +82,7 @@ class _HabitCardState extends State<HabitCard> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            right: 16, top: 16, bottom: 16),
+                        padding: const EdgeInsets.only(right: 16, top: 16, bottom: 16),
                         child: widget.progress == 100
                             ? StylizedCheckbox(
                                 isChecked: widget.checkable ? _completed : true,
@@ -102,8 +91,7 @@ class _HabitCardState extends State<HabitCard> {
                             : CustomProgressIndicator(
                                 size: ProgressIndicatorSize.medium,
                                 value: widget.progress.toDouble(),
-                                label: widget.progress.toStringAsPrecision(3) +
-                                    "%",
+                                label: widget.progress.toStringAsPrecision(3) + "%",
                               ),
                       ),
                     ],
@@ -116,10 +104,7 @@ class _HabitCardState extends State<HabitCard> {
                   bottom: 8,
                   child: Text(
                     habit.frequencyType.toPrettyString(),
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.black),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
                   )),
             ],
           ),
@@ -153,8 +138,7 @@ class _HabitCardState extends State<HabitCard> {
         SizedBox(width: 8),
         Text(
           habitString,
-          style: TextStyle(
-              fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         Expanded(child: Container()),
       ],

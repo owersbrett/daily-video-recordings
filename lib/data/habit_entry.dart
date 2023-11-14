@@ -4,6 +4,15 @@ import 'dart:convert';
 import 'unit_type.dart';
 
 class HabitEntry {
+  static const String tableName = "HabitEntry";
+  static const List<String> columnDeclarations = [
+    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
+    "habitId INTEGER",
+    "value TEXT",
+    "unitType TEXT",
+    "createDate INTEGER",
+    "updateDate INTEGER"
+  ];
   final int id;
   final int habitId;
   final dynamic value;
@@ -63,7 +72,7 @@ class HabitEntry {
       id: map['id'] as int,
       habitId: map['habitId'] as int,
       value: map['value'] as dynamic,
-      unitType: UnitType.fromMap(map['unitType'] as Map<String,dynamic>),
+      unitType: UnitType.fromMap(map['unitType'] as Map<String, dynamic>),
       createDate: DateTime.fromMillisecondsSinceEpoch(map['createDate'] as int),
       updateDate: DateTime.fromMillisecondsSinceEpoch(map['updateDate'] as int),
     );
@@ -81,23 +90,17 @@ class HabitEntry {
   @override
   bool operator ==(covariant HabitEntry other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.habitId == habitId &&
-      other.value == value &&
-      other.unitType == unitType &&
-      other.createDate == createDate &&
-      other.updateDate == updateDate;
+
+    return other.id == id &&
+        other.habitId == habitId &&
+        other.value == value &&
+        other.unitType == unitType &&
+        other.createDate == createDate &&
+        other.updateDate == updateDate;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-      habitId.hashCode ^
-      value.hashCode ^
-      unitType.hashCode ^
-      createDate.hashCode ^
-      updateDate.hashCode;
+    return id.hashCode ^ habitId.hashCode ^ value.hashCode ^ unitType.hashCode ^ createDate.hashCode ^ updateDate.hashCode;
   }
 }

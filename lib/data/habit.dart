@@ -1,15 +1,35 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:daily_video_reminders/data/frequency_type.dart';
-import 'package:daily_video_reminders/habit_card.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-import 'unit_type.dart';
+import 'package:daily_video_reminders/data/frequency_type.dart';
+import 'package:daily_video_reminders/data/unit_type.dart';
+import 'package:daily_video_reminders/habit_card.dart';
+
+import 'user.dart';
 
 class Habit {
+  static const String tableName = "Habit";
+  static const List<String> columnDeclarations = [
+    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
+    "userId INTEGER",
+    "verb TEXT",
+    "value INTEGER",
+    "unitIncrement INTEGER",
+    "valueGoal INTEGER",
+    "suffix TEXT",
+    "unitType TEXT",
+    "frequencyType TEXT",
+    "emoji TEXT",
+    "streakEmoji TEXT",
+    "hexColor TEXT",
+    "createDate INTEGER",
+    "updateDate INTEGER",
+    "FOREIGN KEY(userId) REFERENCES ${User.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION"
+  ];
   final int id;
+  final int userId;
   final String verb;
   final int value;
   final int unitIncrement;
@@ -25,6 +45,7 @@ class Habit {
   final DateTime updateDate;
   Habit({
     required this.id,
+    required this.userId,
     required this.verb,
     required this.value,
     required this.unitIncrement,
@@ -41,6 +62,7 @@ class Habit {
 
   Habit copyWith({
     int? id,
+    int? userId,
     String? verb,
     int? value,
     int? unitIncrement,
@@ -56,6 +78,7 @@ class Habit {
   }) {
     return Habit(
       id: id ?? this.id,
+      userId: userId ?? this.userId,
       verb: verb ?? this.verb,
       value: value ?? this.value,
       unitIncrement: unitIncrement ?? this.unitIncrement,
@@ -74,6 +97,7 @@ class Habit {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'userId': userId,
       'verb': verb,
       'value': value,
       'unitIncrement': unitIncrement,
@@ -103,21 +127,21 @@ class Habit {
       hexColor: Colors.black.toHex(),
       createDate: DateTime.now(),
       updateDate: DateTime.now(),
-      frequencyType: FrequencyType.daily,
+      frequencyType: FrequencyType.daily, userId: 1,
     );
   }
 
   factory Habit.fromMap(Map<String, dynamic> map) {
     return Habit(
       id: map['id'] as int,
+      userId: map['userId'] as int,
       verb: map['verb'] as String,
       value: map['value'] as int,
       unitIncrement: map['unitIncrement'] as int,
       valueGoal: map['valueGoal'] as int,
       suffix: map['suffix'] as String,
-      unitType: UnitType.fromMap(map['unitType'] as Map<String, dynamic>),
-      frequencyType:
-          FrequencyType.fromMap(map['frequencyType'] as Map<String, dynamic>),
+      unitType: UnitType.fromMap(map['unitType'] as Map<String,dynamic>),
+      frequencyType: FrequencyType.fromMap(map['frequencyType'] as Map<String,dynamic>),
       emoji: map['emoji'] as String,
       streakEmoji: map['streakEmoji'] as String,
       hexColor: map['hexColor'] as String,
@@ -128,47 +152,49 @@ class Habit {
 
   String toJson() => json.encode(toMap());
 
-  factory Habit.fromJson(String source) =>
-      Habit.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Habit.fromJson(String source) => Habit.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Habit(id: $id, verb: $verb, value: $value, unitIncrement: $unitIncrement, valueGoal: $valueGoal, suffix: $suffix, unitType: $unitType, frequencyType: $frequencyType, emoji: $emoji, streakEmoji: $streakEmoji, hexColor: $hexColor, createDate: $createDate, updateDate: $updateDate)';
+    return 'Habit(id: $id, userId: $userId, verb: $verb, value: $value, unitIncrement: $unitIncrement, valueGoal: $valueGoal, suffix: $suffix, unitType: $unitType, frequencyType: $frequencyType, emoji: $emoji, streakEmoji: $streakEmoji, hexColor: $hexColor, createDate: $createDate, updateDate: $updateDate)';
   }
 
   @override
   bool operator ==(covariant Habit other) {
     if (identical(this, other)) return true;
-
-    return other.id == id &&
-        other.verb == verb &&
-        other.value == value &&
-        other.unitIncrement == unitIncrement &&
-        other.valueGoal == valueGoal &&
-        other.suffix == suffix &&
-        other.unitType == unitType &&
-        other.frequencyType == frequencyType &&
-        other.emoji == emoji &&
-        other.streakEmoji == streakEmoji &&
-        other.hexColor == hexColor &&
-        other.createDate == createDate &&
-        other.updateDate == updateDate;
+  
+    return 
+      other.id == id &&
+      other.userId == userId &&
+      other.verb == verb &&
+      other.value == value &&
+      other.unitIncrement == unitIncrement &&
+      other.valueGoal == valueGoal &&
+      other.suffix == suffix &&
+      other.unitType == unitType &&
+      other.frequencyType == frequencyType &&
+      other.emoji == emoji &&
+      other.streakEmoji == streakEmoji &&
+      other.hexColor == hexColor &&
+      other.createDate == createDate &&
+      other.updateDate == updateDate;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        verb.hashCode ^
-        value.hashCode ^
-        unitIncrement.hashCode ^
-        valueGoal.hashCode ^
-        suffix.hashCode ^
-        unitType.hashCode ^
-        frequencyType.hashCode ^
-        emoji.hashCode ^
-        streakEmoji.hashCode ^
-        hexColor.hashCode ^
-        createDate.hashCode ^
-        updateDate.hashCode;
+      userId.hashCode ^
+      verb.hashCode ^
+      value.hashCode ^
+      unitIncrement.hashCode ^
+      valueGoal.hashCode ^
+      suffix.hashCode ^
+      unitType.hashCode ^
+      frequencyType.hashCode ^
+      emoji.hashCode ^
+      streakEmoji.hashCode ^
+      hexColor.hashCode ^
+      createDate.hashCode ^
+      updateDate.hashCode;
   }
 }
