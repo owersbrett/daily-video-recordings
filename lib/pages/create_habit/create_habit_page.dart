@@ -10,6 +10,7 @@ import 'package:daily_video_reminders/pages/video/dvr_close_button.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:daily_video_reminders/widgets/custom_form_field.dart';
 
+import '../../bloc/habits/habits.dart';
 import '../../data/db.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entity.dart';
@@ -201,7 +202,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                         }
                       },
                       child: HabitCard(
-                        habitEntity: HabitEntity(habit, CustomDatabase.habitEntries, []),
+                        habitEntity: HabitEntity(habit: habit, habitEntries: [], habitEntryNotes:  []),
                         progress: progress,
                         checkable: false,
                       ),
@@ -257,7 +258,8 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                               child: InkWell(
                                 onTap: () {
                                   Logger.root.info("Habit: $habit");
-                                  // BlocProvider.of<HabitBloc>(context).add(HabitAdded(habit));
+                                  BlocProvider.of<HabitsBloc>(context).add(AddHabit(habit));
+                                  Navigator.of(context).pop();
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

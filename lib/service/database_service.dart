@@ -15,6 +15,7 @@ import '../data/level.dart';
 
 class DatabaseService {
   static final DatabaseService _singleton = DatabaseService._internal();
+  // toggle to update database
   static final version = 2;
 
   factory DatabaseService() {
@@ -36,6 +37,7 @@ class DatabaseService {
   }
 
   static Future updateDatabase(Database db) async {
+    onCreate(db, version);
 //     String sql = """
 
 // ALTER TABLE NoteAudio ADD originalFilePath TEXT
@@ -59,11 +61,11 @@ class DatabaseService {
   }
 
   static FutureOr<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
-    await createTables(db);
+    // await createTables(db);
   }
 
   static FutureOr<void> onDowngrade(Database db, int oldVersion, int newVersion) async {
-    // await dropTables(db);
+    await dropTables(db);
     // await createTables(db);
   }
 
@@ -72,14 +74,12 @@ class DatabaseService {
     String dropUserTableSql = getDropTableString(User.tableName);
     String dropHabitEntryTableSql = getDropTableString(HabitEntry.tableName);
 
-    String dropExperienceSql = getDropTableString( Experience.tableName);
-    String dropDomainSql = getDropTableString( Domain.tableName);
-    String dropHabitEntryNoteSql = getDropTableString( HabitEntryNote.tableName);
-    String dropUserLevelSql = getDropTableString( UserLevel.tableName);
-    String dropMultimediaSql = getDropTableString( Multimedia.tableName);
-    String dropLevelSql = getDropTableString( Level.tableName);
-
-
+    String dropExperienceSql = getDropTableString(Experience.tableName);
+    String dropDomainSql = getDropTableString(Domain.tableName);
+    String dropHabitEntryNoteSql = getDropTableString(HabitEntryNote.tableName);
+    String dropUserLevelSql = getDropTableString(UserLevel.tableName);
+    String dropMultimediaSql = getDropTableString(Multimedia.tableName);
+    String dropLevelSql = getDropTableString(Level.tableName);
 
     sqlTry(db, dropUserTableSql);
     sqlTry(db, dropHabitTableSql);
@@ -104,7 +104,6 @@ class DatabaseService {
     String createUserLevelSql = getCreateTableString(UserLevel.columnDeclarations, UserLevel.tableName);
     String createMultimediaSql = getCreateTableString(Multimedia.columnDeclarations, Multimedia.tableName);
     String createLevelSql = getCreateTableString(Level.columnDeclarations, Level.tableName);
-
 
     sqlTry(db, createHabitTableSql);
     sqlTry(db, createUserTableSql);

@@ -7,10 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../widgets/weekday_hero.dart';
 
 class WeekAndHabitsScrollView extends StatelessWidget {
-  const WeekAndHabitsScrollView({super.key, required this.currentDay, required this.weekOfHabitEntities, required this.todaysHabitEntities});
+  const WeekAndHabitsScrollView({super.key, required this.currentDay, required this.weekOfHabitEntities});
   final DateTime currentDay;
-  final List<List<HabitEntity>> weekOfHabitEntities;
-  final List<HabitEntity> todaysHabitEntities;
+  final Map<int, List<HabitEntity>> weekOfHabitEntities;
   DateTime get now => DateTime.now();
   DateTime get yesterday => currentDay.subtract(const Duration(days: 1));
   DateTime get tomorrow => currentDay.add(const Duration(days: 1));
@@ -48,7 +47,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   List<Widget> dayWidgets(BuildContext context) => days(context);
   List<Widget> get habitWidgets {
     List<Widget> widgets = [];
-    widgets = todaysHabitEntities.map((e) => HabitCard(habitEntity: e)).toList();
+    widgets = weekOfHabitEntities[0]?.map((e) => HabitCard(habitEntity: e)).toList() ?? [];
     return widgets;
   }
 

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'habit.dart';
 import 'unit_type.dart';
 
 class HabitEntry {
@@ -13,20 +14,34 @@ class HabitEntry {
     "createDate INTEGER",
     "updateDate INTEGER"
   ];
-  final int id;
+  final int? id;
   final int habitId;
   final dynamic value;
   final UnitType unitType;
   final DateTime createDate;
   final DateTime updateDate;
   HabitEntry({
-    required this.id,
+    this.id,
     required this.habitId,
-    required this.value,
+    this.value,
     required this.unitType,
     required this.createDate,
     required this.updateDate,
   });
+  bool get isEmpty => habitId == -1;
+  static HabitEntry empty() {
+    return HabitEntry(habitId: -1, unitType: UnitType.blank, createDate: DateTime.now(), updateDate: DateTime.now());
+  }
+
+  static HabitEntry fromHabit(Habit habit) {
+    return HabitEntry(
+      habitId: habit.id!,
+      value: 0,
+      unitType: habit.unitType,
+      createDate: DateTime.now(),
+      updateDate: DateTime.now(),
+    );
+  }
 
   HabitEntry copyWith({
     int? id,
@@ -51,7 +66,7 @@ class HabitEntry {
       'id': id,
       'habitId': habitId,
       'value': value,
-      'unitType': unitType.toMap(),
+      'unitType': unitType.toPrettyString(),
       'createDate': createDate.millisecondsSinceEpoch,
       'updateDate': updateDate.millisecondsSinceEpoch,
     };
@@ -72,7 +87,7 @@ class HabitEntry {
       id: map['id'] as int,
       habitId: map['habitId'] as int,
       value: map['value'] as dynamic,
-      unitType: UnitType.fromMap(map['unitType'] as Map<String, dynamic>),
+      unitType: UnitType.fromPrettyString(map['unitType']),
       createDate: DateTime.fromMillisecondsSinceEpoch(map['createDate'] as int),
       updateDate: DateTime.fromMillisecondsSinceEpoch(map['updateDate'] as int),
     );

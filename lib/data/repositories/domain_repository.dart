@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../domain.dart';
 import '_repository.dart';
 
@@ -5,6 +7,9 @@ abstract class IDomainRepository implements Repository<Domain> {
 
 }
 class DomainRepository implements IDomainRepository{
+  final Database db;
+  String get tableName => Domain.tableName;
+  DomainRepository({required this.db});
   @override
   Future<Domain> create(Domain t) {
     // TODO: implement create

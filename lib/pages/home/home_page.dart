@@ -1,27 +1,29 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+
 import 'package:daily_video_reminders/daily_app_bar.dart';
 import 'package:daily_video_reminders/data/bottom_sheet_state.dart';
 import 'package:daily_video_reminders/data/db.dart';
-import 'package:daily_video_reminders/data/repositories/user_repository.dart';
 import 'package:daily_video_reminders/habit_grid.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
 import 'package:daily_video_reminders/pages/create_habit/create_habit_page.dart';
 import 'package:daily_video_reminders/pages/home/home_page_bottom.dart';
 import 'package:daily_video_reminders/pages/home/now_data.dart';
-
 import 'package:daily_video_reminders/pages/home/week_and_habits_scroll_view.dart';
 import 'package:daily_video_reminders/pages/video/record_video_page.dart';
-import 'package:flutter/material.dart';
+
+import '../../bloc/habits/habits.dart';
 import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';
-import '../../data/repositories/multimedia_repository.dart';
+import '../../data/user.dart';
 import '../../main.dart';
-import '../video/video_preview_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required this.user});
+  final User user;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -40,6 +42,8 @@ class _HomePageState extends State<HomePage> {
 
     _timer = Timer.periodic(const Duration(seconds: 1), minuteFunction);
     log(monthlyValue.toString());
+    log("Oi mate");
+    BlocProvider.of<HabitsBloc>(context).add(FetchHabits(widget.user.id!));
   }
 
   void minuteFunction(Timer t) {
@@ -67,7 +71,7 @@ class _HomePageState extends State<HomePage> {
   Map<int, List<HabitEntry>> get habitGridData {
     Map<int, List<HabitEntry>> habitEntries = <int, List<HabitEntry>>{};
     for (var element in CustomDatabase.habits) {
-      habitEntries[element.id] = [];
+      habitEntries[element.id!] = [];
     }
     for (var element in CustomDatabase.habitEntries) {
       habitEntries[element.habitId]!.add(element);
@@ -107,10 +111,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                body: WeekAndHabitsScrollView(
-                  todaysHabitEntities: CustomDatabase.habits.map((e) => HabitEntity(e, CustomDatabase.habitEntries, [])).toList(),
-                  weekOfHabitEntities: [[], [], [], [], [], [], []],
-                  currentDay: DateTime.now(),
+                body: BlocBuilder<HabitsBloc, HabitsState>(
+                  builder: (context, state) {
+                    if (state is HabitsLoaded) {
+                      return WeekAndHabitsScrollView(
+                        weekOfHabitEntities: state.segregatedHabits(),
+                        currentDay: DateTime.now(),
+                      );
+                    }
+                    return CircularProgressIndicator();
+                  },
                 ),
                 bottomSheet: bottomBar(context),
 

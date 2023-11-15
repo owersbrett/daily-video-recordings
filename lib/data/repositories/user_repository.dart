@@ -1,12 +1,17 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../db.dart';
+import '../habit.dart';
+import '../habit_entry.dart';
+import '../multimedia.dart';
 import '../user.dart';
+import '../user_entity.dart';
 import '_repository.dart';
 
 abstract class IUserRepository implements Repository<User> {
   Future<User> create(User t);
   Future<User> get();
+
 }
 
 class UserRepository implements IUserRepository {
@@ -15,8 +20,8 @@ class UserRepository implements IUserRepository {
   UserRepository({required this.db});
   @override
   Future<User> create(User t) async {
-    db.insert(tableName, t.toMap());
-    return t;
+    int i = await db.insert(tableName, t.toMap());
+    return t.copyWith(id: i);
   }
 
   @override
@@ -48,4 +53,6 @@ class UserRepository implements IUserRepository {
     // TODO: implement update
     throw UnimplementedError();
   }
+
+
 }

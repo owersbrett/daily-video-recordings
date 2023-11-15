@@ -28,7 +28,7 @@ class Habit {
     "updateDate INTEGER",
     "FOREIGN KEY(userId) REFERENCES ${User.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION"
   ];
-  final int id;
+  final int? id;
   final int userId;
   final String verb;
   final int value;
@@ -44,7 +44,7 @@ class Habit {
   final DateTime createDate;
   final DateTime updateDate;
   Habit({
-    required this.id,
+     this.id,
     required this.userId,
     required this.verb,
     required this.value,
@@ -103,8 +103,8 @@ class Habit {
       'unitIncrement': unitIncrement,
       'valueGoal': valueGoal,
       'suffix': suffix,
-      'unitType': unitType.toMap(),
-      'frequencyType': frequencyType.toMap(),
+      'unitType': unitType.toPrettyString(),
+      'frequencyType': frequencyType.toPrettyString(),
       'emoji': emoji,
       'streakEmoji': streakEmoji,
       'hexColor': hexColor,
@@ -116,7 +116,6 @@ class Habit {
   factory Habit.empty() {
     return Habit(
       unitIncrement: 1,
-      id: -1,
       verb: "",
       value: 0,
       valueGoal: 1,
@@ -127,7 +126,8 @@ class Habit {
       hexColor: Colors.black.toHex(),
       createDate: DateTime.now(),
       updateDate: DateTime.now(),
-      frequencyType: FrequencyType.daily, userId: 1,
+      frequencyType: FrequencyType.daily,
+      userId: 1,
     );
   }
 
@@ -140,8 +140,8 @@ class Habit {
       unitIncrement: map['unitIncrement'] as int,
       valueGoal: map['valueGoal'] as int,
       suffix: map['suffix'] as String,
-      unitType: UnitType.fromMap(map['unitType'] as Map<String,dynamic>),
-      frequencyType: FrequencyType.fromMap(map['frequencyType'] as Map<String,dynamic>),
+      unitType: UnitType.fromPrettyString(map['unitType']),
+      frequencyType: FrequencyType.fromPrettyString(map['frequencyType']),
       emoji: map['emoji'] as String,
       streakEmoji: map['streakEmoji'] as String,
       hexColor: map['hexColor'] as String,
@@ -162,39 +162,38 @@ class Habit {
   @override
   bool operator ==(covariant Habit other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.userId == userId &&
-      other.verb == verb &&
-      other.value == value &&
-      other.unitIncrement == unitIncrement &&
-      other.valueGoal == valueGoal &&
-      other.suffix == suffix &&
-      other.unitType == unitType &&
-      other.frequencyType == frequencyType &&
-      other.emoji == emoji &&
-      other.streakEmoji == streakEmoji &&
-      other.hexColor == hexColor &&
-      other.createDate == createDate &&
-      other.updateDate == updateDate;
+
+    return other.id == id &&
+        other.userId == userId &&
+        other.verb == verb &&
+        other.value == value &&
+        other.unitIncrement == unitIncrement &&
+        other.valueGoal == valueGoal &&
+        other.suffix == suffix &&
+        other.unitType == unitType &&
+        other.frequencyType == frequencyType &&
+        other.emoji == emoji &&
+        other.streakEmoji == streakEmoji &&
+        other.hexColor == hexColor &&
+        other.createDate == createDate &&
+        other.updateDate == updateDate;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      userId.hashCode ^
-      verb.hashCode ^
-      value.hashCode ^
-      unitIncrement.hashCode ^
-      valueGoal.hashCode ^
-      suffix.hashCode ^
-      unitType.hashCode ^
-      frequencyType.hashCode ^
-      emoji.hashCode ^
-      streakEmoji.hashCode ^
-      hexColor.hashCode ^
-      createDate.hashCode ^
-      updateDate.hashCode;
+        userId.hashCode ^
+        verb.hashCode ^
+        value.hashCode ^
+        unitIncrement.hashCode ^
+        valueGoal.hashCode ^
+        suffix.hashCode ^
+        unitType.hashCode ^
+        frequencyType.hashCode ^
+        emoji.hashCode ^
+        streakEmoji.hashCode ^
+        hexColor.hashCode ^
+        createDate.hashCode ^
+        updateDate.hashCode;
   }
 }

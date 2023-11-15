@@ -10,12 +10,12 @@ static const List<String> columnDeclarations = [
   "updateDate INTEGER"
 ];
 
-  final int id;
+  final int? id;
   final String name;
   final DateTime createDate;
   final DateTime updateDate;
   User({
-    required this.id,
+    this.id,
     required this.name,
     required this.createDate,
     required this.updateDate,

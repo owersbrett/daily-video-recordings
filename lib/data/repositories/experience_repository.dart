@@ -1,9 +1,14 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../experience.dart';
 import '_repository.dart';
 
 abstract class IExperienceRepository implements Repository<Experience> {}
 
 class ExperienceRepository implements IExperienceRepository {
+  final Database db;
+  String get tableName => Experience.tableName;
+  ExperienceRepository({required this.db});
   @override
   Future<Experience> create(Experience t) {
     // TODO: implement create

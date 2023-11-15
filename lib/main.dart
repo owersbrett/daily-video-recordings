@@ -1,6 +1,8 @@
 import 'package:daily_video_reminders/data/repositories/domain_repository.dart';
 import 'package:daily_video_reminders/data/repositories/experience_repository.dart';
+import 'package:daily_video_reminders/data/repositories/habit_entry_note_repository.dart';
 import 'package:daily_video_reminders/data/repositories/user_repository.dart';
+import 'package:daily_video_reminders/pages/home/app_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
 import 'data/db.dart' as db;
+import 'data/repositories/habit_entry_repository.dart';
+import 'data/repositories/habit_repository.dart';
 import 'data/repositories/multimedia_repository.dart';
 import 'service/database_service.dart';
 
@@ -49,11 +53,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     IUserRepository userRepository = UserRepository(db: db);
+    IHabitEntryNoteRepository habitEntryNoteRepository = HabitEntryNoteRepository(db: db);
+    IHabitEntryRepository habitEntryRepository = HabitEntryRepository(db: db);
+    IHabitRepository habitRepository = HabitRepository(db: db);
+    IExperienceRepository experienceRepository = ExperienceRepository(db: db);
+    IDomainRepository domainRepository = DomainRepository(db: db);
+
     IMultimediaRepository multimediaRepository = MultimediaRepository(db: db);
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: theme,
-      home: HomePage(userRepository: userRepository, multimediaRepository: multimediaRepository),
+    return AppWrapper(
+      userRepository: userRepository,
+      multimediaRepository: multimediaRepository,
+      domainRepository: domainRepository,
+      experienceRepository: experienceRepository,
+      habitRepository: habitRepository,
+      habitEntryRepository: habitEntryRepository,
+      habitEntryNoteRepository: habitEntryNoteRepository,
     );
   }
 }
