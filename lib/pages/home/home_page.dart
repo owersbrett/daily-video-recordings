@@ -236,16 +236,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget bottomBar(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () {
-        log("double tapped");
-        setState(() {
-          if (bottomSheetState == BottomSheetState.hidden) {
-            bottomSheetState = BottomSheetState.expanded;
-          } else {
-            bottomSheetState = BottomSheetState.hidden;
-          }
-        });
-      },
+
       onTap: () {
         log("Tapped");
         setState(() {

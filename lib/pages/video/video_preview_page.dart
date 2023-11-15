@@ -73,33 +73,9 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
       child: Image.file(
         file.photoFile ?? File(""),
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return GestureDetector(
-            onTap: () {},
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                border: Border.all(color: Colors.grey),
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.add,
-                  color: Colors.grey,
-                  size: 50,
-                ),
-              ),
-            ),
-          );
-        },
+
       ),
-      footer: Container(
-        padding: EdgeInsets.all(8.0),
-        color: Colors.black54,
-        child: Text(
-          "Video ${i + 1}",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+
     );
   }
 
@@ -119,7 +95,7 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
                 if (snapshot.hasData) {
                   var files = snapshot.data as List<MultimediaFile>;
                   return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       childAspectRatio: 9 / 19.5 * 1.5,
                     ),
@@ -132,17 +108,14 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
                             MaterialPageRoute(builder: (context) => VideoSwipePage(multimediaFile: files[i], page: i)),
                           );
                         },
-                        child: Hero(
-                          tag: 'video$i',
-                          child: gridItem(files[i], i, files[i].photoFile != null),
-                        ),
+                        child: gridItem(files[i], i, files[i].photoFile != null),
                       );
                     },
                   );
                 } else if (snapshot.hasError) {
-                  return Center(child: Text("Error loading videos"));
+                  return const Center(child: Text("Error loading videos"));
                 }
-                return Center(
+                return const Center(
                   child: Text("No videos found"),
                 );
               },

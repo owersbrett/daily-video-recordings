@@ -80,7 +80,6 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
   bool switching = false;
   bool scrolledToPage = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -254,14 +253,21 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
                 itemBuilder: (context, index) {
                   final data = videos[index];
                   log(index.toString());
-                  return Hero(
-                    tag: 'video$index',
-                    child: Stack(
-                      children: [
-                        VideoPlayerItem(path: data.path),
-                        // overlay(size),
-                      ],
-                    ),
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Expanded(child: Container(color: Colors.black),),
+                          AspectRatio(
+                            aspectRatio: 9 / 16,
+                            child: VideoPlayerItem(path: data.path),
+                          ),
+                          Expanded(child: Container(color: Colors.black),),
+                        ],
+                      ),
+                      // overlay(size),
+                    ],
                   );
                 },
               );

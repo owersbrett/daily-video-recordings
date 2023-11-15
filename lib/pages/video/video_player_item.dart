@@ -52,16 +52,9 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
           },
           onLongPressEnd: (details) {
             _controller?.setPlaybackSpeed(1);
-
           },
           onTap: _togglePlay,
-          child: Column(
-            children: [
-              Expanded(
-                child: VideoPlayer(_controller!),
-              ),
-            ],
-          ),
+          child: VideoPlayer(_controller!),
         ),
         DVRCloseButton(onPressed: () => Navigator.of(context).pop())
       ],
