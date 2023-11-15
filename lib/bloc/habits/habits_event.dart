@@ -1,3 +1,5 @@
+import 'package:daily_video_reminders/bloc/experience/experience.dart';
+
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';
 
@@ -26,5 +28,6 @@ class DeleteHabit extends HabitsEvent {
 class UpdateHabitEntry extends HabitsEvent {
   final Habit habit;
   final HabitEntry habitEntry;
-  UpdateHabitEntry(this.habit, this.habitEntry);
+  final ExperienceBloc experienceBloc;
+  UpdateHabitEntry(this.habit, this.habitEntry, this.experienceBloc);
 }

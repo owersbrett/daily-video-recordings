@@ -34,7 +34,7 @@ class _HabitGridState extends State<HabitGrid> {
   List<Widget> habitCells(Habit entry) {
     List<HabitEntry> entries = widget.habits[entry.id]!;
     int i = 1;
-    List<Widget> cells = entries.map((e) => cell((e.value as bool) ? "✅" : "❌")).toList();
+    List<Widget> cells = entries.map((e) => cell((e.booleanValue as bool) ? "✅" : "❌")).toList();
     cells.insert(0, cell(entry.emoji, true));
     return cells;
   }

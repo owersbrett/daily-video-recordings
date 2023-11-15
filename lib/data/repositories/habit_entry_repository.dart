@@ -30,8 +30,8 @@ class HabitEntryRepository implements IHabitEntryRepository {
 
   @override
   Future<HabitEntry> getById(int id) {
-    // TODO: implement getById
-    throw UnimplementedError();
+    var q = db.query(tableName, where: 'id = ?', whereArgs: [id]);
+    return q.then((value) => HabitEntry.fromMap(value.first));
   }
 
   @override

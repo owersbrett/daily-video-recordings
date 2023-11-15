@@ -4,6 +4,8 @@ import 'package:daily_video_reminders/habit_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/experience/experience.dart';
+import '../../bloc/habits/habits.dart';
 import '../../widgets/weekday_hero.dart';
 
 class WeekAndHabitsScrollView extends StatelessWidget {
@@ -44,10 +46,28 @@ class WeekAndHabitsScrollView extends StatelessWidget {
           ),
         ),
       );
+
+  void uncheckHabit(HabitEntity e, BuildContext context) {
+    var habitEntry = e.habitEntries.firstWhere((element) => element.habitId == e.habit.id);
+    habitEntry = habitEntry.copyWith(booleanValue: !habitEntry.booleanValue);
+    BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(e.habit, habitEntry, BlocProvider.of<ExperienceBloc>(context)));
+
+  }
+  void checkHabit(HabitEntity e, BuildContext context) {
+    var habitEntry = e.habitEntries.firstWhere((element) => element.habitId == e.habit.id);
+    habitEntry = habitEntry.copyWith(booleanValue: !habitEntry.booleanValue);
+    BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(e.habit, habitEntry, BlocProvider.of<ExperienceBloc>(context)));
+  }
+
   List<Widget> dayWidgets(BuildContext context) => days(context);
-  List<Widget> get habitWidgets {
+  List<Widget> habitWidgets(BuildContext context) {
     List<Widget> widgets = [];
-    widgets = weekOfHabitEntities[0]?.map((e) => HabitCard(habitEntity: e)).toList() ?? [];
+    if (weekOfHabitEntities.isEmpty) {
+      return widgets;
+    }
+    widgets = weekOfHabitEntities[0]?.map((e) => HabitCard(habitEntity: e, onUncheck: () {
+          uncheckHabit(e, context);
+    }, onCheck: () => checkHabit(e, context))).toList() ?? [];
     return widgets;
   }
 
@@ -63,12 +83,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
         ),
         Expanded(
           child: ListView(
-            children: [
-              ...habitWidgets,
-              SizedBox(
-                height: kToolbarHeight,
-              )
-            ],
+            children: [...habitWidgets(context), const SizedBox(height: kToolbarHeight)],
           ),
         ),
       ],

@@ -1,3 +1,4 @@
+import 'package:daily_video_reminders/bloc/experience/experience.dart';
 import 'package:daily_video_reminders/bloc/habits/habits.dart';
 import 'package:daily_video_reminders/data/repositories/domain_repository.dart';
 import 'package:daily_video_reminders/data/repositories/experience_repository.dart';
@@ -87,17 +88,22 @@ class _DailyVideoRemindersState extends State<DailyVideoReminders> {
   late UserBloc userBloc;
   late MultimediaBloc multimediaBloc;
   late HabitsBloc habitsBloc;
+  late ExperienceBloc experienceBloc;
   @override
   void initState() {
     super.initState();
-    userBloc = UserBloc(widget.userRepository, widget.habitRepository, widget.habitEntryRepository);
+    userBloc = UserBloc(widget.userRepository, widget.habitRepository, widget.habitEntryRepository, widget.experienceRepository);
     multimediaBloc = MultimediaBloc(widget.multimediaRepository);
     habitsBloc = HabitsBloc(widget.habitRepository, widget.habitEntryRepository);
+    experienceBloc = ExperienceBloc(widget.experienceRepository);
   }
 
   @override
   void dispose() {
     userBloc.close();
+    multimediaBloc.close();
+    habitsBloc.close();
+    experienceBloc.close();
     super.dispose();
   }
 
@@ -108,9 +114,10 @@ class _DailyVideoRemindersState extends State<DailyVideoReminders> {
         BlocProvider(create: (context) => userBloc),
         BlocProvider(create: (context) => multimediaBloc),
         BlocProvider(create: (context) => habitsBloc),
+        BlocProvider(create: (context) => experienceBloc),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Mementoh',
         theme: theme,
         home: const UserPage(),
       ),

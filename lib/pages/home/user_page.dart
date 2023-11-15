@@ -29,7 +29,7 @@ class _UserPageState extends State<UserPage> {
         if (state is UserLoaded) {
           return HomePage(user: state.user);
         } else {
-          return Scaffold(
+          return const Scaffold(
             body: Center(child: Text("No user")),
           );
         }

@@ -1,6 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:daily_video_reminders/data/habit_entry.dart';
+
+import 'habit.dart';
+import 'user.dart';
+
 class Experience {
   static String tableName = "Experience";
 
@@ -12,10 +17,14 @@ class Experience {
     "createdAt INTEGER",
     "updatedAt INTEGER",
     "description TEXT",
-    "domainId INTEGER"
+    "domainId INTEGER",
+    "FOREIGN KEY(userId) REFERENCES ${User.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
+    "FOREIGN KEY(habitEntryId) REFERENCES ${HabitEntry.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
+
+    
   ];
 
-  final int id;
+  final int? id;
   final int userId;
   final int habitEntryId;
   final int points;
@@ -25,7 +34,7 @@ class Experience {
   final int domainId;
 
   Experience({
-    required this.id,
+     this.id,
     required this.userId,
     required this.habitEntryId,
     required this.points,
@@ -117,5 +126,17 @@ class Experience {
       updatedAt.hashCode ^
       description.hashCode ^
       domainId.hashCode;
+  }
+
+  static Experience fromHabitEntry(Habit habit, HabitEntry habitEntry) {
+    return Experience(
+      userId: habit.userId,
+      habitEntryId: habitEntry.id!,
+      points: habitEntry.integerValue ??  (habitEntry.booleanValue ? 1 : 0),
+      createdAt: habitEntry.createDate,
+      updatedAt: habitEntry.updateDate,
+      description: habit.verb + " " + habitEntry.integerValue.toString() + " " + habit.suffix,
+      domainId: 0,
+    );
   }
 }

@@ -147,7 +147,7 @@ class HomePageBottom extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildVerticalProgressBar(value4, rubyDark, (nowData.currentTime.minute).toString() + " / 60 Minutes"),
+          _buildVerticalProgressBar(value4, rubyDark, (nowData.currentTime.second).toString()),
           _buildVerticalProgressBar(
               value5,
               goldDark,

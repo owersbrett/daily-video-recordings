@@ -31,7 +31,9 @@ class Level {
     "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
     "name TEXT",
     "pointsToUnlock INTEGER",
-    "nextLevelId INTEGER"
+    "nextLevelId INTEGER",
+    "FOREIGN KEY(nextLevelId) REFERENCES $tableName(id)"
+
   ];
 
   final int id;

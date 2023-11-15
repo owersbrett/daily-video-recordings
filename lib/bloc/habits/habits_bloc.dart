@@ -1,8 +1,10 @@
+import 'package:daily_video_reminders/bloc/experience/experience.dart';
 import 'package:daily_video_reminders/data/habit_entity.dart';
 import 'package:daily_video_reminders/data/repositories/habit_entry_repository.dart';
 import 'package:daily_video_reminders/data/repositories/habit_repository.dart';
 import 'package:logging/logging.dart';
 
+import '../../data/experience.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';
 import 'habits.dart';
@@ -72,11 +74,13 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       if (habitEntity != null) {
         HabitEntry habitEntry = habitEntity.habitEntries.firstWhere((element) => element.id == event.habitEntry.id, orElse: () => HabitEntry.empty());
         if (!habitEntry.isEmpty) {
+
           await habitEntryRepository.update(event.habitEntry);
           habitEntry = await habitEntryRepository.getById(event.habit.id!);
           habitEntity.habitEntries.removeWhere((element) => element.id == habitEntry.id);
           habitEntity.habitEntries.add(habitEntry);
           habits.update(event.habit.id!, (value) => habitEntity);
+          event.experienceBloc.add(ExperienceAdded(Experience.fromHabitEntry(habitEntity.habit, habitEntry)));
           emit(HabitsLoaded(habits));
         }
       }

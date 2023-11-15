@@ -16,7 +16,7 @@ import '../data/level.dart';
 class DatabaseService {
   static final DatabaseService _singleton = DatabaseService._internal();
   // toggle to update database
-  static final version = 2;
+  static final version = 33;
 
   factory DatabaseService() {
     return _singleton;
@@ -57,11 +57,11 @@ class DatabaseService {
   }
 
   static FutureOr<void> onCreate(Database db, int version) async {
-    await createTables(db);
+    // await createTables(db);
   }
 
   static FutureOr<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // await createTables(db);
+    await createTables(db);
   }
 
   static FutureOr<void> onDowngrade(Database db, int oldVersion, int newVersion) async {
@@ -70,11 +70,11 @@ class DatabaseService {
   }
 
   static FutureOr<void> dropTables(Database db) async {
-    String dropHabitTableSql = getDropTableString(Habit.tableName);
-    String dropUserTableSql = getDropTableString(User.tableName);
     String dropHabitEntryTableSql = getDropTableString(HabitEntry.tableName);
-
+    String dropUserTableSql = getDropTableString(User.tableName);
+    String dropHabitTableSql = getDropTableString(Habit.tableName);
     String dropExperienceSql = getDropTableString(Experience.tableName);
+
     String dropDomainSql = getDropTableString(Domain.tableName);
     String dropHabitEntryNoteSql = getDropTableString(HabitEntryNote.tableName);
     String dropUserLevelSql = getDropTableString(UserLevel.tableName);
@@ -97,8 +97,8 @@ class DatabaseService {
     String createUserTableSql = getCreateTableString(User.columnDeclarations, User.tableName);
     String createHabitTableSql = getCreateTableString(Habit.columnDeclarations, Habit.tableName);
     String createHabitEntryTableSql = getCreateTableString(HabitEntry.columnDeclarations, HabitEntry.tableName);
-
     String createExperienceSql = getCreateTableString(Experience.columnDeclarations, Experience.tableName);
+
     String createDomainSql = getCreateTableString(Domain.columnDeclarations, Domain.tableName);
     String createHabitEntryNoteSql = getCreateTableString(HabitEntryNote.columnDeclarations, HabitEntryNote.tableName);
     String createUserLevelSql = getCreateTableString(UserLevel.columnDeclarations, UserLevel.tableName);

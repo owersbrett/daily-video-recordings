@@ -7,6 +7,8 @@ abstract class HabitsState extends Equatable {
   Map<int, HabitEntity> get habitMap => {};
 
   static HabitsEmpty initial = HabitsEmpty();
+    /// -3 days ago - 3 days from now [-3,-2,-1,0,1,2,3]
+  Map<int, List<HabitEntity>> segregatedHabits() => {};
   @override
   List<Object?> get props => [...habitMap.values];
 }
@@ -25,16 +27,9 @@ class HabitsLoaded extends HabitsState {
   final Map<int, HabitEntity> habitMap;
   HabitsLoaded(this.habitMap);
 
-  List<HabitEntity> get todaysHabitEntities {
-    DateTime now = DateTime.now();
-    List<HabitEntity> habitEntities = [];
-    List<Habit> habits = [];
-    habitMap.forEach((key, value) {
-      habits.add(value.habit);
-    });
-    return habitEntities;
-  }
 
+
+  @override
   Map<int, List<HabitEntity>> segregatedHabits() {
     Map<int, List<HabitEntity>> segregatedHabits = {};
     for (var i = -3; i <= 3; i++) {

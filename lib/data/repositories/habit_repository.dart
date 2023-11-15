@@ -1,6 +1,5 @@
 import 'package:daily_video_reminders/data/repositories/_repository.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../habit.dart';
 import '../habit_entity.dart';
 import '../habit_entry.dart';
@@ -47,33 +46,34 @@ class HabitRepository implements IHabitRepository {
   @override
   Future<Map<int, HabitEntity>> getHabitEntities(int userId, [DateTime? startingRange, DateTime? endingRange]) async {
     Map<int, HabitEntity> habitEntityMap = {};
-    var q = await db.query(tableName);
 
     StringBuffer buffer = StringBuffer();
     buffer.write("SELECT ");
     buffer.write(
-        "HABIT.id id, HABIT.userId userId, HABIT.verb verb, HABIT.value value, HABIT.unitIncrement unitIncrement, HABIT.valueGoal valueGoal, HABIT.suffix suffix, HABIT.unitType unitType, HABIT.frequencyType frequencyType, HABIT.emoji emoji, HABIT.streakEmoji streakEmoji, HABIT.hexColor hexColor, HABIT.createDate createDate, HABIT.updateDate updateDate, ");
+        "H.id id, H.userId userId, H.verb verb, H.value value, H.unitIncrement unitIncrement, H.valueGoal valueGoal, H.suffix suffix, H.unitType unitType, H.frequencyType frequencyType, H.emoji emoji, H.streakEmoji streakEmoji, H.hexColor hexColor, H.createDate createDate, H.updateDate updateDate, ");
     buffer.write(
-        "HABIT_ENTRY.id HABIT_ENTRY_ID, HABIT_ENTRY.value HABIT_ENTRY_VALUE, HABIT_ENTRY.createDate HABIT_ENTRY_CREATE_DATE, HABIT_ENTRY.updateDate HABIT_ENTRY_UPDATE_DATE");
+        "HE.id HE_ID, HE.booleanValue HE_BOOLEAN_VALUE, HE.integerValue HE_INTEGER_VALUE, HE.stringValue HE_STRING_VALUE, HE.createDate HE_CREATE_DATE, HE.updateDate HE_UPDATE_DATE");
     buffer.write(" FROM  ");
-    buffer.write("$tableName HABIT ");
+    buffer.write("$tableName H ");
     buffer.write("INNER JOIN ");
-    buffer.write("${HabitEntry.tableName} HABIT_ENTRY on HABIT.id = HABIT_ENTRY.habitId ");
+    buffer.write("${HabitEntry.tableName} HE on H.id = HE.habitId ");
     buffer.write("WHERE ");
-    buffer.write("HABIT.userId = $userId ");
+    buffer.write("H.userId = $userId ");
     if (startingRange != null && endingRange != null) {
-      buffer.write("AND HABIT_ENTRY.createDate BETWEEN ${startingRange.millisecondsSinceEpoch} AND ${endingRange.millisecondsSinceEpoch} ");
+      buffer.write("AND HE.createDate BETWEEN ${startingRange.millisecondsSinceEpoch} AND ${endingRange.millisecondsSinceEpoch} ");
     }
     var response = await db.rawQuery(buffer.toString());
     for (var habitHabitEntryRow in response) {
       Habit habit = Habit.fromMap(habitHabitEntryRow);
       HabitEntry habitEntry = HabitEntry(
-        id: habitHabitEntryRow["HABIT_ENTRY_ID"] as int,
+        id: habitHabitEntryRow["HE_ID"] as int,
         habitId: habitHabitEntryRow["id"] as int,
-        value: habitHabitEntryRow["HABIT_ENTRY_VALUE"],
         unitType: UnitType.fromPrettyString(habitHabitEntryRow["unitType"] as String),
         createDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['updateDate'] as int),
-        updateDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['updateDate'] as int),
+        updateDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['updateDate'] as int), 
+        booleanValue: (habitHabitEntryRow["HE_BOOLEAN_VALUE"] as int) == 1,
+        integerValue: habitHabitEntryRow["HE_INTEGER_VALUE"] as int?,
+        stringValue: habitHabitEntryRow["HE_STRING_VALUE"] as String?,
       );
       if (habitEntityMap.containsKey(habitHabitEntryRow["id"] as int)) {
         HabitEntity habitEntity = habitEntityMap[habitHabitEntryRow["id"] as int]!;

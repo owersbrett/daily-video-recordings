@@ -6,13 +6,14 @@ import 'data/habit_entity.dart';
 import 'widgets/stylized_checkbox.dart';
 
 class HabitCard extends StatefulWidget {
-  const HabitCard({super.key, required this.habitEntity, this.voidCallback, this.progress = 100, this.checkable = true});
+  const HabitCard({super.key, required this.habitEntity, this.onCheck, this.onUncheck, this.progress = 100, this.checkable = true});
   final HabitEntity habitEntity;
   final int progress;
   final bool checkable;
   Habit get habit => habitEntity.habit;
 
-  final VoidCallback? voidCallback;
+  final VoidCallback? onCheck;
+  final VoidCallback? onUncheck;
   @override
   State<HabitCard> createState() => _HabitCardState();
 }
@@ -22,13 +23,15 @@ class _HabitCardState extends State<HabitCard> {
   Habit get habit => widget.habit;
   bool _completed = false;
   void _onCheck(bool? value) {
-    if (widget.voidCallback != null) {
-      widget.voidCallback!();
-    } else {
-      setState(() {
-        _completed = !_completed;
-      });
-    }
+    setState(() {
+      if (_completed && widget.onCheck != null) {
+        widget.onCheck!();
+      } else if (!_completed && widget.onUncheck != null) {
+        widget.onUncheck!();
+      }
+
+      _completed = !_completed;
+    });
   }
 
   String get _starBuilder {

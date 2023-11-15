@@ -1,4 +1,6 @@
+import 'package:daily_video_reminders/data/experience.dart';
 import 'package:daily_video_reminders/data/habit_entity.dart';
+import 'package:daily_video_reminders/data/repositories/experience_repository.dart';
 import 'package:daily_video_reminders/data/repositories/user_repository.dart';
 import 'package:daily_video_reminders/main.dart';
 
@@ -13,10 +15,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final IUserRepository userRepository;
   final IHabitRepository habitRepository;
   final IHabitEntryRepository habitEntryRepository;
+  final IExperienceRepository experienceRepository;
   UserBloc(
     this.userRepository,
     this.habitRepository,
     this.habitEntryRepository,
+    this.experienceRepository,
   ) : super(UserInitial()) {
     on<UserEvent>(_onEvent);
   }
@@ -29,7 +33,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       log("Fetching user...");
       User user = await userRepository.get();
-      emit(UserLoaded(user));
+      List<Experience> experienceList = await experienceRepository.getAll();
+      emit(UserLoaded(user, experienceList));
     } catch (e) {
       log(e.toString());
       log("404 User Not Found.");
@@ -37,7 +42,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       User user = User(name: 'You', createDate: DateTime.now(), updateDate: DateTime.now());
       user = await userRepository.create(user);
       log("200 User Created.");
-      emit(UserLoaded(user));
+      List<Experience> experienceList = await experienceRepository.getAll();
+      emit(UserLoaded(user, experienceList));
     }
   }
 }

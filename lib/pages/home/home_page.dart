@@ -15,6 +15,7 @@ import 'package:daily_video_reminders/pages/home/now_data.dart';
 import 'package:daily_video_reminders/pages/home/week_and_habits_scroll_view.dart';
 import 'package:daily_video_reminders/pages/video/record_video_page.dart';
 
+import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
 import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';
@@ -58,7 +59,6 @@ class _HomePageState extends State<HomePage> {
 
   DateTime get now => nowData.currentTime;
 
-  double get dailyValue => (nowData.elapsedFractionOfHour);
   double get monthlyValue => nowData.currentTime.day / DateTime(now.year, now.month + 1, 0).subtract(Duration(days: 1)).day;
   double get annualValue => nowData.dayOfYearFraction;
 
@@ -95,36 +95,33 @@ class _HomePageState extends State<HomePage> {
           },
           child: Stack(
             children: [
-              Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.white,
-                  title: DailyAppBar(
-                    icon: IconButton(
-                      icon: Icon(Icons.add_circle),
-                      iconSize: 32,
-                      color: Colors.black,
-                      onPressed: () {
-                        setState(() {
-                          showCreateDropdown = true;
-                        });
-                      },
+              BlocBuilder<HabitsBloc, HabitsState>(
+                builder: (context, state) {
+                  return Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: Colors.white,
+                      title: DailyAppBar(
+                        icon: IconButton(
+                          icon: Icon(Icons.add_circle),
+                          iconSize: 32,
+                          color: Colors.black,
+                          onPressed: () {
+                            setState(() {
+                              showCreateDropdown = true;
+                            });
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                body: BlocBuilder<HabitsBloc, HabitsState>(
-                  builder: (context, state) {
-                    if (state is HabitsLoaded) {
-                      return WeekAndHabitsScrollView(
-                        weekOfHabitEntities: state.segregatedHabits(),
-                        currentDay: DateTime.now(),
-                      );
-                    }
-                    return CircularProgressIndicator();
-                  },
-                ),
-                bottomSheet: bottomBar(context),
+                    body: WeekAndHabitsScrollView(
+                      weekOfHabitEntities: state.segregatedHabits(),
+                      currentDay: DateTime.now(),
+                    ),
+                    bottomSheet: bottomBar(context, state),
 
-                // bottomNavigationBar: bottomBar(context),
+                    // bottomNavigationBar: bottomBar(context),
+                  );
+                },
               ),
             ],
           ),
@@ -234,9 +231,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget bottomBar(BuildContext context) {
+  Widget bottomBar(BuildContext context, HabitsState state) {
     return GestureDetector(
-
       onTap: () {
         log("Tapped");
         setState(() {
@@ -249,19 +245,36 @@ class _HomePageState extends State<HomePage> {
           }
         });
       },
-      child: HomePageBottom(
-        value1: dailyValue,
-        value2: monthlyValue,
-        value3: annualValue,
-        value4: nowData.currentTime.second / 60,
-        value5: monthlyValue,
-        value6: annualValue,
-        nowData: nowData,
-        bottomSheetState: bottomSheetState,
-        onStartTimer: () {
-          setState(() {
-            nowData.startTimerTimer = DateTime.now();
+      child: BlocBuilder<ExperienceBloc, ExperienceState>(
+        builder: (context, experienceState) {
+          var todaysHabits = state.segregatedHabits()[0];
+          var todaysHabitEntries = (todaysHabits ?? []).fold(0, (previousValue, element) => element.habitEntries.length);
+          var todaysExperience = experienceState.todays();
+
+          Map<int, List<HabitEntity>> thisWeeksHabitsSeperated = state.segregatedHabits();
+          List<HabitEntity> thisWeeksHabitsTogether = [];
+          thisWeeksHabitsSeperated.forEach((key, value) {
+            thisWeeksHabitsTogether.addAll(value);
           });
+          List<HabitEntry> thisWeeksHabitEntries = thisWeeksHabitsTogether.map((e) => e.habitEntries).toList().fold(<HabitEntry>[], (previousValue, element) => [...previousValue, ...element]);
+          var thisWeeksHabitEntryCount = thisWeeksHabitEntries.length;
+          var thisWeeks = experienceState.thisWeeks();
+
+          return HomePageBottom(
+            value1: todaysExperience / (todaysHabitEntries == 0 ? 1 : todaysHabitEntries),
+            value2: thisWeeks / (thisWeeksHabitEntryCount == 0 ? 1 : thisWeeksHabitEntryCount),
+            value3: annualValue,
+            value4: nowData.currentTime.second / 60,
+            value5: monthlyValue,
+            value6: annualValue,
+            nowData: nowData,
+            bottomSheetState: bottomSheetState,
+            onStartTimer: () {
+              setState(() {
+                nowData.startTimerTimer = DateTime.now();
+              });
+            },
+          );
         },
       ),
     );
