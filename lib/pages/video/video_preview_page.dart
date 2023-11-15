@@ -70,32 +70,27 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
 
   Widget gridItem(MultimediaFile file, int i, bool hasThumbnail) {
     return GridTile(
-      child: GestureDetector(
-        onTap: () {
-          Navigation.createRoute(VideoSwipePage(multimediaFile: file), context);
-        },
-        child: Image.file(
-          file.photoFile ?? File(""),
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return GestureDetector(
-              onTap: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.grey,
-                    size: 50,
-                  ),
+      child: Image.file(
+        file.photoFile ?? File(""),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return GestureDetector(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                border: Border.all(color: Colors.grey),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.add,
+                  color: Colors.grey,
+                  size: 50,
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
       footer: Container(
         padding: EdgeInsets.all(8.0),
@@ -130,13 +125,17 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
                     ),
                     itemCount: files.length,
                     itemBuilder: (ctx, i) {
-                      return GestureDetector(
+                      return InkWell(
                         onTap: () {
-                          log(files[i].videoFile!.path);
-                          log("What");
-                          Navigation.createRoute(VideoSwipePage(multimediaFile: files[i]), context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => VideoSwipePage(multimediaFile: files[i], page: i)),
+                          );
                         },
-                        child: gridItem(files[i], i, files[i].photoFile != null),
+                        child: Hero(
+                          tag: 'video$i',
+                          child: gridItem(files[i], i, files[i].photoFile != null),
+                        ),
                       );
                     },
                   );

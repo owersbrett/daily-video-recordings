@@ -1,1 +1,9 @@
-1. 11-10-2023: You were about to implement linking clips. it's more important to you to save videos. it's not important how you handle clips, for now. 
+# Development
+
+Command + Shift + P + delete + database_service.dart + return
+
+Decrement database version to drop all tables. 
+
+Videos will be saved as of 11-14-2023 because we are directly accessing the file system to extract them.
+
+Would like to store these in metadata folder.

@@ -7,14 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 class VideoSwipePage extends StatefulWidget {
-  const VideoSwipePage({Key? key, this.multimediaFile}) : super(key: key);
+  const VideoSwipePage({Key? key, this.multimediaFile, this.page}) : super(key: key);
+  final int? page;
   final MultimediaFile? multimediaFile;
   @override
   _VideoSwipePageState createState() => _VideoSwipePageState();
 }
 
 class _VideoSwipePageState extends State<VideoSwipePage> {
-  PageController pageController = PageController(initialPage: 0, viewportFraction: 1);
+  late PageController _pageController;
 
   Future<List<File>> videosFuture = MediaService.retrieveVideoClips();
   buildMusicAlbum(String profilePhoto) {
@@ -77,10 +78,13 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
 
   bool isLoading = true;
   bool switching = false;
+  bool scrolledToPage = false;
+
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(initialPage: widget.page ?? 0);
   }
 
   Widget actionColumn(Size size) {
@@ -244,21 +248,20 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
               final videos = data.data as List<File>;
               return PageView.builder(
                 itemCount: videos.length,
-                onPageChanged: (value) {
-                  //TODO
-                  // BlocProvider.of<HomePageBloc>(context).add(HomePageScrollEvent(value));
-                },
-                controller: pageController,
+                controller: _pageController,
                 scrollDirection: Axis.vertical,
                 restorationId: "video_swipe_page",
                 itemBuilder: (context, index) {
                   final data = videos[index];
                   log(index.toString());
-                  return Stack(
-                    children: [
-                      VideoPlayerItem(path: data.path),
-                      // overlay(size),
-                    ],
+                  return Hero(
+                    tag: 'video$index',
+                    child: Stack(
+                      children: [
+                        VideoPlayerItem(path: data.path),
+                        // overlay(size),
+                      ],
+                    ),
                   );
                 },
               );
