@@ -50,8 +50,8 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     // await _backFillHabitEntries(3, habits, threeDaysAgoEntries);
     // await _backFillHabitEntries(2, habits, twoDaysAgoEntries);
     await _backFillHabitEntries(1, habits, aDayAgoEntries);
-    // await _backFillHabitEntries(0, habits, todaysEntries);
-    // await _backFillHabitEntries(-1, habits, tomorrowEntries);
+    await _backFillHabitEntries(0, habits, todaysEntries);
+    await _backFillHabitEntries(-1, habits, tomorrowEntries);
     // await _backFillHabitEntries(-2, habits, twoDaysFromNowEntries);
     // await _backFillHabitEntries(-3, habits, threeDaysFromNowEntries);
 
@@ -63,7 +63,8 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   Future _backFillHabitEntries(int day, List<Habit> habits, List<HabitEntry> entries) async {
     // if you have less entries than habits, create entries for the missing habits
     // right now it's creating entries for all habits
-    // TODO: only create entries for habits that don't have entries
+    // -TODO-: only create entries for habits that don't have entries
+    // TODO: TEST AS I THINK I FIXED THIS ^^
     if (entries.length < habits.length) {
       for (var habit in habits) {
         HabitEntry t = HabitEntry.fromHabit(habit);
