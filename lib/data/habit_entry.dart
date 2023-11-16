@@ -81,13 +81,13 @@ class HabitEntry {
     return <String, dynamic>{
       'id': id,
       'habitId': habitId,
-      'booleanValue': booleanValue,
       'integerValue': integerValue,
       'decimalValue': decimalValue,
       'stringValue': stringValue,
       'unitType': unitType.toPrettyString(),
       'createDate': createDate.millisecondsSinceEpoch,
       'updateDate': updateDate.millisecondsSinceEpoch,
+      'booleanValue': booleanValue ? 1 : 0,
     };
   }
 

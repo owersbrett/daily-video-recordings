@@ -1,4 +1,5 @@
 import 'package:daily_video_reminders/data/repositories/_repository.dart';
+import 'package:daily_video_reminders/main.dart';
 import 'package:sqflite/sqflite.dart';
 import '../habit.dart';
 import '../habit_entity.dart';
@@ -19,8 +20,9 @@ class HabitRepository implements IHabitRepository {
     int i = await db.insert(tableName, t.toMap());
     return t.copyWith(id: i);
   }
+
   @override
-    Future deleteAll() async {
+  Future deleteAll() async {
     await db.delete(tableName);
   }
 
@@ -70,25 +72,31 @@ class HabitRepository implements IHabitRepository {
     var response = await db.rawQuery(buffer.toString());
     for (var habitHabitEntryRow in response) {
       Habit habit = Habit.fromMap(habitHabitEntryRow);
-      HabitEntry habitEntry = HabitEntry(
-        id: habitHabitEntryRow["HE_ID"] as int,
-        habitId: habitHabitEntryRow["id"] as int,
-        unitType: UnitType.fromPrettyString(habitHabitEntryRow["unitType"] as String),
-        createDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['updateDate'] as int),
-        updateDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['updateDate'] as int),
-        booleanValue: (habitHabitEntryRow["HE_BOOLEAN_VALUE"] as int) == 1,
-        integerValue: habitHabitEntryRow["HE_INTEGER_VALUE"] as int?,
-        stringValue: habitHabitEntryRow["HE_STRING_VALUE"] as String?,
-      );
-      if (habitEntityMap.containsKey(habitHabitEntryRow["id"] as int)) {
-        HabitEntity habitEntity = habitEntityMap[habitHabitEntryRow["id"] as int]!;
-        List<HabitEntry> habitEntries = List<HabitEntry>.from(habitEntity.habitEntries);
-        HabitEntry habitEntry = HabitEntry.fromMap(habitHabitEntryRow);
-        habitEntries.add(habitEntry);
-        habitEntity = habitEntity.copyWith(habitEntries: habitEntries);
-        habitEntityMap[habitHabitEntryRow["id"] as int] = habitEntity;
-      } else {
-        habitEntityMap.putIfAbsent(habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: [habitEntry], habitEntryNotes: []));
+      try {
+        log(habitHabitEntryRow.toString());
+        HabitEntry habitEntry = HabitEntry(
+          id: habitHabitEntryRow["HE_ID"] as int,
+          habitId: habitHabitEntryRow["id"] as int,
+          unitType: UnitType.fromPrettyString(habitHabitEntryRow["unitType"] as String),
+          createDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['HE_CREATE_DATE'] as int),
+          updateDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['HE_UPDATE_DATE'] as int),
+          booleanValue: (habitHabitEntryRow["HE_BOOLEAN_VALUE"] as int) == 1,
+          integerValue: habitHabitEntryRow["HE_INTEGER_VALUE"] as int?,
+          stringValue: habitHabitEntryRow["HE_STRING_VALUE"] as String?,
+        );
+        if (habitEntityMap.containsKey(habitHabitEntryRow["id"] as int)) {
+          HabitEntity habitEntity = habitEntityMap[habitHabitEntryRow["id"] as int]!;
+          List<HabitEntry> habitEntries = List<HabitEntry>.from(habitEntity.habitEntries);
+          habitEntries.add(habitEntry);
+          habitEntity = habitEntity.copyWith(habitEntries: habitEntries);
+          habitEntityMap[habitHabitEntryRow["id"] as int] = habitEntity;
+        } else {
+          habitEntityMap.putIfAbsent(
+              habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: [habitEntry], habitEntryNotes: []));
+        }
+      } catch (e) {
+        log("YOU FOUND ME!");
+        log(e.toString());
       }
     }
     return habitEntityMap;

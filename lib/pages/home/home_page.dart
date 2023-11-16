@@ -236,7 +236,6 @@ class _HomePageState extends State<HomePage> {
   Widget bottomBar(BuildContext context, HabitsState state) {
     return GestureDetector(
       onTap: () {
-        log("Tapped");
         setState(() {
           if (bottomSheetState == BottomSheetState.hidden) {
             bottomSheetState = BottomSheetState.collapsed;

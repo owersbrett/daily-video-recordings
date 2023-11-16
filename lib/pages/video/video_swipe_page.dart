@@ -184,7 +184,6 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
                 restorationId: "video_swipe_page",
                 itemBuilder: (context, index) {
                   final data = videos[index];
-                  log(index.toString());
                   return Stack(
                     alignment: Alignment.center,
                     children: [

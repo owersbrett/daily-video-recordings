@@ -30,24 +30,48 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   Future _fetchHabits(FetchHabits event, Emitter<HabitsState> emit) async {
     DateTime now = DateTime.now();
     Map<int, HabitEntity> habitEntities =
-        await habitRepository.getHabitEntities(event.userId, now.subtract(const Duration(days: 7)), now.add(const Duration(days: 7)));
+        await habitRepository.getHabitEntities(event.userId, now.subtract(const Duration(days: 3)), now.add(const Duration(days: 3)));
     List<Habit> habits = habitEntities.values.map((e) => e.habit).toList();
     List<HabitEntry> habitEntries = habitEntities.values.fold<List<HabitEntry>>([], (previousValue, element) {
       return [...previousValue, ...element.habitEntries];
     });
-    List<HabitEntry> todaysEntries = habitEntries.where((element) => element.createDate.day == now.day).toList();
-    if (todaysEntries.length != habits.length) {
-      for (var habit in habits) {
-        if (todaysEntries.where((element) => element.habitId == habit.id).isEmpty) {
-          HabitEntry t = HabitEntry.fromHabit(habit);
-          await habitEntryRepository.create(t);
-        }
-      }
-      habitEntities = await habitRepository.getHabitEntities(event.userId, now.subtract(const Duration(days: 7)), now.add(const Duration(days: 7)));
-    }
 
+    List<HabitEntry> threeDaysAgoEntries =
+        habitEntries.where((element) => element.createDate.day == now.subtract(const Duration(days: 3)).day).toList();
+    List<HabitEntry> twoDaysAgoEntries =
+        habitEntries.where((element) => element.createDate.day == now.subtract(const Duration(days: 2)).day).toList();
+    List<HabitEntry> aDayAgoEntries = habitEntries.where((element) => element.createDate.day == now.subtract(const Duration(days: 1)).day).toList();
+    List<HabitEntry> todaysEntries = habitEntries.where((element) => element.createDate.day == now.day).toList();
+    List<HabitEntry> tomorrowEntries = habitEntries.where((element) => element.createDate.day == now.add(const Duration(days: 1)).day).toList();
+    List<HabitEntry> twoDaysFromNowEntries = habitEntries.where((element) => element.createDate.day == now.add(const Duration(days: 2)).day).toList();
+    List<HabitEntry> threeDaysFromNowEntries =
+        habitEntries.where((element) => element.createDate.day == now.add(const Duration(days: 3)).day).toList();
+
+    // await _backFillHabitEntries(3, habits, threeDaysAgoEntries);
+    // await _backFillHabitEntries(2, habits, twoDaysAgoEntries);
+    await _backFillHabitEntries(1, habits, aDayAgoEntries);
+    // await _backFillHabitEntries(0, habits, todaysEntries);
+    // await _backFillHabitEntries(-1, habits, tomorrowEntries);
+    // await _backFillHabitEntries(-2, habits, twoDaysFromNowEntries);
+    // await _backFillHabitEntries(-3, habits, threeDaysFromNowEntries);
+
+    // habitEntities = await habitRepository.getHabitEntities(event.userId, now.subtract(const Duration(days: 3)), now.add(const Duration(days: 3)));
 
     emit(HabitsLoaded(habitEntities));
+  }
+
+  Future _backFillHabitEntries(int day, List<Habit> habits, List<HabitEntry> entries) async {
+    // if you have less entries than habits, create entries for the missing habits
+    // right now it's creating entries for all habits
+    // TODO: only create entries for habits that don't have entries
+    if (entries.length < habits.length) {
+      for (var habit in habits) {
+        HabitEntry t = HabitEntry.fromHabit(habit);
+        DateTime updatedDate = DateTime.now().subtract(Duration(days: day));
+        t = t.copyWith(updateDate: updatedDate, createDate: updatedDate);
+        await habitEntryRepository.createIfDoesntExistForDate(t);
+      }
+    }
   }
 
   Future _addHabit(AddHabit event, Emitter<HabitsState> emit) async {

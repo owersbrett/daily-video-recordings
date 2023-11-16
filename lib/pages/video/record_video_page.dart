@@ -101,9 +101,6 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
       );
   Widget _videoRecorder() => CameraPreview(_cameraController);
   void _toggleVideoPlayer() {
-    log("Toggling video player");
-    log("Video playing: ${clips.last.path}");
-    log(videoPlaying.toString());
     setState(() {
       if (videoPlaying) {
         _videoPlayerController.pause();
