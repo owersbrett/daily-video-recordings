@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:daily_video_reminders/service/media_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:daily_video_reminders/daily_app_bar.dart';
@@ -256,7 +257,10 @@ class _HomePageState extends State<HomePage> {
           thisWeeksHabitsSeperated.forEach((key, value) {
             thisWeeksHabitsTogether.addAll(value);
           });
-          List<HabitEntry> thisWeeksHabitEntries = thisWeeksHabitsTogether.map((e) => e.habitEntries).toList().fold(<HabitEntry>[], (previousValue, element) => [...previousValue, ...element]);
+          List<HabitEntry> thisWeeksHabitEntries = thisWeeksHabitsTogether
+              .map((e) => e.habitEntries)
+              .toList()
+              .fold(<HabitEntry>[], (previousValue, element) => [...previousValue, ...element]);
           var thisWeeksHabitEntryCount = thisWeeksHabitEntries.length;
           var thisWeeks = experienceState.thisWeeks();
 

@@ -5,6 +5,7 @@ import 'package:daily_video_reminders/data/db.dart';
 import 'package:daily_video_reminders/data/multimedia_file.dart';
 import 'package:daily_video_reminders/main.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
+import 'package:daily_video_reminders/pages/video/loading_page.dart';
 import 'package:daily_video_reminders/pages/video/record_video_page.dart';
 import 'package:daily_video_reminders/pages/video/video_swipe_page.dart';
 import 'package:daily_video_reminders/service/file_directories_service.dart';
@@ -12,8 +13,11 @@ import 'package:daily_video_reminders/service/media_service.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../bloc/multimedia/multimedia.dart';
 
 class VideoPreviewPage extends StatefulWidget {
   @override
@@ -73,56 +77,45 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
       child: Image.file(
         file.photoFile ?? File(""),
         fit: BoxFit.cover,
-
       ),
-
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Center(
-            child: FutureBuilder(
-              future: _multimediaFiles,
-              builder: (ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasData) {
-                  var files = snapshot.data as List<MultimediaFile>;
-                  return GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 9 / 19.5 * 1.5,
-                    ),
-                    itemCount: files.length,
-                    itemBuilder: (ctx, i) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => VideoSwipePage(multimediaFile: files[i], page: i)),
-                          );
-                        },
-                        child: gridItem(files[i], i, files[i].photoFile != null),
+    return BlocBuilder<MultimediaBloc, MultimediaState>(
+      builder: (context, state) {
+        if (state is! MultimediaLoaded) {
+          return const LoadingPage();
+        }
+        var files = state.multimediaList;
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            children: [
+              Center(
+                  child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 9 / 19.5 * 1.5,
+                ),
+                itemCount: files.length,
+                itemBuilder: (ctx, i) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VideoSwipePage(multimediaFile: files[i], page: i)),
                       );
                     },
+                    child: gridItem(files[i], i, files[i].photoFile != null),
                   );
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text("Error loading videos"));
-                }
-                return const Center(
-                  child: Text("No videos found"),
-                );
-              },
-            ),
+                },
+              )),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

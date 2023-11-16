@@ -130,7 +130,7 @@ class MediaService {
     }
     for (var element in photoFiles) {
       String id = element.path.split("/videos/").last.split(".jpg").first;
-      multimediaFiles[id] = multimediaFiles[id]!.copyWith(photoFile: element);
+      multimediaFiles[id] == null ?  null : multimediaFiles[id] = multimediaFiles[id]!.copyWith(photoFile: element);
     }
 
     // Sorting based on datetime in filename
