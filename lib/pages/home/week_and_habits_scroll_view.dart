@@ -1,16 +1,21 @@
 import 'package:daily_video_reminders/data/habit_entity.dart';
 import 'package:daily_video_reminders/data/habit_entry.dart';
 import 'package:daily_video_reminders/habit_card.dart';
+import 'package:daily_video_reminders/habit_entry_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
+import '../../data/habit.dart';
 import '../../widgets/weekday_hero.dart';
 
 class WeekAndHabitsScrollView extends StatelessWidget {
-  const WeekAndHabitsScrollView({super.key, required this.currentDay, required this.weekOfHabitEntities});
+  const WeekAndHabitsScrollView(
+      {super.key, required this.todaysHabitEntries, required this.currentDay, required this.weekOfHabitEntities, required this.habitsMap});
   final DateTime currentDay;
+  final List<HabitEntry> todaysHabitEntries;
+  final Map<int, Habit> habitsMap;
   final Map<int, List<HabitEntity>> weekOfHabitEntities;
   DateTime get now => DateTime.now();
   DateTime get yesterday => currentDay.subtract(const Duration(days: 1));
@@ -51,8 +56,8 @@ class WeekAndHabitsScrollView extends StatelessWidget {
     var habitEntry = e.habitEntries.firstWhere((element) => element.habitId == e.habit.id);
     habitEntry = habitEntry.copyWith(booleanValue: !habitEntry.booleanValue);
     BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(e.habit, habitEntry, BlocProvider.of<ExperienceBloc>(context)));
-
   }
+
   void checkHabit(HabitEntity e, BuildContext context) {
     var habitEntry = e.habitEntries.firstWhere((element) => element.habitId == e.habit.id);
     habitEntry = habitEntry.copyWith(booleanValue: !habitEntry.booleanValue);
@@ -62,13 +67,13 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   List<Widget> dayWidgets(BuildContext context) => days(context);
   List<Widget> habitWidgets(BuildContext context) {
     List<Widget> widgets = [];
-    if (weekOfHabitEntities.isEmpty) {
-      return widgets;
-    }
-    widgets = weekOfHabitEntities[0]?.map((e) => HabitCard(habitEntity: e, onUncheck: () {
-          uncheckHabit(e, context);
-    }, onCheck: () => checkHabit(e, context))).toList() ?? [];
+    widgets = todaysHabitEntries.map((e) => HabitEntryCard (habit: habitsMap[e.habitId] ?? Habit.empty(), habitEntry: e)).toList();
+    // widgets = weekOfHabitEntities[0]?.map((entity) => entity.habitEntries.map((entry) => HabitEntryCard(habitEntry: entry, habit: entity.habit))).toList() ?? [];
     return widgets;
+    // widgets = weekOfHabitEntities[0]?.map((e) => HabitCard(habitEntity: e, onUncheck: () {
+    //       uncheckHabit(e, context);
+    // }, onCheck: () => checkHabit(e, context), habitEntry: null,)).toList() ?? [];
+    // return widgets;
   }
 
   @override
@@ -89,4 +94,10 @@ class WeekAndHabitsScrollView extends StatelessWidget {
       ],
     ));
   }
+}
+
+class HabitEntryEntity {
+  HabitEntryEntity({required this.habitEntry, required this.habit});
+  HabitEntry habitEntry;
+  Habit habit;
 }

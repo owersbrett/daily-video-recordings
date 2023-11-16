@@ -35,8 +35,8 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<bool> update(HabitEntry t) {
-    db.update(tableName, t.copyWith(updateDate: DateTime.now()).toMap());
-    return Future.value(true);
+  Future<bool> update(HabitEntry t) async {
+    int i = await db.update(tableName, t.toMap(), where: 'id = ?', whereArgs: [t.id]);
+    return Future.value(i > 0);
   }
 }

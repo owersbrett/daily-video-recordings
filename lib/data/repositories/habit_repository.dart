@@ -7,6 +7,7 @@ import '../unit_type.dart';
 
 abstract class IHabitRepository implements Repository<Habit> {
   Future<Map<int, HabitEntity>> getHabitEntities(int userId, [DateTime? startingRange, DateTime? endingRange]);
+  Future deleteAll();
 }
 
 class HabitRepository implements IHabitRepository {
@@ -17,6 +18,10 @@ class HabitRepository implements IHabitRepository {
   Future<Habit> create(Habit t) async {
     int i = await db.insert(tableName, t.toMap());
     return t.copyWith(id: i);
+  }
+  @override
+    Future deleteAll() async {
+    await db.delete(tableName);
   }
 
   @override
@@ -70,7 +75,7 @@ class HabitRepository implements IHabitRepository {
         habitId: habitHabitEntryRow["id"] as int,
         unitType: UnitType.fromPrettyString(habitHabitEntryRow["unitType"] as String),
         createDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['updateDate'] as int),
-        updateDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['updateDate'] as int), 
+        updateDate: DateTime.fromMillisecondsSinceEpoch(habitHabitEntryRow['updateDate'] as int),
         booleanValue: (habitHabitEntryRow["HE_BOOLEAN_VALUE"] as int) == 1,
         integerValue: habitHabitEntryRow["HE_INTEGER_VALUE"] as int?,
         stringValue: habitHabitEntryRow["HE_STRING_VALUE"] as String?,

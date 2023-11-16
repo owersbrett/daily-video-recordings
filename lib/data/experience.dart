@@ -132,7 +132,7 @@ class Experience {
     return Experience(
       userId: habit.userId,
       habitEntryId: habitEntry.id!,
-      points: habitEntry.integerValue ??  (habitEntry.booleanValue ? 1 : 0),
+      points: habitEntry.integerValue ??  (habitEntry.booleanValue ? 25 : 0),
       createdAt: habitEntry.createDate,
       updatedAt: habitEntry.updateDate,
       description: habit.verb + " " + habitEntry.integerValue.toString() + " " + habit.suffix,

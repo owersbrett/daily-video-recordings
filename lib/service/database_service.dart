@@ -16,7 +16,7 @@ import '../data/level.dart';
 class DatabaseService {
   static final DatabaseService _singleton = DatabaseService._internal();
   // toggle to update database
-  static final version = 33;
+  static final version = 6;
 
   factory DatabaseService() {
     return _singleton;
@@ -70,9 +70,9 @@ class DatabaseService {
   }
 
   static FutureOr<void> dropTables(Database db) async {
-    String dropHabitEntryTableSql = getDropTableString(HabitEntry.tableName);
     String dropUserTableSql = getDropTableString(User.tableName);
     String dropHabitTableSql = getDropTableString(Habit.tableName);
+    String dropHabitEntryTableSql = getDropTableString(HabitEntry.tableName);
     String dropExperienceSql = getDropTableString(Experience.tableName);
 
     String dropDomainSql = getDropTableString(Domain.tableName);

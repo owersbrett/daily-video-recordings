@@ -7,6 +7,7 @@ import 'package:daily_video_reminders/pages/video/_video_preview_deprecated.dart
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../bloc/experience/experience.dart';
 import '../../data/habit_entry.dart';
 import '../video/video_preview_page.dart';
 
@@ -102,7 +103,22 @@ class HomePageBottom extends StatelessWidget {
                 Expanded(
                   child: _list(context),
                 ),
-                _buildHorizontalProgressBars(),
+                Row(
+                  children: [
+                    BlocBuilder<ExperienceBloc, ExperienceState>(
+                      builder: (context, state) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text(
+                            state.currentLevel().toString(),
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        );
+                      },
+                    ),
+                    Expanded(child: _buildHorizontalProgressBars()),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).padding.bottom > 0 ? 0 : 24,
                 )

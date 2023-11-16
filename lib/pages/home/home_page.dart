@@ -115,8 +115,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     body: WeekAndHabitsScrollView(
+                      todaysHabitEntries: state.todaysHabitEntries,
                       weekOfHabitEntities: state.segregatedHabits(),
-                      currentDay: DateTime.now(),
+                      currentDay: DateTime.now(), habitsMap: state.habitsMap,
                     ),
                     bottomSheet: bottomBar(context, state),
 
@@ -248,26 +249,23 @@ class _HomePageState extends State<HomePage> {
       },
       child: BlocBuilder<ExperienceBloc, ExperienceState>(
         builder: (context, experienceState) {
-          var todaysHabits = state.segregatedHabits()[0];
-          var todaysHabitEntries = (todaysHabits ?? []).fold(0, (previousValue, element) => element.habitEntries.length);
-          var todaysExperience = experienceState.todays();
+
 
           Map<int, List<HabitEntity>> thisWeeksHabitsSeperated = state.segregatedHabits();
           List<HabitEntity> thisWeeksHabitsTogether = [];
           thisWeeksHabitsSeperated.forEach((key, value) {
             thisWeeksHabitsTogether.addAll(value);
           });
-          List<HabitEntry> thisWeeksHabitEntries = thisWeeksHabitsTogether
-              .map((e) => e.habitEntries)
-              .toList()
-              .fold(<HabitEntry>[], (previousValue, element) => [...previousValue, ...element]);
-          var thisWeeksHabitEntryCount = thisWeeksHabitEntries.length;
-          var thisWeeks = experienceState.thisWeeks();
+          var percentageForToday = state.todaysCompletionPercentage;
+          log(percentageForToday.toString());
+          var percentageForTheWeek = state.weeksCompletionPercentage;
+          log(percentageForTheWeek.toString());
+          var percentageToNextLevel = experienceState.percentageToNextLevel();
 
           return HomePageBottom(
-            value1: todaysExperience / (todaysHabitEntries == 0 ? 1 : todaysHabitEntries),
-            value2: thisWeeks / (thisWeeksHabitEntryCount == 0 ? 1 : thisWeeksHabitEntryCount),
-            value3: annualValue,
+            value1: percentageForToday,
+            value2: percentageForTheWeek,
+            value3: percentageToNextLevel,
             value4: nowData.currentTime.second / 60,
             value5: monthlyValue,
             value6: annualValue,

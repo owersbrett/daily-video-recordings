@@ -4,7 +4,7 @@ import '../experience.dart';
 import '_repository.dart';
 
 abstract class IExperienceRepository implements Repository<Experience> {
-  void deleteAll();
+  Future deleteAll();
 }
 
 class ExperienceRepository implements IExperienceRepository {
@@ -18,7 +18,9 @@ class ExperienceRepository implements IExperienceRepository {
   }
 
   @override
-  Future<bool> delete(Experience t) async => (await db.delete(tableName, where: 'id = ?', whereArgs: [t.id])) == 0;
+  Future<bool> delete(Experience t) async {
+    return (await db.delete(tableName, where: 'habitEntryId = ?', whereArgs: [t.habitEntryId])) == 0;
+  }
 
   @override
   Future<List<Experience>> getAll() async {
@@ -43,7 +45,7 @@ class ExperienceRepository implements IExperienceRepository {
   }
   
   @override
-  void deleteAll() async {
+  Future deleteAll() async {
     await db.delete(tableName);
   }
 }

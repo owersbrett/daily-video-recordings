@@ -19,17 +19,33 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   Future _onEvent(HabitsEvent event, Emitter<HabitsState> emit) async {
     Logger.root.info("HabitsBloc: " + event.toString());
 
-      if (event is FetchHabits) await _fetchHabits(event, emit);
-      if (event is AddHabit) await _addHabit(event, emit);
-      if (event is UpdateHabit) await _updateHabit(event, emit);
-      if (event is DeleteHabit) await _deleteHabit(event, emit);
-      if (event is UpdateHabitEntry) await _updateHabitEntry(event, emit);
+    if (event is FetchHabits) await _fetchHabits(event, emit);
+    if (event is AddHabit) await _addHabit(event, emit);
+    if (event is UpdateHabit) await _updateHabit(event, emit);
+    if (event is DeleteHabit) await _deleteHabit(event, emit);
+    if (event is UpdateHabitEntry) await _updateHabitEntry(event, emit);
     Logger.root.info("HabitsBloc: " + event.toString());
   }
 
   Future _fetchHabits(FetchHabits event, Emitter<HabitsState> emit) async {
+    DateTime now = DateTime.now();
+    Map<int, HabitEntity> habitEntities =
+        await habitRepository.getHabitEntities(event.userId, now.subtract(const Duration(days: 7)), now.add(const Duration(days: 7)));
+    List<Habit> habits = habitEntities.values.map((e) => e.habit).toList();
+    List<HabitEntry> habitEntries = habitEntities.values.fold<List<HabitEntry>>([], (previousValue, element) {
+      return [...previousValue, ...element.habitEntries];
+    });
+    List<HabitEntry> todaysEntries = habitEntries.where((element) => element.createDate.day == now.day).toList();
+    if (todaysEntries.length != habits.length) {
+      for (var habit in habits) {
+        if (todaysEntries.where((element) => element.habitId == habit.id).isEmpty) {
+          HabitEntry t = HabitEntry.fromHabit(habit);
+          await habitEntryRepository.create(t);
+        }
+      }
+      habitEntities = await habitRepository.getHabitEntities(event.userId, now.subtract(const Duration(days: 7)), now.add(const Duration(days: 7)));
+    }
 
-    Map<int, HabitEntity> habitEntities = await habitRepository.getHabitEntities(event.userId);
 
     emit(HabitsLoaded(habitEntities));
   }
@@ -39,12 +55,9 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       Habit habit = await habitRepository.create(event.habit);
       HabitEntry habitEntry = HabitEntry.fromHabit(habit);
       habitEntry = await habitEntryRepository.create(habitEntry);
-      HabitEntity habitEntity = HabitEntity(habit: habit, habitEntries: [habitEntry], habitEntryNotes: []);
-      var loadedState = state as HabitsLoaded;
-      Map<int, HabitEntity> habits = Map<int, HabitEntity>.from(loadedState.habitMap);
-      habits.putIfAbsent(habit.id!, () => habitEntity);
+      Map<int, HabitEntity> habitEntities = await habitRepository.getHabitEntities(event.habit.userId);
 
-      emit(HabitsLoaded(habits));
+      emit(HabitsLoaded(habitEntities));
     } else {
       Logger.root.severe("Error adding habit: " + event.habit.toString());
     }
@@ -68,22 +81,14 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
 
   Future _updateHabitEntry(UpdateHabitEntry event, Emitter<HabitsState> emit) async {
     if (state is HabitsLoaded) {
-      var loadedState = state as HabitsLoaded;
-      Map<int, HabitEntity> habits = Map<int, HabitEntity>.from(loadedState.habitMap);
-      HabitEntity? habitEntity = habits[event.habit.id];
-      if (habitEntity != null) {
-        HabitEntry habitEntry = habitEntity.habitEntries.firstWhere((element) => element.id == event.habitEntry.id, orElse: () => HabitEntry.empty());
-        if (!habitEntry.isEmpty) {
-
-          await habitEntryRepository.update(event.habitEntry);
-          habitEntry = await habitEntryRepository.getById(event.habit.id!);
-          habitEntity.habitEntries.removeWhere((element) => element.id == habitEntry.id);
-          habitEntity.habitEntries.add(habitEntry);
-          habits.update(event.habit.id!, (value) => habitEntity);
-          event.experienceBloc.add(ExperienceAdded(Experience.fromHabitEntry(habitEntity.habit, habitEntry)));
-          emit(HabitsLoaded(habits));
-        }
+      await habitEntryRepository.update(event.habitEntry);
+      var habitEntities = await habitRepository.getHabitEntities(event.habit.userId);
+      if (event.habitEntry.booleanValue) {
+        event.experienceBloc.add(ExperienceAdded(Experience.fromHabitEntry(event.habit, event.habitEntry)));
+      } else {
+        event.experienceBloc.add(ExperienceRemoved(Experience.fromHabitEntry(event.habit, event.habitEntry)));
       }
+      emit(HabitsLoaded(habitEntities));
     } else {
       Logger.root.severe("Error updating habit entry: " + event.habitEntry.toString());
     }

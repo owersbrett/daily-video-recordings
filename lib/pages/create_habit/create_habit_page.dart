@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:daily_video_reminders/pages/create_habit/display_habit_card.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -201,7 +202,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           pickColor();
                         }
                       },
-                      child: HabitCard(
+                      child: DisplayHabitCard(
                         habitEntity: HabitEntity(habit: habit, habitEntries: [], habitEntryNotes:  []),
                         progress: progress,
                         checkable: false,
