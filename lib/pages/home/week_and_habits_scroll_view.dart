@@ -7,16 +7,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
+import '../../bloc/user/user.dart';
 import '../../data/habit.dart';
 import '../../widgets/weekday_hero.dart';
 
 class WeekAndHabitsScrollView extends StatelessWidget {
-  const WeekAndHabitsScrollView(
-      {super.key, required this.todaysHabitEntries, required this.currentDay, required this.weekOfHabitEntities, required this.habitsMap});
-  final DateTime currentDay;
-  final List<HabitEntry> todaysHabitEntries;
-  final Map<int, Habit> habitsMap;
-  final Map<int, List<HabitEntity>> weekOfHabitEntities;
+  const WeekAndHabitsScrollView({super.key, required this.habitsState});
+  DateTime get currentDay => habitsState.currentDate;
+  final HabitsState habitsState;
+  List<HabitEntry> get todaysHabitEntries => habitsState.todaysHabitEntries;
+  Map<int, Habit> get habitsMap => habitsState.habitsMap;
+  Map<int, List<HabitEntity>> get weekOfHabitEntities => habitsState.segregatedHabits();
   DateTime get now => DateTime.now();
   DateTime get yesterday => currentDay.subtract(const Duration(days: 1));
   DateTime get tomorrow => currentDay.add(const Duration(days: 1));
@@ -27,18 +28,18 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   DateTime get threeDaysAgo => twoDaysAgo.subtract(const Duration(days: 1));
   DateTime get threeDaysAhead => twoDaysAhead.add(const Duration(days: 1));
   List<Widget> days(BuildContext context) => [
-        wdh(threeDaysAgo, 12, context),
-        wdh(twoDaysAgo, 40, context),
-        wdh(yesterday, 50, context),
-        wdh(currentDay, 100, context),
-        wdh(tomorrow, 80, context),
-        wdh(twoDaysAhead, 100, context),
-        wdh(threeDaysAhead, 54, context)
+        wdh(threeDaysAgo, (habitsState.getRelativeHabitEntriesPercentage(-3) * 100).toInt(), context),
+        wdh(twoDaysAgo, (habitsState.getRelativeHabitEntriesPercentage(-2) * 100).toInt(), context),
+        wdh(yesterday, (habitsState.getRelativeHabitEntriesPercentage(-1) * 100).toInt(), context),
+        wdh(currentDay, (habitsState.getRelativeHabitEntriesPercentage(0) * 100).toInt(), context),
+        wdh(tomorrow, (habitsState.getRelativeHabitEntriesPercentage(1) * 100).toInt(), context),
+        wdh(twoDaysAhead, (habitsState.getRelativeHabitEntriesPercentage(2) * 100).toInt(), context),
+        wdh(threeDaysAhead, (habitsState.getRelativeHabitEntriesPercentage(3) * 100).toInt(), context)
       ];
 
   Widget wdh(DateTime weekdayDate, int score, BuildContext context) => GestureDetector(
         onTap: () {
-          //  BlocProvider.of<HomePageBloc>(context).add(HomePageEvent.selectDay(weekdayDate));
+          BlocProvider.of<HabitsBloc>(context).add(FetchHabits(BlocProvider.of<UserBloc>(context).state.user.id!, weekdayDate));
         },
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, bottom: 8),
@@ -65,16 +66,13 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   }
 
   List<Widget> dayWidgets(BuildContext context) => days(context);
-  List<Widget> habitWidgets(BuildContext context) {
-    List<Widget> widgets = [];
-    widgets = todaysHabitEntries.map((e) => HabitEntryCard (habit: habitsMap[e.habitId] ?? Habit.empty(), habitEntry: e)).toList();
-    // widgets = weekOfHabitEntities[0]?.map((entity) => entity.habitEntries.map((entry) => HabitEntryCard(habitEntry: entry, habit: entity.habit))).toList() ?? [];
-    return widgets;
-    // widgets = weekOfHabitEntities[0]?.map((e) => HabitCard(habitEntity: e, onUncheck: () {
-    //       uncheckHabit(e, context);
-    // }, onCheck: () => checkHabit(e, context), habitEntry: null,)).toList() ?? [];
-    // return widgets;
-  }
+  List<Widget> habitWidgets(BuildContext context) => todaysHabitEntries
+      .map((e) => HabitEntryCard(
+            habit: habitsMap[e.habitId] ?? Habit.empty(),
+            habitEntry: e,
+            currentListDate: currentDay,
+          ))
+      .toList();
 
   @override
   Widget build(BuildContext context) {

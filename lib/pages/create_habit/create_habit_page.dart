@@ -19,6 +19,8 @@ import '../../util/string_util.dart';
 import '../../validators/form_validator.dart'; // Include this package for color picker
 
 class CreateHabitPage extends StatefulWidget {
+  const CreateHabitPage({super.key, required this.dateToAddHabit});
+  final DateTime dateToAddHabit;
   @override
   _CreateHabitPageState createState() => _CreateHabitPageState();
 }
@@ -203,7 +205,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                         }
                       },
                       child: DisplayHabitCard(
-                        habitEntity: HabitEntity(habit: habit, habitEntries: [], habitEntryNotes:  []),
+                        habitEntity: HabitEntity(habit: habit, habitEntries: [], habitEntryNotes: []),
                         progress: progress,
                         checkable: false,
                       ),
@@ -259,7 +261,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                               child: InkWell(
                                 onTap: () {
                                   Logger.root.info("Habit: $habit");
-                                  BlocProvider.of<HabitsBloc>(context).add(AddHabit(habit));
+                                  BlocProvider.of<HabitsBloc>(context).add(AddHabit(habit, widget.dateToAddHabit));
                                   Navigator.of(context).pop();
                                 },
                                 child: Container(

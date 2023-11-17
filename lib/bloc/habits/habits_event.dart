@@ -6,13 +6,15 @@ import '../../data/habit_entry.dart';
 class HabitsEvent {}
 
 class FetchHabits extends HabitsEvent {
-  FetchHabits(this.userId);
+  FetchHabits(this.userId, this.currentDate);
   final int userId;
+  final DateTime currentDate;
 }
 
 class AddHabit extends HabitsEvent {
   final Habit habit;
-  AddHabit(this.habit);
+  final DateTime dateToAddHabit;
+  AddHabit(this.habit, this.dateToAddHabit);
 }
 
 class UpdateHabit extends HabitsEvent {

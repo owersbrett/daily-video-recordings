@@ -1,13 +1,13 @@
 import 'package:daily_video_reminders/util/string_util.dart';
 
 enum FrequencyType {
-  once,
-  everyOtherDay,
+  // once,
   daily,
+  everyOtherDay,
   weekly,
-  biweekly,
-  monthly,
-  yearly,
+  // biweekly,
+  // monthly,
+  // yearly,
   ;
 
   Map<String, dynamic> toMap() {

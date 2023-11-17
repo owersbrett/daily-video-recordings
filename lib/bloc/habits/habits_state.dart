@@ -6,9 +6,11 @@ import '../../data/habit.dart';
 import '../../data/habit_entry.dart';
 
 abstract class HabitsState extends Equatable {
+  DateTime get currentDate => DateTime.now();
   double get weeksCompletionPercentage => 0;
 
   double get todaysCompletionPercentage => 0;
+  double getRelativeHabitEntriesPercentage(int daysForwardOrAgo) => 0;
 
   Map<int, HabitEntity> get habitMap => {};
 
@@ -19,10 +21,11 @@ abstract class HabitsState extends Equatable {
   /// -3 days ago - 3 days from now [-3,-2,-1,0,1,2,3]
   Map<int, List<HabitEntity>> segregatedHabits() => {};
   @override
-  List<Object?> get props => [...habitMap.values];
+  List<Object?> get props => [currentDate.day, ...habitMap.values];
 
   List<HabitEntry> get todaysHabitEntries => [];
   List<HabitEntry> get weeksHabitEntries => [];
+  List<HabitEntry> getRelativeHabitEntries(int daysForwardOrAgo) => [];
 }
 
 class HabitsError extends HabitsState {
@@ -37,7 +40,8 @@ class HabitsEmpty extends HabitsState {}
 class HabitsLoaded extends HabitsState {
   @override
   final Map<int, HabitEntity> habitMap;
-  HabitsLoaded(this.habitMap);
+  HabitsLoaded(this.habitMap, this.currentDate);
+  final DateTime currentDate;
 
   @override
   Map<int, Habit> get habitsMap {
@@ -50,9 +54,33 @@ class HabitsLoaded extends HabitsState {
 
   @override
   List<HabitEntry> get todaysHabitEntries {
-    var now = DateTime.now();
-    var startInterval = DateTime(now.year, now.month, now.day);
-    var endInterval = DateTime(now.year, now.month, now.day + 1);
+    var startInterval = DateTime(currentDate.year, currentDate.month, currentDate.day);
+    var endInterval = DateTime(currentDate.year, currentDate.month, currentDate.day + 1);
+    var todaysHabitEntries = habitMap.values.fold<List<HabitEntry>>([], (previousValue, element) {
+      var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
+      return [...previousValue, ...filteredEntries];
+    });
+    return todaysHabitEntries;
+  }
+
+  @override
+  double getRelativeHabitEntriesPercentage(int daysForwardOrAgo){
+    var now = currentDate;
+    var startInterval = DateTime(now.year, now.month, now.day, 0, 0, 0).add(Duration(days: daysForwardOrAgo));
+    var endInterval = DateTime(now.year, now.month, now.day, 23, 59, 59).add(Duration(days: daysForwardOrAgo));
+    var todaysHabitEntries = habitMap.values.fold<List<HabitEntry>>([], (previousValue, element) {
+      var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
+      return [...previousValue, ...filteredEntries];
+    });
+    return todaysHabitEntries.fold(0, (previousValue, element) => element.booleanValue ? previousValue + 1 : previousValue) /
+      (todaysHabitEntries.isEmpty ? 1 : todaysHabitEntries.length);
+  }
+
+  @override
+  List<HabitEntry> getRelativeHabitEntries(int daysForwardOrAgo) {
+    var now = currentDate;
+    var startInterval = DateTime(now.year, now.month, now.day, 0, 0, 0).add(Duration(days: daysForwardOrAgo));
+    var endInterval = DateTime(now.year, now.month, now.day, 23, 59, 59).add(Duration(days: daysForwardOrAgo));
     var todaysHabitEntries = habitMap.values.fold<List<HabitEntry>>([], (previousValue, element) {
       var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
       return [...previousValue, ...filteredEntries];
@@ -62,9 +90,9 @@ class HabitsLoaded extends HabitsState {
 
   @override
   List<HabitEntry> get weeksHabitEntries {
-    var now = DateTime.now();
-    var startInterval = DateTime(now.year, now.month, now.day - now.weekday);
-    var endInterval = DateTime(now.year, now.month, now.day + (7 - now.weekday));
+    var now = currentDate;
+    var startInterval = DateTime(now.year, now.month, now.day, 0, 0, 0).subtract(Duration(days: 4));
+    var endInterval = DateTime(now.year, now.month, now.day, 23, 59, 59).add(Duration(days: 4));
     var weeksHabitEntries = habitMap.values.fold<List<HabitEntry>>([], (previousValue, element) {
       var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
       return [...previousValue, ...filteredEntries];
@@ -74,11 +102,14 @@ class HabitsLoaded extends HabitsState {
   }
 
   @override
-  double get todaysCompletionPercentage => todaysHabitEntries.fold(0, (previousValue, element) => element.booleanValue ? previousValue + 1 : previousValue) / (todaysHabitEntries.isEmpty ? 1 : todaysHabitEntries.length);
-  
+  double get todaysCompletionPercentage =>
+      todaysHabitEntries.fold(0, (previousValue, element) => element.booleanValue ? previousValue + 1 : previousValue) /
+      (todaysHabitEntries.isEmpty ? 1 : todaysHabitEntries.length);
 
   @override
-  double get weeksCompletionPercentage => weeksHabitEntries.fold(0, (previousValue, element) => element.booleanValue ? previousValue + 1 : previousValue) / (weeksHabitEntries.isEmpty ? 1 : weeksHabitEntries.length);
+  double get weeksCompletionPercentage =>
+      weeksHabitEntries.fold(0, (previousValue, element) => element.booleanValue ? previousValue + 1 : previousValue) /
+      (weeksHabitEntries.isEmpty ? 1 : weeksHabitEntries.length);
 
   @override
   Map<int, List<HabitEntity>> segregatedHabits() {

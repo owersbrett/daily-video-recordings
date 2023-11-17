@@ -35,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   Timer? _timer;
   NowData nowData = NowData();
 
-  DateTime selectedDate = DateTime.now();
   bool showCreateDropdown = false;
   BottomSheetState bottomSheetState = BottomSheetState.hidden;
   @override
@@ -45,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     _timer = Timer.periodic(const Duration(seconds: 1), minuteFunction);
     log(monthlyValue.toString());
     log("Oi mate");
-    BlocProvider.of<HabitsBloc>(context).add(FetchHabits(widget.user.id!));
+    BlocProvider.of<HabitsBloc>(context).add(FetchHabits(widget.user.id!, DateTime.now()));
   }
 
   void minuteFunction(Timer t) {
@@ -114,11 +113,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    body: WeekAndHabitsScrollView(
-                      todaysHabitEntries: state.todaysHabitEntries,
-                      weekOfHabitEntities: state.segregatedHabits(),
-                      currentDay: DateTime.now(), habitsMap: state.habitsMap,
-                    ),
+                    body: WeekAndHabitsScrollView(habitsState: state),
                     bottomSheet: bottomBar(context, state),
 
                     // bottomNavigationBar: bottomBar(context),
@@ -140,29 +135,33 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        showCreateDropdown = false;
-                      });
-                      Navigation.createRoute(CreateHabitPage(), context, AnimationEnum.pageAscend);
+                  BlocBuilder<HabitsBloc, HabitsState>(
+                    builder: (context, state) {
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            showCreateDropdown = false;
+                          });
+                          Navigation.createRoute(CreateHabitPage(dateToAddHabit: state.currentDate), context, AnimationEnum.pageAscend);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.add_circle),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                "Habit",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.add_circle),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            "Habit",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                   Container(
                     width: 100,
@@ -248,8 +247,6 @@ class _HomePageState extends State<HomePage> {
       },
       child: BlocBuilder<ExperienceBloc, ExperienceState>(
         builder: (context, experienceState) {
-
-
           Map<int, List<HabitEntity>> thisWeeksHabitsSeperated = state.segregatedHabits();
           List<HabitEntity> thisWeeksHabitsTogether = [];
           thisWeeksHabitsSeperated.forEach((key, value) {

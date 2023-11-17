@@ -5,6 +5,8 @@ import '_repository.dart';
 
 abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future createIfDoesntExistForDate(HabitEntry t);
+  Future createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(HabitEntry t);
+  Future createForTodayIfDoesntExistBetweenStartDateAndEndDate(HabitEntry t, DateTime startDate, DateTime endDate);
 }
 
 class HabitEntryRepository implements IHabitEntryRepository {
@@ -46,6 +48,25 @@ class HabitEntryRepository implements IHabitEntryRepository {
     DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day);
     DateTime end = DateTime(t.createDate.year, t.createDate.month, t.createDate.day, 23, 59, 59);
     var q = await db.query(tableName, where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
+    if(q.isEmpty){
+      await create(t);
+    }
+  }
+  
+  @override
+  Future createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(HabitEntry t) async {
+    DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day).subtract( const Duration(days: 1));
+    DateTime end = DateTime(t.createDate.year, t.createDate.month, t.createDate.day, 23, 59, 59).add( const Duration(days: 1));
+    var q = await db.query(tableName, where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
+    if(q.isEmpty){
+      await create(t);
+    }
+  }
+  
+  @override
+  Future createForTodayIfDoesntExistBetweenStartDateAndEndDate(HabitEntry t, DateTime startDate, DateTime endDate) async {
+
+    var q = await db.query(tableName, where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, startDate.millisecondsSinceEpoch, endDate.millisecondsSinceEpoch]);
     if(q.isEmpty){
       await create(t);
     }

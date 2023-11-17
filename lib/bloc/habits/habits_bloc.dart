@@ -5,8 +5,10 @@ import 'package:daily_video_reminders/data/repositories/habit_repository.dart';
 import 'package:logging/logging.dart';
 
 import '../../data/experience.dart';
+import '../../data/frequency_type.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';
+import '../../main.dart';
 import 'habits.dart';
 
 class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
@@ -28,9 +30,9 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   }
 
   Future _fetchHabits(FetchHabits event, Emitter<HabitsState> emit) async {
-    DateTime now = DateTime.now();
-    Map<int, HabitEntity> habitEntities =
-        await habitRepository.getHabitEntities(event.userId, now.subtract(const Duration(days: 3)), now.add(const Duration(days: 3)));
+    DateTime now = event.currentDate;
+    List<DateTime> interval = getInterval(now);
+    Map<int, HabitEntity> habitEntities = await _getHabitEntries(event.userId, interval[0], interval[1]);
     List<Habit> habits = habitEntities.values.map((e) => e.habit).toList();
     List<HabitEntry> habitEntries = habitEntities.values.fold<List<HabitEntry>>([], (previousValue, element) {
       return [...previousValue, ...element.habitEntries];
@@ -51,17 +53,29 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     List<HabitEntry> twoDaysFromNowEntries = habitEntries.where((element) => element.createDate.day == twoDaysFromNow.day).toList();
     List<HabitEntry> threeDaysFromNowEntries = habitEntries.where((element) => element.createDate.day == threeDaysFromNow.day).toList();
 
-    // await _backFillHabitEntries(3, habits, threeDaysAgoEntries);
-    // await _backFillHabitEntries(2, habits, twoDaysAgoEntries);
+    await _backFillHabitEntries(threeDaysAgo, habits, threeDaysAgoEntries);
+    await _backFillHabitEntries(twoDaysAgo, habits, twoDaysAgoEntries);
     await _backFillHabitEntries(aDayAgo, habits, aDayAgoEntries);
     await _backFillHabitEntries(now, habits, todaysEntries);
     await _backFillHabitEntries(tomorrow, habits, tomorrowEntries);
-    // await _backFillHabitEntries(-2, habits, twoDaysFromNowEntries);
-    // await _backFillHabitEntries(-3, habits, threeDaysFromNowEntries);
+    await _backFillHabitEntries(twoDaysFromNow, habits, twoDaysFromNowEntries);
+    await _backFillHabitEntries(threeDaysFromNow, habits, threeDaysFromNowEntries);
 
-    // habitEntities = await habitRepository.getHabitEntities(event.userId, now.subtract(const Duration(days: 3)), now.add(const Duration(days: 3)));
+    habitEntities = await _getHabitEntries(event.userId, interval[0], interval[1]);
 
-    emit(HabitsLoaded(habitEntities));
+    emit(HabitsLoaded(habitEntities, event.currentDate));
+  }
+
+  List<DateTime> getInterval(DateTime now) {
+    DateTime startInterval = now.subtract(const Duration(days: 3));
+    startInterval = DateTime(startInterval.year, startInterval.month, startInterval.day);
+    DateTime endInterval = now.add(const Duration(days: 3));
+    endInterval = DateTime(endInterval.year, endInterval.month, endInterval.day, 23, 59, 59);
+    return [startInterval, endInterval];
+  }
+
+  Future<Map<int, HabitEntity>> _getHabitEntries(int userId, DateTime startInterval, DateTime endInterval) {
+    return habitRepository.getHabitEntities(userId, startInterval, endInterval);
   }
 
   Future _backFillHabitEntries(DateTime day, List<Habit> habits, List<HabitEntry> entries) async {
@@ -69,24 +83,41 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     // right now it's creating entries for all habits
     // -TODO-: only create entries for habits that don't have entries
     // TODO: TEST AS I THINK I FIXED THIS ^^
-    if (entries.length < habits.length) {
-      for (var habit in habits) {
-        HabitEntry t = HabitEntry.fromHabit(habit);
-        DateTime updatedDate = DateTime.now().subtract(Duration(days: day.day));
-        t = t.copyWith(updateDate: updatedDate, createDate: updatedDate);
-        await habitEntryRepository.createIfDoesntExistForDate(t);
+    DateTime beginningOfSixDaysAgo = DateTime(day.year, day.month, day.day).subtract(const Duration(days: 6));
+    DateTime endOfSixDaysFromNow = DateTime(day.year, day.month, day.day, 23, 59, 59).add(const Duration(days: 6));
+
+    for (var habit in habits) {
+      switch (habit.frequencyType) {
+        case FrequencyType.daily:
+          HabitEntry t = HabitEntry.fromHabit(habit);
+          t = t.copyWith(updateDate: day, createDate: day);
+          await habitEntryRepository.createIfDoesntExistForDate(t);
+          break;
+        case FrequencyType.everyOtherDay:
+          HabitEntry t = HabitEntry.fromHabit(habit);
+          t = t.copyWith(updateDate: day, createDate: day);
+          await habitEntryRepository.createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(t);
+        case FrequencyType.weekly:
+          HabitEntry t = HabitEntry.fromHabit(habit);
+          t = t.copyWith(updateDate: day, createDate: day);
+          await habitEntryRepository.createForTodayIfDoesntExistBetweenStartDateAndEndDate(t, beginningOfSixDaysAgo, endOfSixDaysFromNow);
+          break;
+        default:
+          log("FrequencyType not implemented: " + habit.frequencyType.toString());
       }
     }
   }
 
   Future _addHabit(AddHabit event, Emitter<HabitsState> emit) async {
     if (state is HabitsLoaded) {
-      Habit habit = await habitRepository.create(event.habit);
+      Habit habit = event.habit.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
+      habit = await habitRepository.create(habit);
       HabitEntry habitEntry = HabitEntry.fromHabit(habit);
+      habitEntry = habitEntry.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
       habitEntry = await habitEntryRepository.create(habitEntry);
       Map<int, HabitEntity> habitEntities = await habitRepository.getHabitEntities(event.habit.userId);
 
-      emit(HabitsLoaded(habitEntities));
+      emit(HabitsLoaded(habitEntities, state.currentDate));
     } else {
       Logger.root.severe("Error adding habit: " + event.habit.toString());
     }
@@ -102,7 +133,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       if (habitEntity != null) {
         await habitRepository.delete(event.habit);
       }
-      emit(HabitsLoaded(habits));
+      emit(HabitsLoaded(habits, state.currentDate));
     } else {
       Logger.root.severe("Error deleting habit: " + event.habit.toString());
     }
@@ -117,7 +148,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       } else {
         event.experienceBloc.add(ExperienceRemoved(Experience.fromHabitEntry(event.habit, event.habitEntry)));
       }
-      emit(HabitsLoaded(habitEntities));
+      emit(HabitsLoaded(habitEntities, state.currentDate));
     } else {
       Logger.root.severe("Error updating habit entry: " + event.habitEntry.toString());
     }

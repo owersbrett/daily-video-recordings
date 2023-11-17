@@ -9,10 +9,10 @@ import 'data/habit_entry.dart';
 import 'widgets/stylized_checkbox.dart';
 
 class HabitEntryCard extends StatefulWidget {
-  const HabitEntryCard({super.key, required this.habit, required this.habitEntry});
+  const HabitEntryCard({super.key, required this.habit, required this.habitEntry, required this.currentListDate});
   final HabitEntry habitEntry;
   final Habit habit;
-
+  final DateTime currentListDate;
   @override
   State<HabitEntryCard> createState() => _HabitEntryCardState();
 }
@@ -22,9 +22,15 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
   Habit get habit => widget.habit;
   bool get _completed => widget.habitEntry.booleanValue;
 
-
   void _onCheck(bool? value) {
-    BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue), BlocProvider.of<ExperienceBloc>(context)));
+    DateTime now = DateTime.now();
+    DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
+    if (widget.currentListDate.isAfter(endOfDay)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You're a liar, that's in the future."), backgroundColor: Colors.black,));
+    } else {
+      BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(
+          habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue), BlocProvider.of<ExperienceBloc>(context)));
+    }
   }
 
   String get _starBuilder {
@@ -46,7 +52,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
 
   @override
   Widget build(BuildContext context) {
-    return  Material(
+    return Material(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
