@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:daily_video_reminders/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -17,12 +18,17 @@ class ColorPickerDialog extends StatefulWidget {
 }
 
 class _ColorPickerDialogState extends State<ColorPickerDialog> {
-  Color currentColor = Colors.black;
-  void changeColor(Color color) {
-    setState(() => currentColor = color);
+  late Color currentColor;
+  @override
+  void initState() {
+    currentColor = widget.initialColor;
+    super.initState();
   }
 
-
+  void changeColor(Color color) {
+    log("value: $color");
+    setState(() => currentColor = color);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +48,13 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
         ),
         actions: <Widget>[
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-backgroundColor: Colors.white
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: const Text('Pick', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),),
+              child: const Text(
+                'Pick',
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+              ),
             ),
             onPressed: () {
               widget.onSubmit(currentColor);

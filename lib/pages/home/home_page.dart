@@ -10,7 +10,7 @@ import 'package:daily_video_reminders/data/bottom_sheet_state.dart';
 import 'package:daily_video_reminders/data/db.dart';
 import 'package:daily_video_reminders/habit_grid.dart';
 import 'package:daily_video_reminders/navigation/navigation.dart';
-import 'package:daily_video_reminders/pages/create_habit/create_habit_page.dart';
+import 'package:daily_video_reminders/pages/create_habit/create_a_habit.dart';
 import 'package:daily_video_reminders/pages/home/home_page_bottom.dart';
 import 'package:daily_video_reminders/pages/home/now_data.dart';
 import 'package:daily_video_reminders/pages/home/week_and_habits_scroll_view.dart';

@@ -6,9 +6,6 @@ import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';
 import '../../widgets/stylized_checkbox.dart';
 
-
-
-
 class DisplayHabitCard extends StatefulWidget {
   const DisplayHabitCard({super.key, required this.habitEntity, this.onCheck, this.onUncheck, this.progress = 100, this.checkable = true});
   final HabitEntity habitEntity;
@@ -23,7 +20,7 @@ class DisplayHabitCard extends StatefulWidget {
 }
 
 class _DisplayHabitCardState extends State<DisplayHabitCard> {
-  String get habitString => habit.verb + " " + habit.valueGoal.toString() + " " + habit.suffix;
+  String get habitString => habit.stringValue;
   Habit get habit => widget.habit;
   bool _completed = false;
 

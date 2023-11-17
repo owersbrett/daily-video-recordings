@@ -57,7 +57,7 @@ class HabitRepository implements IHabitRepository {
     StringBuffer buffer = StringBuffer();
     buffer.write("SELECT ");
     buffer.write(
-        "H.id id, H.userId userId, H.verb verb, H.value value, H.unitIncrement unitIncrement, H.valueGoal valueGoal, H.suffix suffix, H.unitType unitType, H.frequencyType frequencyType, H.emoji emoji, H.streakEmoji streakEmoji, H.hexColor hexColor, H.createDate createDate, H.updateDate updateDate, ");
+        "H.id id, H.userId userId, H.stringValue stringValue, H.value value, H.unitIncrement unitIncrement, H.valueGoal valueGoal, H.suffix suffix, H.unitType unitType, H.frequencyType frequencyType, H.emoji emoji, H.streakEmoji streakEmoji, H.hexColor hexColor, H.createDate createDate, H.updateDate updateDate, ");
     buffer.write(
         "HE.id HE_ID, HE.booleanValue HE_BOOLEAN_VALUE, HE.integerValue HE_INTEGER_VALUE, HE.stringValue HE_STRING_VALUE, HE.createDate HE_CREATE_DATE, HE.updateDate HE_UPDATE_DATE");
     buffer.write(" FROM  ");

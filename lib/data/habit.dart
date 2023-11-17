@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:daily_video_reminders/data/frequency_type.dart';
 import 'package:daily_video_reminders/data/unit_type.dart';
-import 'package:daily_video_reminders/habit_card.dart';
+
 
 import 'user.dart';
 
@@ -15,7 +15,7 @@ class Habit {
   static const List<String> columnDeclarations = [
     "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
     "userId INTEGER",
-    "verb TEXT",
+    "stringValue TEXT",
     "value INTEGER",
     "unitIncrement INTEGER",
     "valueGoal INTEGER",
@@ -31,7 +31,7 @@ class Habit {
   ];
   final int? id;
   final int userId;
-  final String verb;
+  final String stringValue;
   final int value;
   final int unitIncrement;
   final int valueGoal;
@@ -45,9 +45,9 @@ class Habit {
   final DateTime createDate;
   final DateTime updateDate;
   Habit({
-     this.id,
+    this.id,
     required this.userId,
-    required this.verb,
+    required this.stringValue,
     required this.value,
     required this.unitIncrement,
     required this.valueGoal,
@@ -64,7 +64,7 @@ class Habit {
   Habit copyWith({
     int? id,
     int? userId,
-    String? verb,
+    String? stringValue,
     int? value,
     int? unitIncrement,
     int? valueGoal,
@@ -80,7 +80,7 @@ class Habit {
     return Habit(
       id: id ?? this.id,
       userId: userId ?? this.userId,
-      verb: verb ?? this.verb,
+      stringValue: stringValue ?? this.stringValue,
       value: value ?? this.value,
       unitIncrement: unitIncrement ?? this.unitIncrement,
       valueGoal: valueGoal ?? this.valueGoal,
@@ -99,7 +99,7 @@ class Habit {
     return <String, dynamic>{
       'id': id,
       'userId': userId,
-      'verb': verb,
+      'stringValue': stringValue,
       'value': value,
       'unitIncrement': unitIncrement,
       'valueGoal': valueGoal,
@@ -117,7 +117,7 @@ class Habit {
   factory Habit.empty() {
     return Habit(
       unitIncrement: 1,
-      verb: "",
+      stringValue: "",
       value: 0,
       valueGoal: 1,
       suffix: "",
@@ -136,7 +136,7 @@ class Habit {
     return Habit(
       id: map['id'] as int,
       userId: map['userId'] as int,
-      verb: map['verb'] as String,
+      stringValue: map['stringValue'] as String,
       value: map['value'] as int,
       unitIncrement: map['unitIncrement'] as int,
       valueGoal: map['valueGoal'] as int,
@@ -157,7 +157,7 @@ class Habit {
 
   @override
   String toString() {
-    return 'Habit(id: $id, userId: $userId, verb: $verb, value: $value, unitIncrement: $unitIncrement, valueGoal: $valueGoal, suffix: $suffix, unitType: $unitType, frequencyType: $frequencyType, emoji: $emoji, streakEmoji: $streakEmoji, hexColor: $hexColor, createDate: $createDate, updateDate: $updateDate)';
+    return 'Habit(id: $id, userId: $userId, stringValue: $stringValue, value: $value, unitIncrement: $unitIncrement, valueGoal: $valueGoal, suffix: $suffix, unitType: $unitType, frequencyType: $frequencyType, emoji: $emoji, streakEmoji: $streakEmoji, hexColor: $hexColor, createDate: $createDate, updateDate: $updateDate)';
   }
 
   @override
@@ -166,7 +166,7 @@ class Habit {
 
     return other.id == id &&
         other.userId == userId &&
-        other.verb == verb &&
+        other.stringValue == stringValue &&
         other.value == value &&
         other.unitIncrement == unitIncrement &&
         other.valueGoal == valueGoal &&
@@ -184,7 +184,7 @@ class Habit {
   int get hashCode {
     return id.hashCode ^
         userId.hashCode ^
-        verb.hashCode ^
+        stringValue.hashCode ^
         value.hashCode ^
         unitIncrement.hashCode ^
         valueGoal.hashCode ^

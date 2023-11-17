@@ -19,9 +19,7 @@ class Experience {
     "description TEXT",
     "domainId INTEGER",
     "FOREIGN KEY(userId) REFERENCES ${User.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
-    "FOREIGN KEY(habitEntryId) REFERENCES ${HabitEntry.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
-
-    
+        "FOREIGN KEY(habitEntryId) REFERENCES ${HabitEntry.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
   ];
 
   final int? id;
@@ -34,7 +32,7 @@ class Experience {
   final int domainId;
 
   Experience({
-     this.id,
+    this.id,
     required this.userId,
     required this.habitEntryId,
     required this.points,
@@ -104,38 +102,37 @@ class Experience {
   @override
   bool operator ==(covariant Experience other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.userId == userId &&
-      other.habitEntryId == habitEntryId &&
-      other.points == points &&
-      other.createdAt == createdAt &&
-      other.updatedAt == updatedAt &&
-      other.description == description &&
-      other.domainId == domainId;
+
+    return other.id == id &&
+        other.userId == userId &&
+        other.habitEntryId == habitEntryId &&
+        other.points == points &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.description == description &&
+        other.domainId == domainId;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      userId.hashCode ^
-      habitEntryId.hashCode ^
-      points.hashCode ^
-      createdAt.hashCode ^
-      updatedAt.hashCode ^
-      description.hashCode ^
-      domainId.hashCode;
+        userId.hashCode ^
+        habitEntryId.hashCode ^
+        points.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode ^
+        description.hashCode ^
+        domainId.hashCode;
   }
 
   static Experience fromHabitEntry(Habit habit, HabitEntry habitEntry) {
     return Experience(
       userId: habit.userId,
       habitEntryId: habitEntry.id!,
-      points: habitEntry.integerValue ??  (habitEntry.booleanValue ? 25 : 0),
+      points: habitEntry.integerValue ?? (habitEntry.booleanValue ? 25 : 0),
       createdAt: habitEntry.createDate,
       updatedAt: habitEntry.updateDate,
-      description: habit.verb + " " + habitEntry.integerValue.toString() + " " + habit.suffix,
+      description: habit.stringValue + " " + habitEntry.integerValue.toString() + " " + habit.suffix,
       domainId: 0,
     );
   }

@@ -18,7 +18,7 @@ class HabitEntryCard extends StatefulWidget {
 }
 
 class _HabitEntryCardState extends State<HabitEntryCard> {
-  String get habitString => habit.verb + " " + habit.valueGoal.toString() + " " + habit.suffix;
+  String get habitString => habit.stringValue;
   Habit get habit => widget.habit;
   bool get _completed => widget.habitEntry.booleanValue;
 
@@ -26,7 +26,10 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     DateTime now = DateTime.now();
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
     if (widget.currentListDate.isAfter(endOfDay)) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You're a liar, that's in the future."), backgroundColor: Colors.black,));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("You're a liar, that's in the future."),
+        backgroundColor: Colors.black,
+      ));
     } else {
       BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(
           habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue), BlocProvider.of<ExperienceBloc>(context)));

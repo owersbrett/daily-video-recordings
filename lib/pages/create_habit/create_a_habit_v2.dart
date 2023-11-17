@@ -134,7 +134,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   void initState() {
     super.initState();
     _frequencyController.text = "Daily";
-    habit = habit.copyWith(verb: _verbController.text, valueGoal: 10, suffix: "Pages", frequencyType: FrequencyType.daily);
+    habit = habit.copyWith(stringValue: _verbController.text, valueGoal: 10, suffix: "Pages", frequencyType: FrequencyType.daily);
     _verbFocus.requestFocus();
   }
 
@@ -243,7 +243,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                             setState(() {
                               hasFocusedOnFrequency = true;
                             });
-                            setHabit(habit.copyWith(verb: val));
+                            setHabit(habit.copyWith(stringValue: val));
                           },
                           validator: (str) => FormValidator.nonEmpty(str, "Frequency"),
                           onEditingComplete: () => FocusScope.of(context).unfocus(),
@@ -354,7 +354,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
           setState(() {
             hasFocusedOnVerb = true;
           });
-          setHabit(habit.copyWith(verb: val));
+          setHabit(habit.copyWith(stringValue: val));
         },
         validator: (str) => FormValidator.nonEmpty(str, "Verb"),
         onEditingComplete: () {

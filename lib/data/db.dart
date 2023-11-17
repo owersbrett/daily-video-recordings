@@ -101,7 +101,7 @@ class CustomDatabase {
   static List<Habit> habits = [
     Habit(
       id: 1,
-      verb: "Drink",
+      stringValue: "Drink",
       value: 16,
       valueGoal: 64,
       suffix: "oz of water",
@@ -112,7 +112,8 @@ class CustomDatabase {
       unitIncrement: 1,
       updateDate: DateTime.now(),
       streakEmoji: "🔥",
-      frequencyType: FrequencyType.daily, userId: 1,
+      frequencyType: FrequencyType.daily,
+      userId: 1,
     ),
     // Habit(
     //   id: 2,
