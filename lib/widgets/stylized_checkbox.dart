@@ -13,11 +13,10 @@ class StylizedCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // if (isChecked) {
-        //   AudioPlayer().play(AssetSource("audio/unpop.m4a"));
-        // } else {
-        //   AudioPlayer().play(AssetSource("audio/pop.m4a"));
-        // }
+        if (isChecked) {
+          // AudioPlayer().play(AssetSource("audio/unpop.m4a"));
+        } else {
+        }
         onTap();
       },
       child: Container(

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:daily_video_reminders/bloc/experience/experience.dart';
 import 'package:daily_video_reminders/bloc/habits/habits.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,9 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
         backgroundColor: Colors.black,
       ));
     } else {
+      if (!widget.habitEntry.booleanValue) {
+        AudioPlayer().play(AssetSource("audio/shimmer.wav"));
+      }
       BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(
           habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue), BlocProvider.of<ExperienceBloc>(context)));
     }
@@ -102,7 +106,6 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                                 height: 24,
                               ),
                               _titleRow(),
-
                               if (buttonsExpanded)
                                 Row(
                                   children: [
