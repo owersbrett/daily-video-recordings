@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:daily_video_reminders/pages/create_habit/display_habit_card.dart';
+import 'package:daily_video_reminders/util/color_util.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -28,16 +29,17 @@ class CreateHabitPage extends StatefulWidget {
 class _CreateHabitPageState extends State<CreateHabitPage> {
   final _formKey = GlobalKey<FormState>();
 
-  bool hasFocusedOnHabit = false;
+  bool hasCompletedHabit = false;
   bool hasFocusedOnFrequency = false;
+  TextEditingController colorTextEdittingController = TextEditingController(text: "Red");
   bool hasFocusedOnColor = false;
   Habit habit = Habit.empty();
   bool get complete => progress == 100;
   int get progress {
     int _progress = 0;
-    if (hasFocusedOnHabit) _progress += 35;
-    if (hasFocusedOnColor) _progress += 35;
-    if (hasFocusedOnFrequency) _progress += 5;
+    if (hasCompletedHabit) _progress += 35;
+    if (habit.hexColor.isNotEmpty) _progress += 35;
+    _progress += 30;
 
     return _progress;
   }
@@ -122,6 +124,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   void onPickColor(Color color) {
     setState(() {
       habit = habit.copyWith(hexColor: '#${color.value.toRadixString(16).padLeft(8, '0')}');
+      colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
     });
     Navigator.of(context).pop();
   }
@@ -130,7 +133,8 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   void initState() {
     super.initState();
     _frequencyController.text = "Daily";
-    habit = habit.copyWith(stringValue: _stringValueController.text, valueGoal: 1, suffix: "", frequencyType: FrequencyType.daily);
+    habit = habit.copyWith(
+        stringValue: _stringValueController.text, valueGoal: 1, suffix: "", frequencyType: FrequencyType.daily, hexColor: Colors.red.toHex());
 
     _stringValueFocus.requestFocus();
   }
@@ -145,7 +149,10 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ColorPickerDialog(onSubmit: (color) => onPickColor(color));
+        return ColorPickerDialog(
+          onSubmit: (color) => onPickColor(color),
+          initialColor: ColorUtil.getColorFromHex(habit.hexColor),
+        );
       },
     );
   }
@@ -170,7 +177,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                   width: 12,
                 ),
                 Text(
-                  "Track a Habit",
+                  "Create a Habit",
                   style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 Expanded(
@@ -214,14 +221,14 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                               context: context,
                               builder: (ctx) {
                                 return SelectorDialog(
-                                  values: FrequencyType.values.map((e) => e.toPrettyString()).toList(),
+                                  values: FrequencyType.values.map((e) => e.toUiString()).toList(),
                                   onSelect: (String prettyString) {
                                     setState(() {
                                       _frequencyController.text = prettyString;
                                     });
                                     setHabit(
                                       habit.copyWith(
-                                          frequencyType: FrequencyType.values.where((element) => element.toPrettyString() == prettyString).first),
+                                          frequencyType: FrequencyType.values.where((element) => element.toUiString() == prettyString).first),
                                     );
                                     Navigator.of(context).pop();
                                   },
@@ -241,6 +248,28 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           validator: (str) => FormValidator.nonEmpty(str, "Frequency"),
                           onEditingComplete: () => FocusScope.of(context).unfocus(),
                           value: _frequencyController,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          pickColor();
+                        },
+                        child: CustomFormField(
+                          focusNode: _frequencyFocus,
+                          label: "Color",
+                          enabled: false,
+                          onChanged: (val) {
+                            setState(() {
+                              hasFocusedOnFrequency = true;
+                            });
+                            setHabit(habit.copyWith(stringValue: val));
+                          },
+                          validator: (str) => FormValidator.nonEmpty(str, "Color"),
+                          onEditingComplete: () => FocusScope.of(context).unfocus(),
+                          value: colorTextEdittingController,
                         ),
                       ),
                     ),
@@ -297,14 +326,13 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         focusNode: _stringValueFocus,
         label: "Habit",
         onChanged: (val) {
-          setState(() {
-            hasFocusedOnHabit = true;
-          });
           setHabit(habit.copyWith(stringValue: val));
         },
         validator: (str) => FormValidator.nonEmpty(str, "stringValue"),
         onEditingComplete: () {
-          setState(() {});
+          setState(() {
+            if (habit.stringValue.isNotEmpty) hasCompletedHabit = true;
+          });
           FocusScope.of(context).requestFocus(_quantityFocus);
         },
       ),

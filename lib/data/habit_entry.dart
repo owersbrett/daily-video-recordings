@@ -17,12 +17,14 @@ class HabitEntry {
     "createDate INTEGER",
     "updateDate INTEGER",
     "FOREIGN KEY(habitId) REFERENCES ${Habit.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION"
+    
 
   ];
   final int? id;
   final int habitId;
   final bool booleanValue;
   final int? integerValue;
+  final int? streakAtEntry;
   final double? decimalValue;
   final String? stringValue;
   final UnitType unitType;
@@ -35,6 +37,7 @@ class HabitEntry {
     this.integerValue,
     this.decimalValue,
     this.stringValue,
+    this.streakAtEntry,
     required this.unitType,
     required this.createDate,
     required this.updateDate,
@@ -83,6 +86,7 @@ class HabitEntry {
       'habitId': habitId,
       'integerValue': integerValue,
       'decimalValue': decimalValue,
+      // 'streakAtEntry': streakAtEntry,
       'stringValue': stringValue,
       'unitType': unitType.toPrettyString(),
       'createDate': createDate.millisecondsSinceEpoch,
@@ -105,6 +109,7 @@ class HabitEntry {
     return HabitEntry(
       id: map['id'] != null ? map['id'] as int : null,
       habitId: map['habitId'] as int,
+      // streakAtEntry: map['streakAtEntry'] as int?,
       booleanValue:( map['booleanValue'] as int) == 1,
       integerValue: map['integerValue'] != null ? map['integerValue'] as int : null,
       decimalValue: map['decimalValue'] != null ? map['decimalValue'] as double : null,
@@ -134,6 +139,7 @@ class HabitEntry {
       other.booleanValue == booleanValue &&
       other.integerValue == integerValue &&
       other.decimalValue == decimalValue &&
+      other.streakAtEntry == streakAtEntry &&
       other.stringValue == stringValue &&
       other.unitType == unitType &&
       other.createDate == createDate &&
@@ -147,6 +153,7 @@ class HabitEntry {
       booleanValue.hashCode ^
       integerValue.hashCode ^
       decimalValue.hashCode ^
+      streakAtEntry.hashCode ^
       stringValue.hashCode ^
       unitType.hashCode ^
       createDate.hashCode ^

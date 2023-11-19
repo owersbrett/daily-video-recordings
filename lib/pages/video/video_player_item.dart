@@ -1,3 +1,5 @@
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+
 import 'dart:async';
 import 'dart:io';
 import 'package:daily_video_reminders/main.dart';
@@ -15,6 +17,33 @@ class VideoPlayerItem extends StatefulWidget {
 }
 
 class _VideoPlayerItemState extends State<VideoPlayerItem> {
+  int progress = 0;
+  bool get isSaving => progress != 100 && progress != 0;
+
+  Future downloadVideo() async {
+    setState(() {
+      progress = 1;
+    });
+
+    await ImageGallerySaver.saveFile(widget.path);
+
+    while (progress < 100) {
+      await updateProgress();
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.black,
+      content: const Text("Video Saved"),
+      duration: const Duration(seconds: 1),
+    ));
+  }
+
+  Future updateProgress() async {
+    setState(() {
+      progress += 1;
+    });
+    await Future.delayed(Duration(milliseconds: 25));
+  }
+
   VideoPlayerController get _controller => widget.videoController;
   Timer _timer = Timer.periodic(Duration(days: 1), (timer) {});
   int secondsRemaining = 0;
@@ -50,7 +79,6 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     }
   }
 
-
   Widget overlay() {
     return Column(
       children: [
@@ -61,17 +89,13 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
           child: Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              infoColumn(),
-              Expanded(child: actionColumn())
-
-
-            ],
+            children: [infoColumn(), Expanded(child: actionColumn())],
           ),
         ),
       ],
     );
   }
+
   Widget actionColumn() {
     return Container(
       child: Column(
@@ -81,22 +105,35 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
             children: [
               InkWell(
                 onTap: () {
-                  showDialog(context: context, builder: 
-                  (ctx) => AlertDialog(
-                    title: const Text("Delete Video?", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                    content: const Text("Are you sure you want to delete this video?"),
-                    actions: [
-                      TextButton(onPressed: () {
-                        Navigator.of(ctx).pop();
-                      }, child: const Text("Cancel", style: TextStyle(color: Colors.black),)),
-                      TextButton(onPressed: () {
-                        File(widget.path).delete();
-                        Navigator.of(ctx).pop();
-                        Navigator.of(context).pop();
-                      }, child: const Text("Delete", style: TextStyle(color: Colors.red), ))
-                    ],
-                  )
-                  );
+                  showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                            title: const Text(
+                              "Delete Video?",
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                            ),
+                            content: const Text("Are you sure you want to delete this video?"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(ctx).pop();
+                                  },
+                                  child: const Text(
+                                    "Cancel",
+                                    style: TextStyle(color: Colors.black),
+                                  )),
+                              TextButton(
+                                  onPressed: () {
+                                    File(widget.path).delete();
+                                    Navigator.of(ctx).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    "Delete",
+                                    style: TextStyle(color: Colors.red),
+                                  ))
+                            ],
+                          ));
                 },
                 child: const Icon(
                   Icons.delete,
@@ -116,7 +153,8 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
       ),
     );
   }
-  Widget _videoSlider(){
+
+  Widget _videoSlider() {
     return Expanded(
       child: Slider(
         value: secondsElapsed.toDouble(),
@@ -181,20 +219,36 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
         child: CircularProgressIndicator(),
       );
     }
-    return Stack(
+    return Column(
       children: [
-        GestureDetector(
-          onLongPress: () {
-            _controller?.setPlaybackSpeed(2);
-          },
-          onLongPressEnd: (details) {
-            _controller?.setPlaybackSpeed(1);
-          },
-          onTap: _togglePlay,
-          child: VideoPlayer(_controller!),
+        Expanded(
+          child: Stack(
+            children: [
+              GestureDetector(
+                onLongPress: () {
+                  _controller?.setPlaybackSpeed(2);
+                },
+                onLongPressEnd: (details) {
+                  _controller?.setPlaybackSpeed(1);
+                },
+                onTap: _togglePlay,
+                child: VideoPlayer(_controller!),
+              ),
+              overlay(),
+              Positioned(
+                        left: 8,
+        top: kToolbarHeight / 2,
+                  child: IconButton(
+                icon: Icon(Icons.download),
+                onPressed: () async {
+                  downloadVideo();
+                },
+              )),
+              DVRCloseButton(onPressed: () => Navigator.of(context).pop())
+            ],
+          ),
         ),
-        overlay(),
-        DVRCloseButton(onPressed: () => Navigator.of(context).pop())
+        isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
       ],
     );
   }

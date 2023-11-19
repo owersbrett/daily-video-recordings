@@ -33,6 +33,7 @@ void main() async {
   Database database = await DatabaseService.initialize();
 
   await DatabaseService.updateDatabase(database);
+  await DatabaseService.logTableColumns(database);
 
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb ? HydratedStorage.webStorageDirectory : await getTemporaryDirectory(),

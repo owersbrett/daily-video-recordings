@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:daily_video_reminders/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -11,20 +12,24 @@ class StylizedCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        // if (isChecked) {
+        //   AudioPlayer().play(AssetSource("audio/unpop.m4a"));
+        // } else {
+        //   AudioPlayer().play(AssetSource("audio/pop.m4a"));
+        // }
+        onTap();
+      },
       child: Container(
         width: 75,
         height: 75,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           border: Border.all(
-            color: isChecked ? Theme.of(context).colorScheme.outline : color
-                .withOpacity(isChecked ? 1 : 0.3),
+            color: isChecked ? Theme.of(context).colorScheme.outline : color.withOpacity(isChecked ? 1 : 0.3),
             width: 12.0,
           ),
-          color: isChecked
-              ? Theme.of(context).colorScheme.outline
-              : Colors.transparent,
+          color: isChecked ? Theme.of(context).colorScheme.outline : Colors.transparent,
         ),
         child: isChecked
             ? Center(

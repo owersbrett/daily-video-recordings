@@ -1,25 +1,46 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
 
 import 'package:daily_video_reminders/data/habit.dart';
-import 'package:daily_video_reminders/data/user.dart';
 import 'package:daily_video_reminders/data/habit_entry.dart';
 import 'package:daily_video_reminders/data/habit_entry_note.dart';
 import 'package:daily_video_reminders/data/multimedia.dart';
+import 'package:daily_video_reminders/data/user.dart';
 import 'package:daily_video_reminders/data/user_level.dart';
 
 import '../data/domain.dart';
 import '../data/experience.dart';
 import '../data/level.dart';
+import '../data/memento.dart';
 
 class DatabaseService {
   static final DatabaseService _singleton = DatabaseService._internal();
   // toggle to update database
-  static final version = 6;
+  static final version = 5;
 
   factory DatabaseService() {
     return _singleton;
+  }
+
+  static Future<void> logTableColumns(Database database) async {
+    // First, get all table names (except sqlite system tables)
+    var tableNames = await database.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+
+    // Iterate over each table
+    for (var tableMap in tableNames) {
+      Object? tableName = tableMap['name'];
+      print('Table: $tableName');
+
+      // Get column info for each table
+      List<Map> columns = await database.rawQuery('PRAGMA table_info($tableName)');
+      for (var column in columns) {
+        print('Column: ${column['name']} - Type: ${column['type']}');
+      }
+      print('\n');
+    }
   }
 
   DatabaseService._internal();
@@ -69,28 +90,42 @@ class DatabaseService {
     // await createTables(db);
   }
 
+
+
+  static List<List<String>> getColumnDeclarations() {
+    return [
+      User.columnDeclarations,
+      Habit.columnDeclarations,
+      HabitEntry.columnDeclarations,
+      Experience.columnDeclarations,
+      Domain.columnDeclarations,
+      HabitEntryNote.columnDeclarations,
+      UserLevel.columnDeclarations,
+      Multimedia.columnDeclarations,
+      Level.columnDeclarations,
+      Memento.columnDeclarations,
+    ];
+  }
+
+    static List<String> getTableNames() {
+    return [
+      Habit.tableName,
+      User.tableName,
+      HabitEntry.tableName,
+      Experience.tableName,
+      Domain.tableName,
+      HabitEntryNote.tableName,
+      UserLevel.tableName,
+      Multimedia.tableName,
+      Level.tableName,
+      Memento.tableName,
+    ];
+  }
+
   static FutureOr<void> dropTables(Database db) async {
-    String dropUserTableSql = getDropTableString(User.tableName);
-    String dropHabitTableSql = getDropTableString(Habit.tableName);
-    String dropHabitEntryTableSql = getDropTableString(HabitEntry.tableName);
-    String dropExperienceSql = getDropTableString(Experience.tableName);
-
-    String dropDomainSql = getDropTableString(Domain.tableName);
-    String dropHabitEntryNoteSql = getDropTableString(HabitEntryNote.tableName);
-    String dropUserLevelSql = getDropTableString(UserLevel.tableName);
-    String dropMultimediaSql = getDropTableString(Multimedia.tableName);
-    String dropLevelSql = getDropTableString(Level.tableName);
-
-    sqlTry(db, dropUserTableSql);
-    sqlTry(db, dropHabitTableSql);
-    sqlTry(db, dropHabitEntryTableSql);
-
-    sqlTry(db, dropExperienceSql);
-    sqlTry(db, dropDomainSql);
-    sqlTry(db, dropHabitEntryNoteSql);
-    sqlTry(db, dropUserLevelSql);
-    sqlTry(db, dropMultimediaSql);
-    sqlTry(db, dropLevelSql);
+    for (var table in DatabaseService.getTableNames()) {
+      await sqlTry(db, getDropTableString(table));
+    }
   }
 
   static FutureOr<void> createTables(Database db) async {
@@ -98,6 +133,7 @@ class DatabaseService {
     String createHabitTableSql = getCreateTableString(Habit.columnDeclarations, Habit.tableName);
     String createHabitEntryTableSql = getCreateTableString(HabitEntry.columnDeclarations, HabitEntry.tableName);
     String createExperienceSql = getCreateTableString(Experience.columnDeclarations, Experience.tableName);
+    String createMementoSql = getCreateTableString(Memento.columnDeclarations, Memento.tableName);
 
     String createDomainSql = getCreateTableString(Domain.columnDeclarations, Domain.tableName);
     String createHabitEntryNoteSql = getCreateTableString(HabitEntryNote.columnDeclarations, HabitEntryNote.tableName);
@@ -109,6 +145,7 @@ class DatabaseService {
     sqlTry(db, createUserTableSql);
     sqlTry(db, createHabitEntryTableSql);
     sqlTry(db, createExperienceSql);
+    sqlTry(db, createMementoSql);
     sqlTry(db, createDomainSql);
     sqlTry(db, createHabitEntryNoteSql);
     sqlTry(db, createUserLevelSql);

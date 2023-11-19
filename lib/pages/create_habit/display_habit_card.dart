@@ -1,4 +1,5 @@
 import 'package:daily_video_reminders/data/habit.dart';
+import 'package:daily_video_reminders/pages/create_habit/typewriter_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../custom_progress_indicator.dart';
@@ -110,7 +111,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
                   left: 8,
                   bottom: 8,
                   child: Text(
-                    habit.frequencyType.toPrettyString(),
+                    habit.frequencyType.toUiString(),
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
                   )),
             ],
@@ -143,11 +144,22 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
       children: [
         Text(habit.emoji, style: TextStyle(fontSize: 24)),
         SizedBox(width: 8),
-        Text(
-          habitString,
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+        Flexible(
+          flex: 2,
+          child: habitString.isEmpty
+              ? TypewriterWidget(textList: [
+                  "Drink 64 oz of water per day...",
+                  "Refrain from smoking cigarettes...",
+                  "Exercise for 30 minutes...",
+                  "Reach out to an old friend..."
+                ], typingSpeed: Duration(milliseconds: 100),)
+              : Text(
+                  habitString,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+                ),
         ),
-        Expanded(child: Container()),
+        SizedBox(width: 8),
+
       ],
     );
   }

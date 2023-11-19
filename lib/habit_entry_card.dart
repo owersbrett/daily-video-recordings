@@ -20,14 +20,22 @@ class HabitEntryCard extends StatefulWidget {
 class _HabitEntryCardState extends State<HabitEntryCard> {
   String get habitString => habit.stringValue;
   Habit get habit => widget.habit;
+  bool buttonsExpanded = false;
+  bool noteExpanded = false;
   bool get _completed => widget.habitEntry.booleanValue;
 
   void _onCheck(bool? value) {
     DateTime now = DateTime.now();
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
+    DateTime startOfDay = DateTime(now.year, now.month, now.day, 0, 0, 0);
     if (widget.currentListDate.isAfter(endOfDay)) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("You're a liar, that's in the future."),
+        backgroundColor: Colors.black,
+      ));
+    } else if (widget.currentListDate.isBefore(startOfDay)) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("You can't change the past."),
         backgroundColor: Colors.black,
       ));
     } else {
@@ -55,53 +63,85 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: HexColor.fromHex(habit.hexColor).withOpacity(.5), width: 2),
-            gradient: LinearGradient(
-              colors: [
-                HexColor.fromHex(habit.hexColor).withOpacity(.5),
-                HexColor.fromHex(habit.hexColor).withOpacity(.3),
-              ],
-              stops: [_completed ? .5 : 0.5, gradientStop],
-              begin: Alignment.topLeft,
-              end: Alignment.centerRight,
-            ),
-          ),
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: _titleRow(),
-                        ),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(right: 16, top: 16, bottom: 16),
-                          child: StylizedCheckbox(isChecked: _completed, color: HexColor.fromHex(habit.hexColor), onTap: () => _onCheck(_completed))),
-                    ],
-                  ),
+    return GestureDetector(
+      // onTap: () {
+      //   setState(() {
+      //     buttonsExpanded = !buttonsExpanded;
+      //   });
+      // },
+      child: Material(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: HexColor.fromHex(habit.hexColor).withOpacity(.5), width: 2),
+              gradient: LinearGradient(
+                colors: [
+                  HexColor.fromHex(habit.hexColor).withOpacity(.5),
+                  HexColor.fromHex(habit.hexColor).withOpacity(.3),
                 ],
+                stops: [_completed ? .5 : 0.5, gradientStop],
+                begin: Alignment.topLeft,
+                end: Alignment.centerRight,
               ),
-              starAndStreakRow(),
-              Positioned(
-                  left: 8,
-                  bottom: 8,
-                  child: Text(
-                    habit.frequencyType.toPrettyString(),
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
-                  )),
-            ],
+            ),
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 24,
+                              ),
+                              _titleRow(),
+
+                              if (buttonsExpanded)
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: TextButton(
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all(Colors.black),
+                                        ),
+                                        child: Text("Edit", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                        onPressed: () {},
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 16, top: 16, bottom: 16),
+                            child:
+                                StylizedCheckbox(isChecked: _completed, color: HexColor.fromHex(habit.hexColor), onTap: () => _onCheck(_completed))),
+                      ],
+                    ),
+                  ],
+                ),
+                // starAndStreakRow(),
+                Positioned(
+                    left: 8,
+                    bottom: 8,
+                    child: Text(
+                      habit.frequencyType.toUiString(),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
+                    )),
+              ],
+            ),
           ),
         ),
       ),
@@ -131,11 +171,13 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
       children: [
         Text(habit.emoji, style: TextStyle(fontSize: 24)),
         SizedBox(width: 8),
-        Text(
-          habitString,
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+        Flexible(
+          child: Text(
+            habitString,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
         ),
-        Expanded(child: Container()),
+        SizedBox(width: 8),
       ],
     );
   }

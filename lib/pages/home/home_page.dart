@@ -215,9 +215,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.download_rounded),
-                          SizedBox(
-                            width: 4,
-                          ),
+                          SizedBox(width: 4),
                           Text("Report", style: Theme.of(context).textTheme.bodyMedium),
                         ],
                       ),

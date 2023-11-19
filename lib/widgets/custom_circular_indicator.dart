@@ -2,16 +2,13 @@ import 'package:daily_video_reminders/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class WeekdayHero extends StatelessWidget {
-  const WeekdayHero({super.key, required this.date, required this.expanded, this.score = 100, this.textColor = Colors.black});
+class CustomCircularIndicator extends StatelessWidget {
+  const CustomCircularIndicator({super.key, required this.expanded, this.title, this.centerValue, this.score = 100, this.textColor = Colors.black});
   final int score;
   final bool expanded;
+  final String? title;
+  final String? centerValue;
   final Color textColor;
-
-  final DateTime date;
-
-  String get dayOfWeek => DateFormat('EEE').format(date);
-  String get dayOfMonth => DateFormat('d').format(date);
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +21,14 @@ class WeekdayHero extends StatelessWidget {
             mainAxisSize: MainAxisSize.min, // Set the main axis size to the minimum
             children: <Widget>[
               Text(
-                dayOfWeek,
+                title ?? "",
                 style: TextStyle(fontSize: expanded ? 20 : 16, color: textColor, fontWeight: expanded ? FontWeight.bold : FontWeight.normal),
               ),
               const SizedBox(height: 8), //
               CustomProgressIndicator(
-                size: expanded ? ProgressIndicatorSize.medium : ProgressIndicatorSize.small,
+                size: expanded ? ProgressIndicatorSize.large : ProgressIndicatorSize.small,
                 value: score.toDouble(),
-                label: dayOfMonth,
+                label: centerValue ?? "",
                 textColor: textColor,
               ),
             ],

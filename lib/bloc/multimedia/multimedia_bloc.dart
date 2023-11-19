@@ -18,6 +18,15 @@ class MultimediaBloc extends Bloc<MultimediaEvent, MultimediaState> {
 
   Future _fetchMultimedia(FetchMultimedia event, Emitter<MultimediaState> emit) async {
     List<MultimediaFile> multimediaList = await MediaService.retrieveMultimediaFiles();
+    bool needsThumbnailCapture = false;
+    for (var element in multimediaList) {
+      if (element.photoFile == null) {
+        needsThumbnailCapture = true;
+        await MediaService.setThumbnail(element.videoFile!);
+      }
+    }
+    multimediaList = await MediaService.retrieveMultimediaFiles();
+
     emit(MultimediaLoaded(multimediaList));
   }
 }

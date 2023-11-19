@@ -47,7 +47,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
             date: weekdayDate,
             score: score,
             // expanded: weekdayDate == selectedDate,
-            expanded: false,
+            expanded: weekdayDate == currentDay,
             key: ValueKey(weekdayDate.day),
           ),
         ),

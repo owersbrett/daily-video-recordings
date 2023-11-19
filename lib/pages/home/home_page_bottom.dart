@@ -105,17 +105,7 @@ class HomePageBottom extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    BlocBuilder<ExperienceBloc, ExperienceState>(
-                      builder: (context, state) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                            state.currentLevel().toString(),
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
-                        );
-                      },
-                    ),
+                    const SizedBox(width: 8),
                     Expanded(child: _buildHorizontalProgressBars()),
                   ],
                 ),
