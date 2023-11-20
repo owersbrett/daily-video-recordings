@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:mementoh/pages/report/report_page.dart';
 import 'package:mementoh/service/media_service.dart';
 import 'package:flutter/material.dart';
 
@@ -68,7 +69,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  Map<int, List<HabitEntry>> get habitGridData {
+  Map<int, List<HabitEntry>> habitGridData() {
     Map<int, List<HabitEntry>> habitEntries = <int, List<HabitEntry>>{};
     for (var element in CustomDatabase.habits) {
       habitEntries[element.id!] = [];
@@ -131,13 +132,13 @@ class _HomePageState extends State<HomePage> {
             child: Material(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               elevation: 10,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  BlocBuilder<HabitsBloc, HabitsState>(
-                    builder: (context, state) {
-                      return InkWell(
+              child: BlocBuilder<HabitsBloc, HabitsState>(
+                builder: (context, state) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
                         onTap: () {
                           setState(() {
                             showCreateDropdown = false;
@@ -160,68 +161,66 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                      );
-                    },
-                  ),
-                  Container(
-                    width: 100,
-                    height: 2,
-                    color: Colors.grey.withOpacity(.2),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        showCreateDropdown = false;
-                      });
-                      Navigation.createRoute(
-                          RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
-                          context,
-                          AnimationEnum.pageAscend);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.video_call_rounded),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text("Video", style: Theme.of(context).textTheme.bodyMedium),
-                        ],
                       ),
-                    ),
-                  ),
-                  Container(
-                    width: 100,
-                    height: 2,
-                    color: Colors.grey.withOpacity(.2),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        showCreateDropdown = false;
-                      });
-                      Navigation.createRoute(
-                          HabitGrid(
-                            habits: habitGridData,
-                          ),
-                          context,
-                          AnimationEnum.pageAscend);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.download_rounded),
-                          SizedBox(width: 4),
-                          Text("Report", style: Theme.of(context).textTheme.bodyMedium),
-                        ],
+                      Container(
+                        width: 100,
+                        height: 2,
+                        color: Colors.grey.withOpacity(.2),
                       ),
-                    ),
-                  ),
-                ],
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            showCreateDropdown = false;
+                          });
+                          Navigation.createRoute(
+                              RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
+                              context,
+                              AnimationEnum.pageAscend);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.video_call_rounded),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Text("Video", style: Theme.of(context).textTheme.bodyMedium),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 2,
+                        color: Colors.grey.withOpacity(.2),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            showCreateDropdown = false;
+                          });
+                          Navigation.createRoute(
+                              ReportPage(),
+                              context,
+                              AnimationEnum.pageAscend);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.download_rounded),
+                              SizedBox(width: 4),
+                              Text("Report", style: Theme.of(context).textTheme.bodyMedium),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),

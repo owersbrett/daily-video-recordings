@@ -1,5 +1,6 @@
 import 'package:mementoh/bloc/experience/experience.dart';
 import 'package:mementoh/bloc/habits/habits.dart';
+import 'package:mementoh/bloc/reports/reports.dart';
 import 'package:mementoh/data/repositories/domain_repository.dart';
 import 'package:mementoh/data/repositories/experience_repository.dart';
 import 'package:mementoh/data/repositories/habit_entry_note_repository.dart';
@@ -87,6 +88,7 @@ class DailyVideoReminders extends StatefulWidget {
 class _DailyVideoRemindersState extends State<DailyVideoReminders> {
   late UserBloc userBloc;
   late MultimediaBloc multimediaBloc;
+  late ReportsBloc reportsBloc;
   late HabitsBloc habitsBloc;
   late ExperienceBloc experienceBloc;
   @override
@@ -96,10 +98,12 @@ class _DailyVideoRemindersState extends State<DailyVideoReminders> {
     multimediaBloc = MultimediaBloc(widget.multimediaRepository);
     habitsBloc = HabitsBloc(widget.habitRepository, widget.habitEntryRepository);
     experienceBloc = ExperienceBloc(widget.experienceRepository);
+    reportsBloc = ReportsBloc(widget.habitRepository);
   }
 
   @override
   void dispose() {
+    reportsBloc.close();
     userBloc.close();
     multimediaBloc.close();
     habitsBloc.close();
@@ -113,6 +117,7 @@ class _DailyVideoRemindersState extends State<DailyVideoReminders> {
       providers: [
         BlocProvider(create: (context) => userBloc),
         BlocProvider(create: (context) => multimediaBloc),
+        BlocProvider(create: (context) => reportsBloc),
         BlocProvider(create: (context) => habitsBloc),
         BlocProvider(create: (context) => experienceBloc),
       ],

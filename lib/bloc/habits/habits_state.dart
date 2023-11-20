@@ -10,6 +10,8 @@ abstract class HabitsState extends Equatable {
   double get weeksCompletionPercentage => 0;
 
   double get todaysCompletionPercentage => 0;
+
+  Map<int, List<HabitEntry>> get getWeekOfHabitEntrys => {};
   double getRelativeHabitEntriesPercentage(int daysForwardOrAgo) => 0;
 
   Map<int, HabitEntity> get habitMap => {};
@@ -129,6 +131,13 @@ class HabitsLoaded extends HabitsState {
     }
 
     return segregatedHabits;
+  }
+
+  @override
+  Map<int, List<HabitEntry>> get getWeekOfHabitEntrys {
+    Map<int, List<HabitEntry>> weekOfHabitEntrys = {};
+    
+    return weekOfHabitEntrys;
   }
 }
 
