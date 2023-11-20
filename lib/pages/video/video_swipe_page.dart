@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:daily_video_reminders/data/multimedia_file.dart';
-import 'package:daily_video_reminders/main.dart';
-import 'package:daily_video_reminders/pages/video/video_player_item.dart';
-import 'package:daily_video_reminders/service/media_service.dart';
+import 'package:mementoh/data/multimedia_file.dart';
+import 'package:mementoh/main.dart';
+import 'package:mementoh/pages/video/video_player_item.dart';
+import 'package:mementoh/service/media_service.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';

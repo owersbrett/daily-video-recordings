@@ -1,4 +1,4 @@
-import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +7,7 @@ class RecordingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  FloatingActionButton(
+    return FloatingActionButton(
       backgroundColor: rubyLight.withOpacity(.5),
       child: Container(
         decoration: const BoxDecoration(

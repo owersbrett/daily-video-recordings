@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/data/habit_entity.dart';
-import 'package:daily_video_reminders/data/multimedia.dart';
+import 'package:mementoh/data/habit_entity.dart';
+import 'package:mementoh/data/multimedia.dart';
 
 import 'user.dart';
 

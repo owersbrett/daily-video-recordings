@@ -1,7 +1,7 @@
-import 'package:daily_video_reminders/data/habit_entity.dart';
-import 'package:daily_video_reminders/data/habit_entry.dart';
-import 'package:daily_video_reminders/habit_card.dart';
-import 'package:daily_video_reminders/habit_entry_card.dart';
+import 'package:mementoh/data/habit_entity.dart';
+import 'package:mementoh/data/habit_entry.dart';
+import 'package:mementoh/habit_card.dart';
+import 'package:mementoh/habit_entry_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

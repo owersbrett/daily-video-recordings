@@ -1,9 +1,9 @@
-import 'package:daily_video_reminders/bloc/habits/habits.dart';
-import 'package:daily_video_reminders/dropdown_chip.dart';
-import 'package:daily_video_reminders/pages/home/home_page.dart';
-import 'package:daily_video_reminders/service/admin_service.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
-import 'package:daily_video_reminders/widgets/nav_dropdown.dart';
+import 'package:mementoh/bloc/habits/habits.dart';
+import 'package:mementoh/dropdown_chip.dart';
+import 'package:mementoh/pages/home/home_page.dart';
+import 'package:mementoh/service/admin_service.dart';
+import 'package:mementoh/theme/theme.dart';
+import 'package:mementoh/widgets/nav_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

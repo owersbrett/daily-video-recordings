@@ -1,12 +1,12 @@
-import 'package:daily_video_reminders/data/multimedia.dart';
-import 'package:daily_video_reminders/data/repositories/_repository.dart';
+import 'package:mementoh/data/multimedia.dart';
+import 'package:mementoh/data/repositories/_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class IMultimediaRepository implements Repository<Multimedia> {}
 
 class MultimediaRepository implements IMultimediaRepository {
   final Database db;
-  MultimediaRepository({ required this.db});
+  MultimediaRepository({required this.db});
   @override
   Future<Multimedia> create(Multimedia t) {
     // TODO: implement create

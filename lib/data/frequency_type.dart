@@ -1,4 +1,4 @@
-import 'package:daily_video_reminders/util/string_util.dart';
+import 'package:mementoh/util/string_util.dart';
 
 enum FrequencyType {
   // once,
@@ -27,6 +27,7 @@ enum FrequencyType {
   static FrequencyType fromPrettyString(String prettyString) {
     return FrequencyType.values.firstWhere((element) => element.toPrettyString().toLowerCase() == prettyString.toLowerCase());
   }
+
   String toUiString() {
     switch (this) {
       case FrequencyType.daily:

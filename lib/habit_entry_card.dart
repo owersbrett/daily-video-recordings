@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:daily_video_reminders/bloc/experience/experience.dart';
-import 'package:daily_video_reminders/bloc/habits/habits.dart';
+import 'package:mementoh/bloc/experience/experience.dart';
+import 'package:mementoh/bloc/habits/habits.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_progress_indicator.dart';

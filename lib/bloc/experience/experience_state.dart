@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/main.dart';
-import 'package:daily_video_reminders/service/admin_service.dart';
+import 'package:mementoh/main.dart';
+import 'package:mementoh/service/admin_service.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/experience.dart';
@@ -81,8 +81,6 @@ class ExperienceState extends Equatable {
     return exp;
   }
 
-
-
   double percentageToNextLevel() {
     log("-------------------");
     log("sumOfAllExperience: " + sumOfAllExperience().toString());
@@ -142,8 +140,6 @@ class ExperienceState extends Equatable {
     }
     return sum;
   }
-
-  
 }
 
 class ExperienceLoaded extends ExperienceState {

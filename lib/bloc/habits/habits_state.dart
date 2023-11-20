@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/data/habit_entity.dart';
-import 'package:daily_video_reminders/main.dart';
+import 'package:mementoh/data/habit_entity.dart';
+import 'package:mementoh/main.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/habit.dart';
@@ -64,7 +64,7 @@ class HabitsLoaded extends HabitsState {
   }
 
   @override
-  double getRelativeHabitEntriesPercentage(int daysForwardOrAgo){
+  double getRelativeHabitEntriesPercentage(int daysForwardOrAgo) {
     var now = currentDate;
     var startInterval = DateTime(now.year, now.month, now.day, 0, 0, 0).add(Duration(days: daysForwardOrAgo));
     var endInterval = DateTime(now.year, now.month, now.day, 23, 59, 59).add(Duration(days: daysForwardOrAgo));
@@ -73,7 +73,7 @@ class HabitsLoaded extends HabitsState {
       return [...previousValue, ...filteredEntries];
     });
     return todaysHabitEntries.fold(0, (previousValue, element) => element.booleanValue ? previousValue + 1 : previousValue) /
-      (todaysHabitEntries.isEmpty ? 1 : todaysHabitEntries.length);
+        (todaysHabitEntries.isEmpty ? 1 : todaysHabitEntries.length);
   }
 
   @override

@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/custom_progress_indicator.dart';
-import 'package:daily_video_reminders/data/db.dart';
+import 'package:mementoh/custom_progress_indicator.dart';
+import 'package:mementoh/data/db.dart';
 import 'package:flutter/material.dart';
 
 import 'data/habit.dart';

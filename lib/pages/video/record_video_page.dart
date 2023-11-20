@@ -2,12 +2,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
-import 'package:daily_video_reminders/data/multimedia_file.dart';
-import 'package:daily_video_reminders/main.dart';
-import 'package:daily_video_reminders/pages/video/dvr_close_button.dart';
-import 'package:daily_video_reminders/service/media_service.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
-import 'package:daily_video_reminders/service/file_directories_service.dart';
+import 'package:mementoh/data/multimedia_file.dart';
+import 'package:mementoh/main.dart';
+import 'package:mementoh/pages/video/dvr_close_button.dart';
+import 'package:mementoh/service/media_service.dart';
+import 'package:mementoh/theme/theme.dart';
+import 'package:mementoh/service/file_directories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -98,11 +98,15 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
         ),
       );
   Widget _videoRecorder() => Column(
-    children: [
-      Container(height: kToolbarHeight, width: MediaQuery.of(context).size.width, color: Colors.black,),
-      CameraPreview(_cameraController),
-    ],
-  );
+        children: [
+          Container(
+            height: kToolbarHeight,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.black,
+          ),
+          CameraPreview(_cameraController),
+        ],
+      );
   void _toggleVideoPlayer() {
     setState(() {
       if (videoPlaying) {
@@ -116,12 +120,12 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   }
 
   Widget _closeButton() => Padding(
-    padding: const EdgeInsets.only(top: kToolbarHeight),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        DVRCloseButton(
-          positioned: false,
+        padding: const EdgeInsets.only(top: kToolbarHeight),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            DVRCloseButton(
+              positioned: false,
               onPressed: () {
                 if (_isPreviewingVideo) {
                   setState(() {
@@ -136,9 +140,9 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                 }
               },
             ),
-      ],
-    ),
-  );
+          ],
+        ),
+      );
   Widget _recordingControls() {
     return Positioned(
       bottom: 0,

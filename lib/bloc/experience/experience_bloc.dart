@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/data/repositories/experience_repository.dart';
-import 'package:daily_video_reminders/main.dart';
+import 'package:mementoh/data/repositories/experience_repository.dart';
+import 'package:mementoh/main.dart';
 
 import 'experience.dart';
 

@@ -1,4 +1,4 @@
-import 'package:daily_video_reminders/bloc/experience/experience.dart';
+import 'package:mementoh/bloc/experience/experience.dart';
 
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';

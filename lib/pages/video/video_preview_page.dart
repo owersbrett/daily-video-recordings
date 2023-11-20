@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:daily_video_reminders/data/db.dart';
-import 'package:daily_video_reminders/data/multimedia_file.dart';
-import 'package:daily_video_reminders/main.dart';
-import 'package:daily_video_reminders/navigation/navigation.dart';
-import 'package:daily_video_reminders/pages/video/loading_page.dart';
-import 'package:daily_video_reminders/pages/video/record_video_page.dart';
-import 'package:daily_video_reminders/pages/video/video_swipe_page.dart';
-import 'package:daily_video_reminders/service/file_directories_service.dart';
-import 'package:daily_video_reminders/service/media_service.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:mementoh/data/db.dart';
+import 'package:mementoh/data/multimedia_file.dart';
+import 'package:mementoh/main.dart';
+import 'package:mementoh/navigation/navigation.dart';
+import 'package:mementoh/pages/video/loading_page.dart';
+import 'package:mementoh/pages/video/record_video_page.dart';
+import 'package:mementoh/pages/video/video_swipe_page.dart';
+import 'package:mementoh/service/file_directories_service.dart';
+import 'package:mementoh/service/media_service.dart';
+import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

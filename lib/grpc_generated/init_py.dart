@@ -1,12 +1,9 @@
-
-import 'package:daily_video_reminders/grpc_generated/health.pb.dart';
-import 'package:daily_video_reminders/grpc_generated/health.pbgrpc.dart';
+import 'package:mementoh/grpc_generated/health.pb.dart';
+import 'package:mementoh/grpc_generated/health.pbgrpc.dart';
 import 'package:flutter/foundation.dart';
 
 import 'client.dart';
-import 'init_py_native.dart'
-    if (dart.library.io) 'init_py_native.dart'
-    if (dart.library.html) 'init_py_web.dart';
+import 'init_py_native.dart' if (dart.library.io) 'init_py_native.dart' if (dart.library.html) 'init_py_web.dart';
 
 bool localPyStartSkipped = false;
 
@@ -52,8 +49,7 @@ void _initParamsFromEnvVars(bool doNoStartPy) {
     initPyImpl();
   }
 
-  var flag = const String.fromEnvironment('useRemote', defaultValue: 'false') ==
-      'true';
+  var flag = const String.fromEnvironment('useRemote', defaultValue: 'false') == 'true';
   if (doNoStartPy || flag) {
     localPyStartSkipped = true;
   }
@@ -63,8 +59,7 @@ void _initParamsFromEnvVars(bool doNoStartPy) {
     defaultHost = hostOverride;
   }
 
-  var portOverride =
-      int.tryParse(const String.fromEnvironment('port', defaultValue: ''));
+  var portOverride = int.tryParse(const String.fromEnvironment('port', defaultValue: ''));
   if (portOverride != null) {
     defaultPort = portOverride;
   }

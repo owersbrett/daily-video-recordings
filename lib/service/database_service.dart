@@ -4,12 +4,12 @@ import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
 
-import 'package:daily_video_reminders/data/habit.dart';
-import 'package:daily_video_reminders/data/habit_entry.dart';
-import 'package:daily_video_reminders/data/habit_entry_note.dart';
-import 'package:daily_video_reminders/data/multimedia.dart';
-import 'package:daily_video_reminders/data/user.dart';
-import 'package:daily_video_reminders/data/user_level.dart';
+import 'package:mementoh/data/habit.dart';
+import 'package:mementoh/data/habit_entry.dart';
+import 'package:mementoh/data/habit_entry_note.dart';
+import 'package:mementoh/data/multimedia.dart';
+import 'package:mementoh/data/user.dart';
+import 'package:mementoh/data/user_level.dart';
 
 import '../data/domain.dart';
 import '../data/experience.dart';
@@ -90,8 +90,6 @@ class DatabaseService {
     // await createTables(db);
   }
 
-
-
   static List<List<String>> getColumnDeclarations() {
     return [
       User.columnDeclarations,
@@ -107,7 +105,7 @@ class DatabaseService {
     ];
   }
 
-    static List<String> getTableNames() {
+  static List<String> getTableNames() {
     return [
       Habit.tableName,
       User.tableName,

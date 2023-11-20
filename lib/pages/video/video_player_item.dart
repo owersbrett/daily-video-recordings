@@ -2,7 +2,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 import 'dart:async';
 import 'dart:io';
-import 'package:daily_video_reminders/main.dart';
+import 'package:mementoh/main.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -236,14 +236,14 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
               ),
               overlay(),
               Positioned(
-                        left: 8,
-        top: kToolbarHeight / 2,
+                  left: 8,
+                  top: kToolbarHeight / 2,
                   child: IconButton(
-                icon: Icon(Icons.download),
-                onPressed: () async {
-                  downloadVideo();
-                },
-              )),
+                    icon: Icon(Icons.download),
+                    onPressed: () async {
+                      downloadVideo();
+                    },
+                  )),
               DVRCloseButton(onPressed: () => Navigator.of(context).pop())
             ],
           ),

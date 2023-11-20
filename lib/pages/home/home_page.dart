@@ -2,19 +2,19 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
-import 'package:daily_video_reminders/service/media_service.dart';
+import 'package:mementoh/service/media_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:daily_video_reminders/daily_app_bar.dart';
-import 'package:daily_video_reminders/data/bottom_sheet_state.dart';
-import 'package:daily_video_reminders/data/db.dart';
-import 'package:daily_video_reminders/habit_grid.dart';
-import 'package:daily_video_reminders/navigation/navigation.dart';
-import 'package:daily_video_reminders/pages/create_habit/create_a_habit.dart';
-import 'package:daily_video_reminders/pages/home/home_page_bottom.dart';
-import 'package:daily_video_reminders/pages/home/now_data.dart';
-import 'package:daily_video_reminders/pages/home/week_and_habits_scroll_view.dart';
-import 'package:daily_video_reminders/pages/video/record_video_page.dart';
+import 'package:mementoh/daily_app_bar.dart';
+import 'package:mementoh/data/bottom_sheet_state.dart';
+import 'package:mementoh/data/db.dart';
+import 'package:mementoh/habit_grid.dart';
+import 'package:mementoh/navigation/navigation.dart';
+import 'package:mementoh/pages/create_habit/create_a_habit.dart';
+import 'package:mementoh/pages/home/home_page_bottom.dart';
+import 'package:mementoh/pages/home/now_data.dart';
+import 'package:mementoh/pages/home/week_and_habits_scroll_view.dart';
+import 'package:mementoh/pages/video/record_video_page.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';

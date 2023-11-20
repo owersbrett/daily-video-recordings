@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/data/habit_entry.dart';
-import 'package:daily_video_reminders/habit_grid.dart';
+import 'package:mementoh/data/habit_entry.dart';
+import 'package:mementoh/habit_grid.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/today_is_widget.dart';

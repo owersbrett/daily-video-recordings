@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/data/repositories/_repository.dart';
-import 'package:daily_video_reminders/main.dart';
+import 'package:mementoh/data/repositories/_repository.dart';
+import 'package:mementoh/main.dart';
 import 'package:sqflite/sqflite.dart';
 import '../habit.dart';
 import '../habit_entity.dart';

@@ -1,7 +1,7 @@
-import 'package:daily_video_reminders/bloc/experience/experience.dart';
-import 'package:daily_video_reminders/data/habit_entity.dart';
-import 'package:daily_video_reminders/data/repositories/habit_entry_repository.dart';
-import 'package:daily_video_reminders/data/repositories/habit_repository.dart';
+import 'package:mementoh/bloc/experience/experience.dart';
+import 'package:mementoh/data/habit_entity.dart';
+import 'package:mementoh/data/repositories/habit_entry_repository.dart';
+import 'package:mementoh/data/repositories/habit_repository.dart';
 import 'package:logging/logging.dart';
 
 import '../../data/experience.dart';

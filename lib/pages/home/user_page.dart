@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/data/repositories/user_repository.dart';
-import 'package:daily_video_reminders/pages/home/home_page.dart';
+import 'package:mementoh/data/repositories/user_repository.dart';
+import 'package:mementoh/pages/home/home_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,13 +14,11 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-
   @override
   void initState() {
     super.initState();
     BlocProvider.of<UserBloc>(context).add(FetchUser());
   }
-
 
   @override
   Widget build(BuildContext context) {

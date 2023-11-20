@@ -1,6 +1,6 @@
-import 'package:daily_video_reminders/data/multimedia_file.dart';
-import 'package:daily_video_reminders/data/repositories/multimedia_repository.dart';
-import 'package:daily_video_reminders/service/media_service.dart';
+import 'package:mementoh/data/multimedia_file.dart';
+import 'package:mementoh/data/repositories/multimedia_repository.dart';
+import 'package:mementoh/service/media_service.dart';
 
 import '../../data/multimedia.dart';
 import 'multimedia.dart';

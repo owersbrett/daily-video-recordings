@@ -1,4 +1,4 @@
-import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 enum ProgressIndicatorSize { small, medium, large }
@@ -11,7 +11,7 @@ class CustomProgressIndicator extends StatelessWidget {
     Key? key,
     required this.value,
     required this.label,
-     this.textColor = Colors.black,
+    this.textColor = Colors.black,
     this.size = ProgressIndicatorSize.small,
   }) : super(key: key);
   final ProgressIndicatorSize size;
@@ -73,8 +73,7 @@ class CustomProgressIndicator extends StatelessWidget {
           child: CircularProgressIndicator(
               value: value * .01, // Current value of the progress indicator
               strokeWidth: 6, // Width of the progress line
-              backgroundColor:
-                  Colors.grey[300], // Color for the background of the line
+              backgroundColor: Colors.grey[300], // Color for the background of the line
               color: _color(context) // Color for the progress line
               ),
         ),

@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class StylizedCheckbox extends StatelessWidget {
@@ -15,8 +15,7 @@ class StylizedCheckbox extends StatelessWidget {
       onTap: () {
         if (isChecked) {
           // AudioPlayer().play(AssetSource("audio/unpop.m4a"));
-        } else {
-        }
+        } else {}
         onTap();
       },
       child: Container(

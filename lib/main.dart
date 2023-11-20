@@ -1,16 +1,16 @@
-import 'package:daily_video_reminders/data/repositories/domain_repository.dart';
-import 'package:daily_video_reminders/data/repositories/experience_repository.dart';
-import 'package:daily_video_reminders/data/repositories/habit_entry_note_repository.dart';
-import 'package:daily_video_reminders/data/repositories/user_repository.dart';
-import 'package:daily_video_reminders/pages/home/app_wrapper.dart';
+import 'package:mementoh/data/repositories/domain_repository.dart';
+import 'package:mementoh/data/repositories/experience_repository.dart';
+import 'package:mementoh/data/repositories/habit_entry_note_repository.dart';
+import 'package:mementoh/data/repositories/user_repository.dart';
+import 'package:mementoh/pages/home/app_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:camera/camera.dart';
-import 'package:daily_video_reminders/pages/home/home_page.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
-import 'package:daily_video_reminders/service/file_directories_service.dart';
+import 'package:mementoh/pages/home/home_page.dart';
+import 'package:mementoh/theme/theme.dart';
+import 'package:mementoh/service/file_directories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 

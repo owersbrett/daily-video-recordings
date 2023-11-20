@@ -1,10 +1,10 @@
-import 'package:daily_video_reminders/data/bottom_sheet_state.dart';
-import 'package:daily_video_reminders/data/db.dart';
-import 'package:daily_video_reminders/habit_grid.dart';
-import 'package:daily_video_reminders/pages/home/mementoh.dart';
-import 'package:daily_video_reminders/pages/home/now_data.dart';
-import 'package:daily_video_reminders/pages/video/_video_preview_deprecated.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:mementoh/data/bottom_sheet_state.dart';
+import 'package:mementoh/data/db.dart';
+import 'package:mementoh/habit_grid.dart';
+import 'package:mementoh/pages/home/mementoh.dart';
+import 'package:mementoh/pages/home/now_data.dart';
+import 'package:mementoh/pages/video/_video_preview_deprecated.dart';
+import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../bloc/experience/experience.dart';
@@ -76,6 +76,13 @@ class HomePageBottom extends StatelessWidget {
 
   Widget _list(BuildContext context) {
     if (large) return VideoPreviewPage();
+    if (mid)
+      return Mementoh(
+        nowData: nowData,
+        onStart: () {
+          onStartTimer();
+        },
+      );
     return Container();
   }
 
@@ -93,13 +100,6 @@ class HomePageBottom extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (mid)
-                  Mementoh(
-                    nowData: nowData,
-                    onStart: () {
-                      onStartTimer();
-                    },
-                  ),
                 Expanded(
                   child: _list(context),
                 ),

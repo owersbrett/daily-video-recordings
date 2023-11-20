@@ -1,5 +1,5 @@
-import 'package:daily_video_reminders/dropdown_chip.dart';
-import 'package:daily_video_reminders/pages/home/home_page.dart';
+import 'package:mementoh/dropdown_chip.dart';
+import 'package:mementoh/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -14,17 +14,10 @@ class TodayIsWidget extends StatelessWidget {
       child: Center(
         child: RichText(
           text: TextSpan(
-            style: TextStyle(
-                fontSize: 24, color: Colors.black), // Default text style
+            style: TextStyle(fontSize: 24, color: Colors.black), // Default text style
             children: <TextSpan>[
-              TextSpan(
-                  text: 'Today ',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              TextSpan(
-                  text: 'is $day',
-                  style: TextStyle(
-                      fontSize:
-                          14)), // No specific style applied, so it uses default
+              TextSpan(text: 'Today ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              TextSpan(text: 'is $day', style: TextStyle(fontSize: 14)), // No specific style applied, so it uses default
             ],
           ),
         ),

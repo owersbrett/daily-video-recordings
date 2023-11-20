@@ -3,10 +3,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'package:daily_video_reminders/main.dart';
-import 'package:daily_video_reminders/pages/home/now_data.dart';
-import 'package:daily_video_reminders/widgets/custom_circular_indicator.dart';
-import 'package:daily_video_reminders/widgets/weekday_hero.dart';
+import 'package:mementoh/main.dart';
+import 'package:mementoh/pages/home/now_data.dart';
+import 'package:mementoh/widgets/custom_circular_indicator.dart';
+import 'package:mementoh/widgets/weekday_hero.dart';
 
 import '../../bloc/experience/experience.dart';
 
@@ -56,17 +56,19 @@ class _MementohState extends State<Mementoh> {
         return Container(
           padding: EdgeInsets.all(10), // Add padding if needed
           child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min, // To center the column content vertically
-              crossAxisAlignment: CrossAxisAlignment.center, // To center the column content horizontally
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: ListView(
+              // mainAxisSize: MainAxisSize.min, // To center the column content vertically
+              // crossAxisAlignment: CrossAxisAlignment.center, // To center the column content horizontally
+              // mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  'Mementoh',
-                  style: TextStyle(
-                      fontSize: 24, // Adjust the font size as needed
-                      fontWeight: FontWeight.bold, // Make the title bold
-                      color: Colors.white),
+                Center(
+                  child: Text(
+                    'Mementoh',
+                    style: TextStyle(
+                        fontSize: 24, // Adjust the font size as needed
+                        fontWeight: FontWeight.bold, // Make the title bold
+                        color: Colors.white),
+                  ),
                 ),
                 Text(
                   'Habit Tracker',
@@ -77,9 +79,11 @@ class _MementohState extends State<Mementoh> {
                   textAlign: TextAlign.center, // Center align the subtitle text
                 ),
                 SizedBox(height: 32), // Space between subtitle and button
-                Text(
-                  widget.nowData.getWeekAndSeason(widget.nowData.currentTime),
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                Center(
+                  child: Text(
+                    widget.nowData.getWeekAndSeason(widget.nowData.currentTime),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(height: 32), // Space between subtitle and button
                 CustomCircularIndicator(
@@ -91,24 +95,26 @@ class _MementohState extends State<Mementoh> {
                   title: "Level",
                 ),
                 SizedBox(height: 36), // Space between subtitle and button
-                Text(
-                  "Welcome to Mementoh",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                  textAlign: TextAlign.center,
+                Center(
+                  child: Text(
+                    "Welcome to Mementoh",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 SizedBox(height: 12), // Space between subtitle and button
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                Row(
-                  children: [
-                    Text(
-                      "Features:",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                      textAlign: TextAlign.center,
+                    Row(
+                      children: [
+                        Text(
+                          "Features:",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
                     SizedBox(height: 12), // Space between subtitle and button
                     Text("- Add Habits To Track Consistency", style: TextStyle(color: Colors.white, fontSize: 12)),
                     SizedBox(height: 12), // Space between subtitle and button
@@ -117,7 +123,6 @@ class _MementohState extends State<Mementoh> {
                     Text("- Gain Experience To Level Up", style: TextStyle(color: Colors.white, fontSize: 12)),
                     SizedBox(height: 12), // Space between subtitle and button
                     Text("- Visualize The Passage of Time", style: TextStyle(color: Colors.white, fontSize: 12)),
-
                   ],
                 ),
                 // GestureDetector(

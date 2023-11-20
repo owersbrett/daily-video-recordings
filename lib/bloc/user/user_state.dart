@@ -1,6 +1,6 @@
-import 'package:daily_video_reminders/data/experience.dart';
-import 'package:daily_video_reminders/data/habit_entity.dart';
-import 'package:daily_video_reminders/data/user_entity.dart';
+import 'package:mementoh/data/experience.dart';
+import 'package:mementoh/data/habit_entity.dart';
+import 'package:mementoh/data/user_entity.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/multimedia.dart';
@@ -24,7 +24,7 @@ class UserInitial extends UserState {
 class UserLoaded extends UserState {
   @override
   final User user;
-  
+
   UserLoaded(this.user, this.experience);
 
   @override

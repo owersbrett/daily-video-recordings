@@ -1,4 +1,4 @@
-package com.example.daily_video_reminders
+package com.owersllc.mementoh
 
 import io.flutter.embedding.android.FlutterActivity
 
