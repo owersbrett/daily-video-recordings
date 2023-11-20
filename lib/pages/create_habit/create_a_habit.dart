@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:mementoh/pages/create_habit/display_habit_card.dart';
 import 'package:mementoh/util/color_util.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,9 @@ class CreateHabitPage extends StatefulWidget {
 
 class _CreateHabitPageState extends State<CreateHabitPage> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController _controller = TextEditingController();
+  bool emojiShowing = false;
+  void _onBackspacePressed() {}
 
   bool hasCompletedHabit = false;
   bool hasFocusedOnFrequency = false;
@@ -214,46 +219,6 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                       ),
                     ),
                     _habitField(context),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: GestureDetector(
-                    //     onTap: () {
-
-                    //       showDialog(
-                    //           context: context,
-                    //           builder: (ctx) {
-                    //             return SelectorDialog(
-                    //               values: FrequencyType.values.map((e) => e.toUiString()).toList(),
-                    //               onSelect: (String prettyString) {
-                    //                 setState(() {
-                    //                   _frequencyController.text = prettyString;
-                    //                 });
-                    //                 setHabit(
-                    //                   habit.copyWith(
-                    //                       frequencyType: FrequencyType.values.where((element) => element.toUiString() == prettyString).first),
-                    //                 );
-                    //                 Navigator.of(context).pop();
-                    //               },
-                    //             );
-                    //           });
-                    //     },
-                    //     child: CustomFormField(
-                    //       focusNode: _frequencyFocus,
-                    //       label: "Frequency",
-                    //       enabled: false,
-                    //       onChanged: (val) {
-                    //         setState(() {
-                    //           hasFocusedOnFrequency = true;
-                    //         });
-                    //         setHabit(habit.copyWith(stringValue: val));
-                    //       },
-                    //       validator: (str) => FormValidator.nonEmpty(str, "Frequency"),
-                    //       onEditingComplete: () => FocusScope.of(context).unfocus(),
-                    //       value: _frequencyController,
-                    //     ),
-                    //   ),
-                    // ),
-
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
@@ -275,6 +240,72 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           value: colorTextEdittingController,
                         ),
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            emojiShowing = !emojiShowing;
+                            _controller.clear();
+                          });
+                          setHabit(habit.copyWith(emoji: ""));
+                        },
+                        child: CustomFormField(
+                          focusNode: FocusNode(),
+                          label: "Emoji",
+                          enabled: false,
+                          onChanged: (val) {},
+                          validator: (str) => FormValidator.nonEmpty(str, "Emoji"),
+                          onEditingComplete: () => FocusScope.of(context).unfocus(),
+                          value: _controller,
+                        ),
+                      ),
+                    ),
+                    Offstage(
+                      offstage: !emojiShowing,
+                      child: SizedBox(
+                          height: 250,
+                          child: EmojiPicker(
+                            textEditingController: _controller,
+                            onBackspacePressed: _onBackspacePressed,
+                            onEmojiSelected: (category, emoji) {
+                              setHabit(habit.copyWith(emoji: emoji.emoji));
+                              setState(() {
+                                emojiShowing = false;
+                              });
+                            },
+                            config: Config(
+                              columns: 7,
+                              // Issue: https://github.com/flutter/flutter/issues/28894
+                              emojiSizeMax: 32 * (foundation.defaultTargetPlatform == TargetPlatform.iOS ? 1.30 : 1.0),
+                              verticalSpacing: 0,
+                              horizontalSpacing: 0,
+                              gridPadding: EdgeInsets.zero,
+                              initCategory: Category.RECENT,
+                              bgColor: const Color(0xFFF2F2F2),
+                              indicatorColor: Colors.blue,
+                              iconColor: Colors.grey,
+                              iconColorSelected: emerald,
+                              backspaceColor: Colors.blue,
+                              skinToneDialogBgColor: Colors.white,
+                              skinToneIndicatorColor: Colors.grey,
+                              enableSkinTones: true,
+                              recentTabBehavior: RecentTabBehavior.RECENT,
+                              recentsLimit: 28,
+                              replaceEmojiOnLimitExceed: false,
+                              noRecents: const Text(
+                                'No Recents',
+                                style: TextStyle(fontSize: 20, color: Colors.black26),
+                                textAlign: TextAlign.center,
+                              ),
+                              loadingIndicator: const SizedBox.shrink(),
+                              tabIndicatorAnimDuration: kTabScrollDuration,
+                              categoryIcons: const CategoryIcons(),
+                              buttonMode: ButtonMode.MATERIAL,
+                              checkPlatformCompatibility: true,
+                            ),
+                          )),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
