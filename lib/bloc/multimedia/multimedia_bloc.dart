@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mementoh/data/multimedia_file.dart';
 import 'package:mementoh/data/repositories/multimedia_repository.dart';
 import 'package:mementoh/service/media_service.dart';
@@ -14,6 +16,12 @@ class MultimediaBloc extends Bloc<MultimediaEvent, MultimediaState> {
 
   Future _onEvent(MultimediaEvent event, Emitter<MultimediaState> emit) async {
     if (event is FetchMultimedia) await _fetchMultimedia(event, emit);
+    if (event is DeleteMultimedia) await _deleteMultimedia(event, emit);
+  }
+
+  Future _deleteMultimedia(DeleteMultimedia event, Emitter<MultimediaState> emit) async {
+    await File(event.filePath).delete();
+    add(FetchMultimedia());
   }
 
   Future _fetchMultimedia(FetchMultimedia event, Emitter<MultimediaState> emit) async {

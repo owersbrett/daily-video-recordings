@@ -230,49 +230,49 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget bottomBar(BuildContext context, HabitsState state) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (bottomSheetState == BottomSheetState.hidden) {
-            bottomSheetState = BottomSheetState.collapsed;
-          } else if (bottomSheetState == BottomSheetState.collapsed) {
-            bottomSheetState = BottomSheetState.expanded;
-          } else if (bottomSheetState == BottomSheetState.expanded) {
-            bottomSheetState = BottomSheetState.hidden;
-          }
-        });
-      },
-      child: BlocBuilder<ExperienceBloc, ExperienceState>(
-        builder: (context, experienceState) {
-          Map<int, List<HabitEntity>> thisWeeksHabitsSeperated = state.segregatedHabits();
-          List<HabitEntity> thisWeeksHabitsTogether = [];
-          thisWeeksHabitsSeperated.forEach((key, value) {
-            thisWeeksHabitsTogether.addAll(value);
-          });
-          var percentageForToday = state.todaysCompletionPercentage;
-          log(percentageForToday.toString());
-          var percentageForTheWeek = state.weeksCompletionPercentage;
-          log(percentageForTheWeek.toString());
-          var percentageToNextLevel = experienceState.percentageToNextLevel();
+  void setBottomSheetState() {
+    setState(() {
+      if (bottomSheetState == BottomSheetState.hidden) {
+        bottomSheetState = BottomSheetState.collapsed;
+      } else if (bottomSheetState == BottomSheetState.collapsed) {
+        bottomSheetState = BottomSheetState.expanded;
+      } else if (bottomSheetState == BottomSheetState.expanded) {
+        bottomSheetState = BottomSheetState.hidden;
+      }
+    });
+  }
 
-          return HomePageBottom(
-            value1: percentageForToday,
-            value2: percentageForTheWeek,
-            value3: percentageToNextLevel,
-            value4: nowData.currentTime.second / 60,
-            value5: monthlyValue,
-            value6: annualValue,
-            nowData: nowData,
-            bottomSheetState: bottomSheetState,
-            onStartTimer: () {
-              setState(() {
-                nowData.startTimerTimer = DateTime.now();
-              });
-            },
-          );
-        },
-      ),
+  Widget bottomBar(BuildContext context, HabitsState state) {
+    return BlocBuilder<ExperienceBloc, ExperienceState>(
+      builder: (context, experienceState) {
+        Map<int, List<HabitEntity>> thisWeeksHabitsSeperated = state.segregatedHabits();
+        List<HabitEntity> thisWeeksHabitsTogether = [];
+        thisWeeksHabitsSeperated.forEach((key, value) {
+          thisWeeksHabitsTogether.addAll(value);
+        });
+        var percentageForToday = state.todaysCompletionPercentage;
+        log(percentageForToday.toString());
+        var percentageForTheWeek = state.weeksCompletionPercentage;
+        log(percentageForTheWeek.toString());
+        var percentageToNextLevel = experienceState.percentageToNextLevel();
+
+        return HomePageBottom(
+          value1: percentageForToday,
+          value2: percentageForTheWeek,
+          value3: percentageToNextLevel,
+          value4: nowData.currentTime.second / 60,
+          value5: monthlyValue,
+          value6: annualValue,
+          nowData: nowData,
+          bottomSheetState: bottomSheetState,
+          setBottomSheetState: setBottomSheetState,
+          onStartTimer: () {
+            setState(() {
+              nowData.startTimerTimer = DateTime.now();
+            });
+          },
+        );
+      },
     );
   }
 }

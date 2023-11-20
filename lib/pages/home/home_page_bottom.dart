@@ -21,7 +21,7 @@ class HomePageBottom extends StatelessWidget {
   final NowData nowData;
   final BottomSheetState bottomSheetState;
   final Function onStartTimer;
-
+  final Function setBottomSheetState;
   HomePageBottom(
       {required this.value1,
       required this.value2,
@@ -31,6 +31,7 @@ class HomePageBottom extends StatelessWidget {
       required this.value6,
       required this.nowData,
       required this.bottomSheetState,
+      required this.setBottomSheetState,
       required this.onStartTimer});
   Widget customSlider(double value, Color color, [double minHeight = 10]) {
     return LinearProgressIndicator(
@@ -106,7 +107,17 @@ class HomePageBottom extends StatelessWidget {
                 Row(
                   children: [
                     const SizedBox(width: 8),
-                    Expanded(child: _buildHorizontalProgressBars()),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setBottomSheetState();
+                        },
+                        child: Container(
+                          color: Colors.black,
+                          child: _buildHorizontalProgressBars(),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -118,7 +129,15 @@ class HomePageBottom extends StatelessWidget {
           ),
           Expanded(
             flex: mid || large ? 3 : 2,
-            child: _buildVerticalProgressBars(),
+            child: GestureDetector(
+              onTap: () {
+                setBottomSheetState();
+              },
+              child: Container(
+color: Colors.black,
+                child: _buildVerticalProgressBars(),
+              ),
+            ),
           ),
         ],
       ),

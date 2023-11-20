@@ -1,4 +1,5 @@
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:mementoh/bloc/multimedia/multimedia.dart';
 
 import 'dart:async';
 import 'dart:io';
@@ -6,6 +7,7 @@ import 'package:mementoh/main.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../bloc/habits/habits.dart';
 import 'dvr_close_button.dart';
 
 class VideoPlayerItem extends StatefulWidget {
@@ -124,7 +126,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                                   )),
                               TextButton(
                                   onPressed: () {
-                                    File(widget.path).delete();
+                                    BlocProvider.of<MultimediaBloc>(context).add(DeleteMultimedia(widget.path));
                                     Navigator.of(ctx).pop();
                                     Navigator.of(context).pop();
                                   },
