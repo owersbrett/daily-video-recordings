@@ -47,7 +47,7 @@ flutter:
   # Include any assets like fonts, images, and videos.
   assets:
     - assets/audio/
-    - assets/images/
+    - assets/icon/
 
   # fonts:
   #   - family: MyCustomFont

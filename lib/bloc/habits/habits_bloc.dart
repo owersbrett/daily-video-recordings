@@ -33,10 +33,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     DateTime now = event.currentDate;
     List<DateTime> interval = getInterval(now);
     Map<int, HabitEntity> habitEntities = await _getHabitEntries(event.userId, interval[0], interval[1]);
-    List<Habit> habits = habitEntities.values.map((e) => e.habit).toList();
-    List<HabitEntry> habitEntries = habitEntities.values.fold<List<HabitEntry>>([], (previousValue, element) {
-      return [...previousValue, ...element.habitEntries];
-    });
+    List<Habit> habits = await habitRepository.getAll();
 
     DateTime threeDaysAgo = now.subtract(const Duration(days: 3));
     DateTime twoDaysAgo = now.subtract(const Duration(days: 2));
@@ -45,21 +42,13 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     DateTime twoDaysFromNow = now.add(const Duration(days: 2));
     DateTime threeDaysFromNow = now.add(const Duration(days: 3));
 
-    List<HabitEntry> threeDaysAgoEntries = habitEntries.where((element) => element.createDate.day == threeDaysAgo.day).toList();
-    List<HabitEntry> twoDaysAgoEntries = habitEntries.where((element) => element.createDate.day == twoDaysAgo.day).toList();
-    List<HabitEntry> aDayAgoEntries = habitEntries.where((element) => element.createDate.day == aDayAgo.day).toList();
-    List<HabitEntry> todaysEntries = habitEntries.where((element) => element.createDate.day == now.day).toList();
-    List<HabitEntry> tomorrowEntries = habitEntries.where((element) => element.createDate.day == tomorrow.day).toList();
-    List<HabitEntry> twoDaysFromNowEntries = habitEntries.where((element) => element.createDate.day == twoDaysFromNow.day).toList();
-    List<HabitEntry> threeDaysFromNowEntries = habitEntries.where((element) => element.createDate.day == threeDaysFromNow.day).toList();
-
-    await _backFillHabitEntries(threeDaysAgo, habits, threeDaysAgoEntries);
-    await _backFillHabitEntries(twoDaysAgo, habits, twoDaysAgoEntries);
-    await _backFillHabitEntries(aDayAgo, habits, aDayAgoEntries);
-    await _backFillHabitEntries(now, habits, todaysEntries);
-    await _backFillHabitEntries(tomorrow, habits, tomorrowEntries);
-    await _backFillHabitEntries(twoDaysFromNow, habits, twoDaysFromNowEntries);
-    await _backFillHabitEntries(threeDaysFromNow, habits, threeDaysFromNowEntries);
+    await _backFillHabitEntries(threeDaysAgo, habits);
+    await _backFillHabitEntries(twoDaysAgo, habits);
+    await _backFillHabitEntries(aDayAgo, habits);
+    await _backFillHabitEntries(now, habits);
+    await _backFillHabitEntries(tomorrow, habits);
+    await _backFillHabitEntries(twoDaysFromNow, habits);
+    await _backFillHabitEntries(threeDaysFromNow, habits);
 
     habitEntities = await _getHabitEntries(event.userId, interval[0], interval[1]);
 
@@ -78,7 +67,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     return habitRepository.getHabitEntities(userId, startInterval, endInterval);
   }
 
-  Future _backFillHabitEntries(DateTime day, List<Habit> habits, List<HabitEntry> entries) async {
+  Future _backFillHabitEntries(DateTime day, List<Habit> habits) async {
     // if you have less entries than habits, create entries for the missing habits
     // right now it's creating entries for all habits
     // -TODO-: only create entries for habits that don't have entries

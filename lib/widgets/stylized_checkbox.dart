@@ -6,8 +6,9 @@ class StylizedCheckbox extends StatelessWidget {
   final bool isChecked;
   final VoidCallback onTap;
   final Color color;
+  final Size size;
 
-  StylizedCheckbox({required this.isChecked, required this.onTap, this.color = emeraldLight});
+  StylizedCheckbox({required this.isChecked, required this.onTap, this.color = emeraldLight, this.size = const Size(80, 80)});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,8 @@ class StylizedCheckbox extends StatelessWidget {
         onTap();
       },
       child: Container(
-        width: 75,
-        height: 75,
+        width: size.width,
+        height: size.height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           border: Border.all(
@@ -34,7 +35,7 @@ class StylizedCheckbox extends StatelessWidget {
                 child: Icon(
                   Icons.check,
                   color: Colors.white,
-                  size: 40,
+                  size: size.height / 2,
                 ),
               )
             : null,

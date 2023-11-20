@@ -11,6 +11,7 @@ import 'package:mementoh/pages/create_habit/selector_dialog.dart';
 import 'package:mementoh/pages/video/dvr_close_button.dart';
 import 'package:mementoh/theme/theme.dart';
 import 'package:mementoh/widgets/custom_form_field.dart';
+import 'package:mementoh/widgets/stylized_checkbox.dart';
 
 import '../../bloc/habits/habits.dart';
 import '../../data/db.dart';
@@ -213,44 +214,46 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                       ),
                     ),
                     _habitField(context),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (ctx) {
-                                return SelectorDialog(
-                                  values: FrequencyType.values.map((e) => e.toUiString()).toList(),
-                                  onSelect: (String prettyString) {
-                                    setState(() {
-                                      _frequencyController.text = prettyString;
-                                    });
-                                    setHabit(
-                                      habit.copyWith(
-                                          frequencyType: FrequencyType.values.where((element) => element.toUiString() == prettyString).first),
-                                    );
-                                    Navigator.of(context).pop();
-                                  },
-                                );
-                              });
-                        },
-                        child: CustomFormField(
-                          focusNode: _frequencyFocus,
-                          label: "Frequency",
-                          enabled: false,
-                          onChanged: (val) {
-                            setState(() {
-                              hasFocusedOnFrequency = true;
-                            });
-                            setHabit(habit.copyWith(stringValue: val));
-                          },
-                          validator: (str) => FormValidator.nonEmpty(str, "Frequency"),
-                          onEditingComplete: () => FocusScope.of(context).unfocus(),
-                          value: _frequencyController,
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: GestureDetector(
+                    //     onTap: () {
+
+                    //       showDialog(
+                    //           context: context,
+                    //           builder: (ctx) {
+                    //             return SelectorDialog(
+                    //               values: FrequencyType.values.map((e) => e.toUiString()).toList(),
+                    //               onSelect: (String prettyString) {
+                    //                 setState(() {
+                    //                   _frequencyController.text = prettyString;
+                    //                 });
+                    //                 setHabit(
+                    //                   habit.copyWith(
+                    //                       frequencyType: FrequencyType.values.where((element) => element.toUiString() == prettyString).first),
+                    //                 );
+                    //                 Navigator.of(context).pop();
+                    //               },
+                    //             );
+                    //           });
+                    //     },
+                    //     child: CustomFormField(
+                    //       focusNode: _frequencyFocus,
+                    //       label: "Frequency",
+                    //       enabled: false,
+                    //       onChanged: (val) {
+                    //         setState(() {
+                    //           hasFocusedOnFrequency = true;
+                    //         });
+                    //         setHabit(habit.copyWith(stringValue: val));
+                    //       },
+                    //       validator: (str) => FormValidator.nonEmpty(str, "Frequency"),
+                    //       onEditingComplete: () => FocusScope.of(context).unfocus(),
+                    //       value: _frequencyController,
+                    //     ),
+                    //   ),
+                    // ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
@@ -307,7 +310,49 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           )
                         ],
                       ),
-                    )
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text("Daily: "),
+                        StylizedCheckbox(
+                          isChecked: habit.frequencyType == FrequencyType.daily,
+                          onTap: () {
+                            setHabit(habit.copyWith(frequencyType: FrequencyType.daily));
+                          },
+                          size: Size(50, 50),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text("Every Other Day: "),
+                          StylizedCheckbox(
+                            isChecked: habit.frequencyType == FrequencyType.everyOtherDay,
+                            onTap: () {
+                              setHabit(habit.copyWith(frequencyType: FrequencyType.everyOtherDay));
+                            },
+                            size: Size(50, 50),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text("Weekly: "),
+                        StylizedCheckbox(
+                          isChecked: habit.frequencyType == FrequencyType.weekly,
+                          onTap: () {
+                            setHabit(habit.copyWith(frequencyType: FrequencyType.weekly));
+                          },
+                          size: Size(50, 50),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
