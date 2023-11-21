@@ -1,6 +1,6 @@
 name: mementoh
 description: A new Flutter project for daily video reminders.
-version: 1.0.0+1
+version: 1.0.0+3
 publish_to: 'none' # Prevent accidental publishing to pub.dev
 
 environment:
