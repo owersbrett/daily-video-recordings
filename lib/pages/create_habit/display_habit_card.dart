@@ -1,7 +1,7 @@
 import 'package:mementoh/data/habit.dart';
 import 'package:mementoh/pages/create_habit/typewriter_widget.dart';
 import 'package:flutter/material.dart';
-import '../../custom_progress_indicator.dart';
+import '../../widgets/custom_progress_indicator.dart';
 import '../../data/habit_entity.dart';
 import '../../widgets/stylized_checkbox.dart';
 
@@ -52,7 +52,6 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
     if (_completed) stars += "⭐";
 
     return stars;
-    ;
   }
 
   double get gradientStop => _completed ? 1.0 : habit.value / 100.0;
@@ -82,7 +81,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
                 children: [
                   Row(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 16
                       ),
                       Expanded(
@@ -110,7 +109,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
                   bottom: 8,
                   child: Text(
                     habit.frequencyType.toUiString(),
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
                   )),
             ],
           ),
@@ -140,12 +139,12 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
   Row _titleRow() {
     return Row(
       children: [
-        Text(habit.emoji, style: TextStyle(fontSize: 24)),
-        SizedBox(width: 8),
+        Text(habit.emoji, style: const TextStyle(fontSize: 24)),
+        const SizedBox(width: 8),
         Flexible(
           flex: 2,
           child: habitString.isEmpty
-              ? TypewriterWidget(
+              ? const TypewriterWidget(
                   textList: [
                     "Drink 64 oz of water per day...",
                     "Refrain from smoking cigarettes...",
@@ -156,10 +155,10 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
                 )
               : Text(
                   habitString,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
                 ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
       ],
     );
   }

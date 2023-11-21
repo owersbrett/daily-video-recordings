@@ -28,7 +28,6 @@ class DropdownChip<T> extends StatefulWidget {
 class _DropdownChipState<T> extends State<DropdownChip<T>> {
   T? selectedValue;
 
-  Color get _color => widget.color ?? Theme.of(context).colorScheme.primary;
   Color get _textColor =>
       widget.textColor ?? Theme.of(context).colorScheme.onPrimary;
   Color get _borderColor =>

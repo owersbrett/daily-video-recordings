@@ -1,11 +1,8 @@
 import 'package:mementoh/data/habit_entity.dart';
 import 'package:mementoh/data/habit_entry.dart';
-import 'package:mementoh/habit_card.dart';
-import 'package:mementoh/habit_entry_card.dart';
+import 'package:mementoh/widgets/habit_entry_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mementoh/pages/create_habit/create_a_habit.dart';
-import 'package:mementoh/pages/create_habit/display_habit_card.dart';
 import 'package:mementoh/pages/create_habit/update_a_habit.dart';
 
 import '../../bloc/experience/experience.dart';
@@ -82,8 +79,8 @@ class WeekAndHabitsScrollView extends StatelessWidget {
               onTap: () {
                 Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
               },
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
+              child: const Padding(
+                padding: EdgeInsets.all(24.0),
                 child: Text(
                   "No habit entries.\nTap to create one!",
                   textAlign: TextAlign.center,

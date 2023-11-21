@@ -14,7 +14,7 @@ class DeleteDialog extends StatelessWidget {
       shadowColor: Colors.black,
       title:  Text(
         title,
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
       content:  Text(description),
       actions: [

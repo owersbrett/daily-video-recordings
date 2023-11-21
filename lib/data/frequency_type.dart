@@ -12,7 +12,7 @@ enum FrequencyType {
 
   Map<String, dynamic> toMap() {
     return {
-      'frequencyType': this.toString(),
+      'frequencyType': toString(),
     };
   }
 

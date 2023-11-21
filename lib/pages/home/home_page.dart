@@ -3,13 +3,11 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:mementoh/pages/report/report_page.dart';
-import 'package:mementoh/service/media_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:mementoh/daily_app_bar.dart';
+import 'package:mementoh/widgets/daily_app_bar.dart';
 import 'package:mementoh/data/bottom_sheet_state.dart';
 import 'package:mementoh/data/db.dart';
-import 'package:mementoh/habit_grid.dart';
 import 'package:mementoh/navigation/navigation.dart';
 import 'package:mementoh/pages/create_habit/create_a_habit.dart';
 import 'package:mementoh/pages/home/home_page_bottom.dart';
@@ -60,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   DateTime get now => nowData.currentTime;
 
-  double get monthlyValue => nowData.currentTime.day / DateTime(now.year, now.month + 1, 0).subtract(Duration(days: 1)).day;
+  double get monthlyValue => nowData.currentTime.day / DateTime(now.year, now.month + 1, 0).subtract(const Duration(days: 1)).day;
   double get annualValue => nowData.dayOfYearFraction;
 
   @override
@@ -103,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                       backgroundColor: Colors.white,
                       title: DailyAppBar(
                         icon: IconButton(
-                          icon: Icon(Icons.add_circle),
+                          icon: const Icon(Icons.add_circle),
                           iconSize: 32,
                           color: Colors.black,
                           onPressed: () {
@@ -130,7 +128,7 @@ class _HomePageState extends State<HomePage> {
             right: 48,
             top: kToolbarHeight * 1.75,
             child: Material(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               elevation: 10,
               child: BlocBuilder<HabitsBloc, HabitsState>(
                 builder: (context, state) {
@@ -150,8 +148,8 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.add_circle),
-                              SizedBox(
+                              const Icon(Icons.add_circle),
+                              const SizedBox(
                                 width: 4,
                               ),
                               Text(
@@ -182,8 +180,8 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.video_call_rounded),
-                              SizedBox(
+                              const Icon(Icons.video_call_rounded),
+                              const SizedBox(
                                 width: 4,
                               ),
                               Text("Video", style: Theme.of(context).textTheme.bodyMedium),
@@ -202,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                             showCreateDropdown = false;
                           });
                           Navigation.createRoute(
-                              ReportPage(),
+                              const ReportPage(),
                               context,
                               AnimationEnum.pageAscend);
                         },
@@ -211,8 +209,8 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.download_rounded),
-                              SizedBox(width: 4),
+                              const Icon(Icons.download_rounded),
+                              const SizedBox(width: 4),
                               Text("Report", style: Theme.of(context).textTheme.bodyMedium),
                             ],
                           ),

@@ -1,6 +1,5 @@
-import 'package:mementoh/custom_progress_indicator.dart';
+import 'package:mementoh/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class CustomCircularIndicator extends StatelessWidget {
   const CustomCircularIndicator({super.key, required this.expanded, this.title, this.centerValue, this.score = 100, this.textColor = Colors.black});

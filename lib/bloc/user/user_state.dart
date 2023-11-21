@@ -1,9 +1,6 @@
 import 'package:mementoh/data/experience.dart';
-import 'package:mementoh/data/habit_entity.dart';
-import 'package:mementoh/data/user_entity.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/multimedia.dart';
 import '../../data/user.dart';
 
 abstract class UserState extends Equatable {

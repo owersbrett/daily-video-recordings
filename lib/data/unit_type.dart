@@ -20,7 +20,7 @@ enum UnitType {
 
   Map<String, dynamic> toMap() {
     return {
-      'unitType': this.toString(),
+      'unitType': toString(),
     };
   }
 

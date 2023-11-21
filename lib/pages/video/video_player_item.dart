@@ -2,8 +2,6 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mementoh/bloc/multimedia/multimedia.dart';
 
 import 'dart:async';
-import 'dart:io';
-import 'package:mementoh/main.dart';
 import 'package:flutter/material.dart';
 import 'package:mementoh/pages/video/delete_dialog.dart';
 import 'package:video_player/video_player.dart';
@@ -33,10 +31,10 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     while (progress < 100) {
       await updateProgress();
     }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       backgroundColor: Colors.black,
-      content: const Text("Video Saved"),
-      duration: const Duration(seconds: 1),
+      content: Text("Video Saved"),
+      duration: Duration(seconds: 1),
     ));
   }
 
@@ -44,11 +42,11 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     setState(() {
       progress += 1;
     });
-    await Future.delayed(Duration(milliseconds: 25));
+    await Future.delayed(const Duration(milliseconds: 25));
   }
 
   VideoPlayerController get _controller => widget.videoController;
-  Timer _timer = Timer.periodic(Duration(days: 1), (timer) {});
+  Timer _timer = Timer.periodic(const Duration(days: 1), (timer) {});
   int secondsRemaining = 0;
   int secondsElapsed = 0;
   @override
@@ -100,46 +98,44 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   }
 
   Widget actionColumn() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => DeleteDialog(
-                      title: "Delete Video?",
-                      description: "Are you sure you want to delete this video?",
-                      onDelete: () {
-                        BlocProvider.of<MultimediaBloc>(context).add(DeleteMultimedia(widget.path));
-                        Navigator.of(ctx).pop();
-                        Navigator.of(context).pop();
-                      },
-                      onCancel: () {
-                        Navigator.of(ctx).pop();
-                      },
-                    ),
-                  );
-                },
-                child: const Icon(
-                  Icons.delete,
-                  size: 40,
-                  color: Colors.red,
-                ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Column(
+          children: [
+            InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => DeleteDialog(
+                    title: "Delete Video?",
+                    description: "Are you sure you want to delete this video?",
+                    onDelete: () {
+                      BlocProvider.of<MultimediaBloc>(context).add(DeleteMultimedia(widget.path));
+                      Navigator.of(ctx).pop();
+                      Navigator.of(context).pop();
+                    },
+                    onCancel: () {
+                      Navigator.of(ctx).pop();
+                    },
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.delete,
+                size: 40,
+                color: Colors.red,
               ),
-            ],
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          // CircleAnimation(
-          //   child: buildMusicAlbum(data.profilePhoto),
-          // ),
-        ],
-      ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        // CircleAnimation(
+        //   child: buildMusicAlbum(data.profilePhoto),
+        // ),
+      ],
     );
   }
 
@@ -170,7 +166,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text("$formattedTimer", style: const TextStyle(color: Colors.white)),
+          Text(formattedTimer, style: const TextStyle(color: Colors.white)),
           Row(
             children: [
               const Icon(
@@ -188,26 +184,21 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     _timer.cancel();
     super.dispose();
   }
 
   void _togglePlay() {
-    if (_controller?.value.isPlaying ?? false) {
-      _controller?.pause();
+    if (_controller.value.isPlaying) {
+      _controller.pause();
     } else {
-      _controller?.play();
+      _controller.play();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_controller == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
     return Column(
       children: [
         Expanded(
@@ -215,20 +206,20 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
             children: [
               GestureDetector(
                 onLongPress: () {
-                  _controller?.setPlaybackSpeed(2);
+                  _controller.setPlaybackSpeed(2);
                 },
                 onLongPressEnd: (details) {
-                  _controller?.setPlaybackSpeed(1);
+                  _controller.setPlaybackSpeed(1);
                 },
                 onTap: _togglePlay,
-                child: VideoPlayer(_controller!),
+                child: VideoPlayer(_controller),
               ),
               overlay(),
               Positioned(
                   left: 8,
                   top: kToolbarHeight / 2,
                   child: IconButton(
-                    icon: Icon(Icons.download),
+                    icon: const Icon(Icons.download),
                     onPressed: () async {
                       downloadVideo();
                     },

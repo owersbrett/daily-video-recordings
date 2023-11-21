@@ -1,34 +1,30 @@
-import 'package:mementoh/dropdown_chip.dart';
-import 'package:mementoh/pages/home/home_page.dart';
+import 'package:mementoh/widgets/dropdown_chip.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ReportAppBar extends StatelessWidget {
   const ReportAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    String day = DateFormat('EEEE').format(DateTime.now());
-
     return Stack(
       children: [
         Row(
           children: [
-            Text(
+            const Text(
               "Weekly",
               style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               width: 4,
             ),
-            Text(
+            const Text(
               "Monthly",
               style: TextStyle(fontSize: 14, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               width: 4,
             ),
-            Text(
+            const Text(
               "Yearly",
               style: TextStyle(fontSize: 14, color: Colors.black),
             ),
@@ -37,7 +33,7 @@ class ReportAppBar extends StatelessWidget {
             ),
             Expanded(
               child: DropdownChip<String>(
-                items: ["Filters", "Sort"],
+                items: const ["Filters", "Sort"],
                 onSelected: (String? value) {},
                 selectedItem: "Filters",
                 textColor: Colors.white,

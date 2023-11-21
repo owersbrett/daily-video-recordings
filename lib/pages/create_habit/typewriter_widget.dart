@@ -51,6 +51,6 @@ class _TypewriterWidgetState extends State<TypewriterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(_currentText, style:  TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),);
+    return Text(_currentText, style:  const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),);
   }
 }

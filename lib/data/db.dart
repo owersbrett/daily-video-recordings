@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 import 'package:mementoh/data/frequency_type.dart';
 import 'package:mementoh/data/unit_type.dart';
@@ -9,7 +8,7 @@ import "habit.dart";
 class CustomDatabase {
   static final CustomDatabase _instance = CustomDatabase._internal();
   factory CustomDatabase() => _instance;
-  CustomDatabase._internal() {}
+  CustomDatabase._internal();
   static List<HabitEntry> habitEntries = [
     // Today
     HabitEntry.bool(1, 1, true),

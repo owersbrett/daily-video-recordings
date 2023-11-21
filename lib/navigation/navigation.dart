@@ -5,15 +5,15 @@ class Navigation {
       [AnimationEnum animationEnum = AnimationEnum.fromRight, Object payload = true]) async {
     PageRouteBuilder<T> pageRoute;
     Widget _safeArea(Widget child) => Container(
-          color: Color(0xFF0C2838),
+          color: const Color(0xFF0C2838),
           child: child,
         );
     switch (animationEnum) {
       case AnimationEnum.fadeIn:
         pageRoute = PageRouteBuilder<T>(
           settings: RouteSettings(arguments: payload),
-          transitionDuration: Duration(milliseconds: 500),
-          reverseTransitionDuration: Duration(milliseconds: 500),
+          transitionDuration: const Duration(milliseconds: 500),
+          reverseTransitionDuration: const Duration(milliseconds: 500),
           pageBuilder: (context, animation, secondaryAnimation) => destination,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             var begin = 0.0;
@@ -32,11 +32,11 @@ class Navigation {
       case AnimationEnum.pageAscend:
         pageRoute = PageRouteBuilder<T>(
           settings: RouteSettings(arguments: payload),
-          transitionDuration: Duration(milliseconds: 500),
-          reverseTransitionDuration: Duration(milliseconds: 500),
+          transitionDuration: const Duration(milliseconds: 500),
+          reverseTransitionDuration: const Duration(milliseconds: 500),
           pageBuilder: (context, animation, secondaryAnimation) => destination,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = Offset(0.0, 1.0);
+            var begin = const Offset(0.0, 1.0);
             var end = Offset.zero;
             var curve = Curves.ease;
 
@@ -53,11 +53,11 @@ class Navigation {
       case AnimationEnum.fromRight:
         pageRoute = PageRouteBuilder<T>(
           settings: RouteSettings(arguments: payload),
-          transitionDuration: Duration(milliseconds: 500),
-          reverseTransitionDuration: Duration(milliseconds: 500),
+          transitionDuration: const Duration(milliseconds: 500),
+          reverseTransitionDuration: const Duration(milliseconds: 500),
           pageBuilder: (context, animation, secondaryAnimation) => destination,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = Offset(1.0, 0.0);
+            var begin = const Offset(1.0, 0.0);
             var end = Offset.zero;
             var curve = Curves.ease;
 
@@ -73,11 +73,11 @@ class Navigation {
       case AnimationEnum.fromLeft:
         pageRoute = PageRouteBuilder<T>(
           settings: RouteSettings(arguments: payload),
-          transitionDuration: Duration(milliseconds: 500),
-          reverseTransitionDuration: Duration(milliseconds: 500),
+          transitionDuration: const Duration(milliseconds: 500),
+          reverseTransitionDuration: const Duration(milliseconds: 500),
           pageBuilder: (context, animation, secondaryAnimation) => destination,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            var begin = Offset(-1.0, 0.0);
+            var begin = const Offset(-1.0, 0.0);
             var end = Offset.zero;
             var curve = Curves.ease;
 
@@ -94,8 +94,8 @@ class Navigation {
       default:
         pageRoute = PageRouteBuilder<T>(
         settings: RouteSettings(arguments: payload),
-        transitionDuration: Duration(milliseconds: 500),
-        reverseTransitionDuration: Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 500),
+        reverseTransitionDuration: const Duration(milliseconds: 500),
         pageBuilder: (context, animation, secondaryAnimation) => destination,
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           var begin = 0.0;

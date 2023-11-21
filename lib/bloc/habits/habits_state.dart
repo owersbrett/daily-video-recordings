@@ -52,6 +52,7 @@ class HabitsLoaded extends HabitsState {
   @override
   final Map<int, HabitEntity> habitMap;
   HabitsLoaded(this.habitMap, this.currentDate);
+  @override
   final DateTime currentDate;
 
   @override
@@ -102,8 +103,8 @@ class HabitsLoaded extends HabitsState {
   @override
   List<HabitEntry> get weeksHabitEntries {
     var now = currentDate;
-    var startInterval = DateTime(now.year, now.month, now.day, 0, 0, 0).subtract(Duration(days: 4));
-    var endInterval = DateTime(now.year, now.month, now.day, 23, 59, 59).add(Duration(days: 4));
+    var startInterval = DateTime(now.year, now.month, now.day, 0, 0, 0).subtract(const Duration(days: 4));
+    var endInterval = DateTime(now.year, now.month, now.day, 23, 59, 59).add(const Duration(days: 4));
     var weeksHabitEntries = habitMap.values.fold<List<HabitEntry>>([], (previousValue, element) {
       var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
       return [...previousValue, ...filteredEntries];

@@ -5,6 +5,6 @@ class RemindPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("Reminder Page");
+    return const Text("Reminder Page");
   }
 }

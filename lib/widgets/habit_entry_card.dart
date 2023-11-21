@@ -3,11 +3,9 @@ import 'package:mementoh/bloc/experience/experience.dart';
 import 'package:mementoh/bloc/habits/habits.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_progress_indicator.dart';
-import 'data/habit.dart';
-import 'data/habit_entity.dart';
-import 'data/habit_entry.dart';
-import 'widgets/stylized_checkbox.dart';
+import '../data/habit.dart';
+import '../data/habit_entry.dart';
+import 'stylized_checkbox.dart';
 
 class HabitEntryCard extends StatefulWidget {
   const HabitEntryCard({super.key, required this.habit, required this.habitEntry, required this.currentListDate});
@@ -60,7 +58,6 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     if (_completed) stars += "⭐";
 
     return stars;
-    ;
   }
 
   double get gradientStop => _completed ? 1.0 : habit.value / 100.0;
@@ -96,13 +93,13 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                   children: [
                     Row(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                         Expanded(
                           child: Column(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
                               _titleRow(),
@@ -115,13 +112,13 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                                         style: ButtonStyle(
                                           backgroundColor: MaterialStateProperty.all(Colors.black),
                                         ),
-                                        child: Text("Edit", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                        child: const Text("Edit", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                         onPressed: () {},
                                       ),
                                     ),
                                   ],
                                 ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 24,
                               ),
                             ],
@@ -141,7 +138,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                     bottom: 8,
                     child: Text(
                       habit.frequencyType.toUiString(),
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
                     )),
               ],
             ),
@@ -172,15 +169,15 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
   Row _titleRow() {
     return Row(
       children: [
-        Text(habit.emoji, style: TextStyle(fontSize: 24)),
-        SizedBox(width: 8),
+        Text(habit.emoji, style: const TextStyle(fontSize: 24)),
+        const SizedBox(width: 8),
         Flexible(
           child: Text(
             habitString,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
       ],
     );
   }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DVRCloseButton extends StatelessWidget {
@@ -9,31 +8,32 @@ class DVRCloseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (positioned)
+    if (positioned) {
       return Positioned(
         right: 8,
         top: kToolbarHeight / 2,
-        child: Container(
+        child: SizedBox(
           height: 60,
           width: 60,
           child: IconButton(
             onPressed: () async {
               onPressed();
             },
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             color: color,
             iconSize: 35,
           ),
         ),
       );
-    return Container(
+    }
+    return SizedBox(
       height: 60,
       width: 60,
       child: IconButton(
         onPressed: () async {
           onPressed();
         },
-        icon: Icon(Icons.close),
+        icon: const Icon(Icons.close),
         color: color,
         iconSize: 35,
       ),

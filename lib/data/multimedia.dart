@@ -18,7 +18,7 @@ class Multimedia {
     "metadataFileId INTEGER"
   ];
 
-  String? multimediaId;
+  int? id;
   String? path;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -30,7 +30,7 @@ class Multimedia {
   String? audioFileId;
   String? metadataFileId;
   Multimedia({
-    this.multimediaId,
+    this.id,
     this.path,
     this.createdAt,
     this.updatedAt,
@@ -44,7 +44,7 @@ class Multimedia {
   });
 
   Multimedia copyWith({
-    String? multimediaId,
+    int? id,
     String? path,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -57,7 +57,7 @@ class Multimedia {
     String? metadataFileId,
   }) {
     return Multimedia(
-      multimediaId: multimediaId ?? this.multimediaId,
+      id: id ?? this.id,
       path: path ?? this.path,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -73,7 +73,7 @@ class Multimedia {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'multimediaId': multimediaId,
+      'id': id,
       'path': path,
       'createdAt': createdAt?.millisecondsSinceEpoch,
       'updatedAt': updatedAt?.millisecondsSinceEpoch,
@@ -89,7 +89,7 @@ class Multimedia {
 
   factory Multimedia.fromMap(Map<String, dynamic> map) {
     return Multimedia(
-      multimediaId: map['multimediaId'] != null ? map['multimediaId'] as String : null,
+      id: map['id'] != null ? map['id'] as int : null,
       path: map['path'] != null ? map['path'] as String : null,
       createdAt: map['createdAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int) : null,
       updatedAt: map['updatedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int) : null,
@@ -109,14 +109,14 @@ class Multimedia {
 
   @override
   String toString() {
-    return 'Multimedia(multimediaId: $multimediaId, path: $path, createdAt: $createdAt, updatedAt: $updatedAt, lastAccessedAt: $lastAccessedAt, fileNameWithoutExtension: $fileNameWithoutExtension, habitId: $habitId, habitEntryId: $habitEntryId, videoFileId: $videoFileId, audioFileId: $audioFileId, metadataFileId: $metadataFileId)';
+    return 'Multimedia(id: $id, path: $path, createdAt: $createdAt, updatedAt: $updatedAt, lastAccessedAt: $lastAccessedAt, fileNameWithoutExtension: $fileNameWithoutExtension, habitId: $habitId, habitEntryId: $habitEntryId, videoFileId: $videoFileId, audioFileId: $audioFileId, metadataFileId: $metadataFileId)';
   }
 
   @override
   bool operator ==(covariant Multimedia other) {
     if (identical(this, other)) return true;
 
-    return other.multimediaId == multimediaId &&
+    return other.id == id &&
         other.path == path &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt &&
@@ -131,7 +131,7 @@ class Multimedia {
 
   @override
   int get hashCode {
-    return multimediaId.hashCode ^
+    return id.hashCode ^
         path.hashCode ^
         createdAt.hashCode ^
         updatedAt.hashCode ^

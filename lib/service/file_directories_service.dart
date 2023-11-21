@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 
 

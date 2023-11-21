@@ -24,6 +24,6 @@ class TimerProgressService {
   static String getString(DateTime currentTime, TimerProgressType timerType) {
     String progress = "";
 
-    return "";
+    return progress;
   }
 }

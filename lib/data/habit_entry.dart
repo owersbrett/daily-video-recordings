@@ -17,8 +17,6 @@ class HabitEntry {
     "createDate INTEGER",
     "updateDate INTEGER",
     "FOREIGN KEY(habitId) REFERENCES ${Habit.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION"
-    
-
   ];
   final int? id;
   final int habitId;

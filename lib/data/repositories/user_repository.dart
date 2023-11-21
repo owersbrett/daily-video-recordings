@@ -1,14 +1,10 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../db.dart';
-import '../habit.dart';
-import '../habit_entry.dart';
-import '../multimedia.dart';
 import '../user.dart';
-import '../user_entity.dart';
 import '_repository.dart';
 
 abstract class IUserRepository implements Repository<User> {
+  @override
   Future<User> create(User t);
   Future<User> get();
 
@@ -31,27 +27,25 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<bool> delete(User t) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<bool> delete(User t) async {
+    await db.delete(tableName, where: 'id = ?', whereArgs: [t.id]);
+    return true;
   }
 
   @override
-  Future<List<User>> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<List<User>> getAll() async {
+    return db.query(tableName).then((value) => value.map((e) => User.fromMap(e)).toList());
   }
 
   @override
-  Future<User> getById(int id) {
-    // TODO: implement getById
-    throw UnimplementedError();
+  Future<User> getById(int id) async {
+    return db.query(tableName, where: 'id = ?', whereArgs: [id]).then((value) => User.fromMap(value.first));
   }
 
   @override
-  Future<bool> update(User t) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(User t) async {
+    int i = await db.update(tableName, t.toMap(), where: 'id = ?', whereArgs: [t.id]);
+    return Future.value(i > 0);
   }
 
 

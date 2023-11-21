@@ -8,11 +8,9 @@ import 'package:mementoh/data/repositories/habit_entry_repository.dart';
 import 'package:mementoh/data/repositories/habit_repository.dart';
 import 'package:mementoh/data/repositories/user_repository.dart';
 
-import 'package:mementoh/pages/home/home_page.dart';
 import 'package:mementoh/pages/home/user_page.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/multimedia/multimedia.dart';
 import '../../bloc/user/user_bloc.dart';
 import '../../data/repositories/multimedia_repository.dart';
@@ -122,6 +120,7 @@ class _DailyVideoRemindersState extends State<DailyVideoReminders> {
         BlocProvider(create: (context) => experienceBloc),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Mementoh',
         theme: theme,
         home: const UserPage(),

@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class CustomFormField extends StatefulWidget {
   const CustomFormField(
@@ -60,7 +58,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
             onTap: () {
               controller.clear();
             },
-            child: Icon(
+            child: const Icon(
               Icons.close,
               color: Colors.black,
             ),
@@ -73,7 +71,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Text(
                 widget.label,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -87,7 +85,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
         ],
         onChanged: widget.onChanged,
         cursorColor: Colors.black,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
           fontSize: 18,
           fontWeight: FontWeight.bold,

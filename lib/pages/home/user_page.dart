@@ -1,9 +1,5 @@
-import 'package:mementoh/data/experience.dart';
-import 'package:mementoh/data/repositories/user_repository.dart';
 import 'package:mementoh/pages/home/home_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mementoh/pages/video/loading_page.dart';
 
 import '../../bloc/experience/experience.dart';

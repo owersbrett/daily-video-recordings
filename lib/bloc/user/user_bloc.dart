@@ -1,11 +1,8 @@
 import 'package:mementoh/data/experience.dart';
-import 'package:mementoh/data/habit_entity.dart';
 import 'package:mementoh/data/repositories/experience_repository.dart';
 import 'package:mementoh/data/repositories/user_repository.dart';
 import 'package:mementoh/main.dart';
 
-import '../../data/habit.dart';
-import '../../data/habit_entry.dart';
 import '../../data/repositories/habit_entry_repository.dart';
 import '../../data/repositories/habit_repository.dart';
 import '../../data/user.dart';

@@ -9,7 +9,7 @@ class HabitEntity extends Equatable {
   final List<HabitEntry> habitEntries;
   final List<HabitEntryNote> habitEntryNotes;
 
-  HabitEntity({required this.habit, required this.habitEntries, required this.habitEntryNotes});
+  const HabitEntity({required this.habit, required this.habitEntries, required this.habitEntryNotes});
 
   @override
   List<Object?> get props => [habit, ...habitEntries, ...habitEntryNotes];

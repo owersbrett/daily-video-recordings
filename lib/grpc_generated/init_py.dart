@@ -1,4 +1,3 @@
-import 'package:mementoh/grpc_generated/health.pb.dart';
 import 'package:mementoh/grpc_generated/health.pbgrpc.dart';
 import 'package:flutter/foundation.dart';
 

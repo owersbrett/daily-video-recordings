@@ -1,14 +1,9 @@
 import 'package:mementoh/data/bottom_sheet_state.dart';
-import 'package:mementoh/data/db.dart';
-import 'package:mementoh/habit_grid.dart';
 import 'package:mementoh/pages/home/mementoh.dart';
 import 'package:mementoh/pages/home/now_data.dart';
-import 'package:mementoh/pages/video/_video_preview_deprecated.dart';
 import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-import '../../bloc/experience/experience.dart';
-import '../../data/habit_entry.dart';
 import '../video/video_preview_page.dart';
 
 class HomePageBottom extends StatelessWidget {
@@ -22,8 +17,9 @@ class HomePageBottom extends StatelessWidget {
   final BottomSheetState bottomSheetState;
   final Function onStartTimer;
   final Function setBottomSheetState;
-  HomePageBottom(
-      {required this.value1,
+  const HomePageBottom(
+      {super.key,
+      required this.value1,
       required this.value2,
       required this.value3,
       required this.value4,
@@ -43,7 +39,7 @@ class HomePageBottom extends StatelessWidget {
   }
 
   TextStyle get midTextStyle {
-    return TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold);
+    return const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold);
   }
 
   bool get small => bottomSheetState == BottomSheetState.hidden;
@@ -64,7 +60,8 @@ class HomePageBottom extends StatelessWidget {
   double sheetHeight(BuildContext context) {
     var height = kToolbarHeight;
     if (mid) {
-      height = MediaQuery.of(context).size.height * .8;
+      height = MediaQuery.of(context).size.height - kToolbarHeight;
+      // height = MediaQuery.of(context).size.height * .8;
     } else if (large) {
       height = MediaQuery.of(context).size.height - kToolbarHeight;
     }
@@ -76,21 +73,22 @@ class HomePageBottom extends StatelessWidget {
   }
 
   Widget _list(BuildContext context) {
-    if (large) return VideoPreviewPage();
-    if (mid)
+    if (large) return const VideoPreviewPage();
+    if (mid) {
       return Mementoh(
         nowData: nowData,
         onStart: () {
           onStartTimer();
         },
       );
+    }
     return Container();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.black),
+      decoration: const BoxDecoration(color: Colors.black),
       height: sheetHeight(context),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -134,7 +132,7 @@ class HomePageBottom extends StatelessWidget {
                 setBottomSheetState();
               },
               child: Container(
-color: Colors.black,
+                color: Colors.black,
                 child: _buildVerticalProgressBars(),
               ),
             ),
@@ -178,7 +176,7 @@ color: Colors.black,
               goldDark,
               nowData.formattedMonth(DateTime.now()) +
                   " - " +
-                  nowData.formattedMonth(DateTime(DateTime.now().year, DateTime.now().month + 1, 1).subtract(Duration(days: 1)))),
+                  nowData.formattedMonth(DateTime(DateTime.now().year, DateTime.now().month + 1, 1).subtract(const Duration(days: 1)))),
           _buildVerticalProgressBar(value6, emeraldDark, nowData.formattedDate + " / 365 Days"),
         ],
       ),
@@ -194,12 +192,12 @@ color: Colors.black,
           mid || large
               ? Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: kToolbarHeight / 3,
                     ),
                     Text(
                       label,
-                      style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   ],
                 )

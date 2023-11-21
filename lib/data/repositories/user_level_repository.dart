@@ -10,32 +10,30 @@ class UserLevelRepository implements IUserLevelRepository {
   String get tableName => UserLevel.tableName;
   UserLevelRepository({required this.db});
   @override
-  Future<UserLevel> create(UserLevel t) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Future<UserLevel> create(UserLevel t) async {
+    int i = await db.insert(tableName, t.toMap());
+    return t.copyWith(id: i);
   }
 
   @override
-  Future<bool> delete(UserLevel t) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<bool> delete(UserLevel t) async {
+    await db.delete(tableName, where: 'id = ?', whereArgs: [t.id]);
+    return true;
   }
 
   @override
-  Future<List<UserLevel>> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<List<UserLevel>> getAll() async {
+    return db.query(tableName).then((value) => value.map((e) => UserLevel.fromMap(e)).toList());
   }
 
   @override
-  Future<UserLevel> getById(int id) {
-    // TODO: implement getById
-    throw UnimplementedError();
+  Future<UserLevel> getById(int id) async {
+    return db.query(tableName, where: 'id = ?', whereArgs: [id]).then((value) => UserLevel.fromMap(value.first));
   }
 
   @override
-  Future<bool> update(UserLevel t) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(UserLevel t) async {
+    int i = await db.update(tableName, t.toMap(), where: 'id = ?', whereArgs: [t.id]);
+    return Future.value(i > 0);
   }
 }

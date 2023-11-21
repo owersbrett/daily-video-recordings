@@ -53,15 +53,18 @@ class ReportsInitial extends ReportsState {
 }
 
 class ReportsLoaded extends ReportsState {
+  @override
   final DateTime startInterval;
+  @override
   final DateTime endInterval;
+  @override
   final Map<int, HabitEntity> fullWeekOfHabits;
   ReportsLoaded(this.fullWeekOfHabits, this.startInterval, this.endInterval);
 
   DateTime get nearestPreviousMonday {
     DateTime monday = startInterval;
     while (monday.weekday != DateTime.monday) {
-      monday = monday.subtract(Duration(days: 1));
+      monday = monday.subtract(const Duration(days: 1));
     }
     return monday;
   }

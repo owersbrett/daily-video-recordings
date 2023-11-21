@@ -8,13 +8,10 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:camera/camera.dart';
-import 'package:mementoh/pages/home/home_page.dart';
-import 'package:mementoh/theme/theme.dart';
 import 'package:mementoh/service/file_directories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
-import 'data/db.dart' as db;
 import 'data/repositories/habit_entry_repository.dart';
 import 'data/repositories/habit_repository.dart';
 import 'data/repositories/multimedia_repository.dart';

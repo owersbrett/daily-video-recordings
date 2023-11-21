@@ -43,9 +43,9 @@ class HabitRepository implements IHabitRepository {
   }
 
   @override
-  Future<Habit> getById(int id) {
-    // TODO: implement getById
-    throw UnimplementedError();
+  Future<Habit> getById(int id) async {
+    var q = db.query(tableName, where: 'id = ?', whereArgs: [id]);
+    return q.then((value) => Habit.fromMap(value.first));
   }
 
   @override
@@ -97,7 +97,7 @@ class HabitRepository implements IHabitRepository {
             habitEntityMap[habitHabitEntryRow["id"] as int] = habitEntity;
           } else {
             habitEntityMap.putIfAbsent(
-                habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: [habitEntry], habitEntryNotes: []));
+                habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: [habitEntry], habitEntryNotes: const []));
           }
         } else {
           if (habitEntityMap.containsKey(habitHabitEntryRow["id"] as int)) {
@@ -106,7 +106,7 @@ class HabitRepository implements IHabitRepository {
             habitEntity = habitEntity.copyWith(habitEntries: habitEntries);
             habitEntityMap[habitHabitEntryRow["id"] as int] = habitEntity;
           } else {
-            habitEntityMap.putIfAbsent(habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: [], habitEntryNotes: []));
+            habitEntityMap.putIfAbsent(habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []));
           }
         }
       } catch (e) {

@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:mementoh/main.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -49,9 +48,9 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
         actions: <Widget>[
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text(
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
                 'Pick',
                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
               ),

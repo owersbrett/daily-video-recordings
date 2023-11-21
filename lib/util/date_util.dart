@@ -14,6 +14,6 @@ class DateUtil {
     return DateTime(monday.year, monday.month, monday.day, 0, 0, 0, 0, 0);
   }
   static DateTime closestComingSunday(){
-    return closestPastMonday().add(Duration(days: 7));
+    return closestPastMonday().add(const Duration(days: 7));
   }
 }

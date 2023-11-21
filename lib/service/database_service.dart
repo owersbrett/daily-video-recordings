@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:mementoh/main.dart';
 import 'package:sqflite/sqflite.dart';
@@ -20,7 +19,7 @@ import '../data/memento.dart';
 class DatabaseService {
   static final DatabaseService _singleton = DatabaseService._internal();
   // toggle to update database
-  static final version = 9;
+  static const version = 9;
 
   factory DatabaseService() {
     return _singleton;
@@ -33,14 +32,14 @@ class DatabaseService {
     // Iterate over each table
     for (var tableMap in tableNames) {
       Object? tableName = tableMap['name'];
-      print('Table: $tableName');
+      log('Table: $tableName');
 
       // Get column info for each table
       List<Map> columns = await database.rawQuery('PRAGMA table_info($tableName)');
       for (var column in columns) {
-        print('Column: ${column['name']} - Type: ${column['type']}');
+        log('Column: ${column['name']} - Type: ${column['type']}');
       }
-      print('\n');
+      log('\n');
     }
   }
 
@@ -157,7 +156,6 @@ class DatabaseService {
       await db.execute(sql);
     } catch (e) {
       log("Sql try error: " + e.toString());
-      print(e.toString());
     }
   }
 
@@ -165,9 +163,9 @@ class DatabaseService {
 
   static String getCreateTableString(List<String> schemaList, String tableName) {
     String schemaString = "";
-    schemaList.forEach((element) {
+    for (var element in schemaList) {
       schemaString += element + ", ";
-    });
+    }
     schemaString = schemaString.substring(0, schemaString.length - 2);
     return "CREATE TABLE " + tableName + "(" + schemaString + ");";
   }

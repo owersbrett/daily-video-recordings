@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:mementoh/data/multimedia_file.dart';
-import 'package:flutter_ffmpeg/ffmpeg_execution.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:intl/intl.dart'; // Add this line for date formatting
+// Add this line for date formatting
 import 'package:camera/camera.dart';
 import 'package:mementoh/main.dart';
 import 'package:mementoh/service/file_directories_service.dart';
@@ -20,7 +19,7 @@ class MediaService {
     path += videoId + "-" + formattedDate;
 
     String mp4Path = path + ".mp4";
-    String txtPath = path + ".txt";
+    // String txtPath = path + ".txt";
     String jpgPath = path + ".jpg";
     BytesBuilder combinedBytes = BytesBuilder();
     for (XFile file in videoClips) {

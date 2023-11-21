@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:mementoh/main.dart';
 
 class NowData {
   DateTime startTime;
@@ -28,8 +29,7 @@ class NowData {
   String formattedMonth(DateTime from) => DateFormat('EEEE MMMM d').format(from);
 
   void timeLimitReached() {
-    // Implement your logic for when the time limit is reached
-    print("Time limit reached!");
+    log("Time limit reached!");
   }
 
   String get formattedDate {

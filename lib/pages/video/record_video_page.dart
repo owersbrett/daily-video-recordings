@@ -1,25 +1,19 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
-import 'package:mementoh/data/multimedia_file.dart';
-import 'package:mementoh/main.dart';
 import 'package:mementoh/pages/video/dvr_close_button.dart';
-import 'package:mementoh/service/media_service.dart';
 import 'package:mementoh/theme/theme.dart';
-import 'package:mementoh/service/file_directories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../navigation/navigation.dart';
+import '../../bloc/habits/habits.dart';
+import '../../bloc/multimedia/multimedia.dart';
 
 class RecordVideoPage extends StatefulWidget {
   final CameraDescription camera;
 
-  const RecordVideoPage({required this.camera});
+  const RecordVideoPage({super.key, required this.camera});
 
   @override
   _RecordVideoPageState createState() => _RecordVideoPageState();
@@ -71,7 +65,6 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   void dispose() {
     _cameraController.dispose();
     _videoPlayerController.dispose();
-    ;
     super.dispose();
   }
 
@@ -158,7 +151,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                 child: IconButton(
                     onPressed: () {
                       Logger.root.info("Delete the most recent clip");
-                      if (clips.length > 0) {
+                      if (clips.isNotEmpty) {
                         setState(() {
                           clips.removeLast();
                         });
@@ -166,7 +159,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                     },
                     icon: Icon(
                       Icons.delete,
-                      color: clips.length == 0 ? Colors.grey : Colors.red,
+                      color: clips.isEmpty ? Colors.grey : Colors.red,
                     ))),
             Center(
               child: GestureDetector(
@@ -181,7 +174,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                       width: _isRecording ? 3 : 5,
                     ),
                   ),
-                  child: Container(
+                  child: SizedBox(
                     height: 55,
                     width: 55,
                     child: Icon(
@@ -195,12 +188,12 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
             ),
             Expanded(
               child: Visibility(
-                visible: clips.length > 0 && !_isRecording && !_isPreviewingVideo,
+                visible: clips.isNotEmpty && !_isRecording && !_isPreviewingVideo,
                 child: IconButton(
                   onPressed: () {
                     _toggleBetweenRecordingAndPreviewing();
                   },
-                  icon: Icon(Icons.check),
+                  icon: const Icon(Icons.check),
                 ),
               ),
             ),
@@ -210,21 +203,8 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     );
   }
 
-  Future<File> _saveVideos() async {
-    MultimediaFile multimediaFile = await MediaService.saveVideoClipsToOneFile(clips, Uuid().v4());
-    if (multimediaFile.videoFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Video file is null"),
-        ),
-      );
-      throw Exception("Video file is null");
-    } else {
-      File file = multimediaFile.videoFile!;
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      log(file.path);
-      return file;
-    }
+  void _saveVideos() {
+    BlocProvider.of<MultimediaBloc>(context).add(AddMultimedia(clips, context));
   }
 
   Widget _savingControls() {
@@ -254,7 +234,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                       }
                     });
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.delete,
                     color: rubyLight,
                   )),
@@ -268,7 +248,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(50),
                 ),
-                child: Container(
+                child: SizedBox(
                   height: 55,
                   width: 55,
                   child: Icon(
@@ -284,7 +264,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                 onPressed: () {
                   _saveVideos();
                 },
-                icon: Icon(Icons.save),
+                icon: const Icon(Icons.save),
               ),
             ),
           ],

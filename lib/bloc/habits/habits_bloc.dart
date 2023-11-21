@@ -68,10 +68,6 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   }
 
   Future _backFillHabitEntries(DateTime day, List<Habit> habits) async {
-    // if you have less entries than habits, create entries for the missing habits
-    // right now it's creating entries for all habits
-    // -TODO-: only create entries for habits that don't have entries
-    // TODO: TEST AS I THINK I FIXED THIS ^^
     DateTime beginningOfSixDaysAgo = DateTime(day.year, day.month, day.day).subtract(const Duration(days: 6));
     DateTime endOfSixDaysFromNow = DateTime(day.year, day.month, day.day, 23, 59, 59).add(const Duration(days: 6));
 

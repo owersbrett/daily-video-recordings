@@ -1,6 +1,10 @@
 // Define your custom colors
 import 'package:flutter/material.dart';
 
+const Color sapphire = Color(0xFF0F52BA); // A shade of ruby
+const Color sapphireLight = Color(0xFF4D7EBB); // A lighter shade of ruby
+const Color sapphireDark = Color(0xFF0A3A6B); // A darker shade of ruby
+
 const Color ruby = Color(0xFF9B111E); // A shade of ruby
 const Color rubyLight = Color(0xFFC9404A); // A lighter shade of ruby
 const Color rubyDark = Color(0xFF700D16); // A darker shade of ruby
@@ -13,7 +17,7 @@ const Color gold = Color(0xFFD4AF37); // A shade of gold
 const Color goldLight = Color(0xFFE8C55F); // A lighter shade of gold
 const Color goldDark = Color(0xFFA78B2C); // A darker shade of gold
 // Define the color scheme
-final ColorScheme myColorScheme = ColorScheme(
+const ColorScheme myColorScheme = ColorScheme(
   brightness: Brightness.light,
   primary: Colors.white, // Use ruby as the primary color
   outlineVariant:
@@ -36,12 +40,12 @@ final ColorScheme myColorScheme = ColorScheme(
 final ThemeData theme = ThemeData(
   // This is the theme of your application.
   //
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white
   ),
   dropdownMenuTheme:
-      DropdownMenuThemeData(textStyle: TextStyle(color: Colors.white)),
-  textTheme: TextTheme(
+      const DropdownMenuThemeData(textStyle: TextStyle(color: Colors.white)),
+  textTheme: const TextTheme(
     bodyLarge: TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.bold,
@@ -58,9 +62,9 @@ final ThemeData theme = ThemeData(
     ),
   ),
   colorScheme: myColorScheme,
-  inputDecorationTheme: InputDecorationTheme(
+  inputDecorationTheme: const InputDecorationTheme(
     labelStyle:
-        const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
     focusedBorder: OutlineInputBorder(
       gapPadding: 0,
       borderSide: BorderSide(color: Colors.black, width: 3),

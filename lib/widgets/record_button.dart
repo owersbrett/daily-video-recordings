@@ -14,8 +14,8 @@ class RecordingButton extends StatelessWidget {
           shape: BoxShape.circle,
           color: Colors.white,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(2.0),
+        child: const Padding(
+          padding: EdgeInsets.all(2.0),
           child: Icon(
             CupertinoIcons.circle_fill,
             size: 36,

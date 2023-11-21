@@ -1,58 +1,28 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:mementoh/data/db.dart';
 import 'package:mementoh/data/multimedia_file.dart';
 import 'package:mementoh/main.dart';
 import 'package:mementoh/navigation/navigation.dart';
 import 'package:mementoh/pages/video/loading_page.dart';
 import 'package:mementoh/pages/video/record_video_page.dart';
 import 'package:mementoh/pages/video/video_swipe_page.dart';
-import 'package:mementoh/service/file_directories_service.dart';
-import 'package:mementoh/service/media_service.dart';
-import 'package:mementoh/theme/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../bloc/multimedia/multimedia.dart';
 
 class VideoPreviewPage extends StatefulWidget {
+  const VideoPreviewPage({super.key});
+
   @override
   _VideoPreviewPageState createState() => _VideoPreviewPageState();
 }
 
 class _VideoPreviewPageState extends State<VideoPreviewPage> {
-  Future<List<MultimediaFile>>? _multimediaFiles;
 
   VideoPlayerController? _controller;
-
-  XFile? _videoFile;
-
-  Future<void> _pickVideo() async {
-    final ImagePicker _picker = ImagePicker();
-    // Pick an image
-    final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
-    setState(() {
-      _videoFile = video;
-    });
-  }
-
-  void _uploadVideo() {
-    if (_videoFile != null) {
-      // Implement your video uploading logic
-      print('Uploading ${_videoFile!.path}');
-    }
-  }
-
-  // Function to enter full-screen mode
-  void _goFullScreen() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => FullScreenVideo(controller: _controller!)),
-    );
-  }
 
   @override
   void dispose() {
@@ -63,14 +33,10 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
   @override
   void initState() {
     super.initState();
-    _multimediaFiles = MediaService.retrieveMultimediaFiles();
+    BlocProvider.of<MultimediaBloc>(context).add(FetchMultimedia());
   }
 
-  void refreshData() {
-    setState(() {
-      _multimediaFiles = MediaService.retrieveMultimediaFiles();
-    });
-  }
+  
 
   Widget gridItem(MultimediaFile file, int i, bool hasThumbnail) {
     return GridTile(
@@ -96,8 +62,8 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
                 Navigation.createRoute(RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
                     context, AnimationEnum.pageAscend);
               },
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
+              child: const Padding(
+                padding: EdgeInsets.all(24.0),
                 child: Text(
                   "No video entries.\nTap to create one!",
                   style: TextStyle(color: Colors.white),

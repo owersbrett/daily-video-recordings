@@ -21,15 +21,19 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<bool> delete(HabitEntry t) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<bool> delete(HabitEntry t) async {
+    await db.delete(tableName, where: 'id = ?', whereArgs: [t.id]);
+    return true;
   }
 
   @override
-  Future<List<HabitEntry>> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<List<HabitEntry>> getAll() async {
+    List<Map<String, dynamic>> response = await db.query(tableName);
+    List<HabitEntry> habitEntries = [];
+    for (var habitEntryRow in response) {
+      habitEntries.add(HabitEntry.fromMap(habitEntryRow));
+    }
+    return habitEntries;
   }
 
   @override

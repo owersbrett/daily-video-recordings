@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'package:mementoh/data/multimedia_file.dart';
-import 'package:mementoh/main.dart';
 import 'package:mementoh/pages/video/video_player_item.dart';
 import 'package:mementoh/service/media_service.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoSwipePage extends StatefulWidget {
@@ -26,7 +24,7 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
       child: Column(
         children: [
           Container(
-              padding: EdgeInsets.all(11),
+              padding: const EdgeInsets.all(11),
               height: 50,
               width: 50,
               decoration: BoxDecoration(
@@ -209,7 +207,7 @@ class _VideoSwipePageState extends State<VideoSwipePage> {
                 },
               );
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }),

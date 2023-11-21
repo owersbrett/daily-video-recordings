@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +7,7 @@ class StylizedCheckbox extends StatelessWidget {
   final Color color;
   final Size size;
 
-  StylizedCheckbox({required this.isChecked, required this.onTap, this.color = emeraldLight, this.size = const Size(80, 80)});
+  const StylizedCheckbox({super.key, required this.isChecked, required this.onTap, this.color = emeraldLight, this.size = const Size(80, 80)});
 
   @override
   Widget build(BuildContext context) {

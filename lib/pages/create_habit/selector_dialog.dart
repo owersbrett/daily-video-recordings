@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SelectorDialog extends StatelessWidget {
@@ -31,7 +30,7 @@ class SelectorDialog extends StatelessWidget {
                               child: Center(
                                 child: Text(
                                   values[i],
-                                  style: TextStyle(color: Colors.black),
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ),
                             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import '../habit_entry_card.dart';
+import '../widgets/habit_entry_card.dart';
 
 class ColorUtil {
   static String getStringFromHex(Color color) {

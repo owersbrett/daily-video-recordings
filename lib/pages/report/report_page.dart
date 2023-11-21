@@ -1,12 +1,9 @@
 import 'package:mementoh/bloc/reports/reports.dart';
-import 'package:mementoh/data/habit_entry.dart';
-import 'package:mementoh/habit_grid.dart';
+import 'package:mementoh/widgets/habit_grid.dart';
 import 'package:flutter/material.dart';
-
 import '../../bloc/habits/habits.dart';
 import '../../bloc/user/user.dart';
 import '../../util/date_util.dart';
-import '../../widgets/today_is_widget.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -30,15 +27,14 @@ class _ReportPageState extends State<ReportPage> {
         builder: (context, state) {
           return Column(
             children: [
-              TodayIsWidget(),
-              const SizedBox(height: 8),
               Expanded(
-                  child: HabitGrid(
-                habits: state.habits,
-                habitEntries: state.currentHabitEntries,
-                startInterval: state.startInterval,
-                endInterval: state.endInterval,
-              )),
+                child: HabitGrid(
+                  habits: state.habits,
+                  habitEntries: state.currentHabitEntries,
+                  startInterval: state.startInterval,
+                  endInterval: state.endInterval,
+                ),
+              ),
             ],
           );
         },
