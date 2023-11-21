@@ -28,6 +28,15 @@ abstract class HabitsState extends Equatable {
   List<HabitEntry> get todaysHabitEntries => [];
   List<HabitEntry> get weeksHabitEntries => [];
   List<HabitEntry> getRelativeHabitEntries(int daysForwardOrAgo) => [];
+
+  Habit? getHabit(int habitId) {
+    for (var habitEntity in habitMap.values) {
+      if (habitEntity.habit.id == habitId) {
+        return habitEntity.habit;
+      }
+    }
+    return null;
+  }
 }
 
 class HabitsError extends HabitsState {

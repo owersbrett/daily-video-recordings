@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:mementoh/main.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'package:mementoh/data/habit.dart';
@@ -19,7 +20,7 @@ import '../data/memento.dart';
 class DatabaseService {
   static final DatabaseService _singleton = DatabaseService._internal();
   // toggle to update database
-  static final version = 5;
+  static final version = 9;
 
   factory DatabaseService() {
     return _singleton;
@@ -58,7 +59,7 @@ class DatabaseService {
   }
 
   static Future updateDatabase(Database db) async {
-    onCreate(db, version);
+    await onCreate(db, version);
 //     String sql = """
 
 // ALTER TABLE NoteAudio ADD originalFilePath TEXT
@@ -78,7 +79,7 @@ class DatabaseService {
   }
 
   static FutureOr<void> onCreate(Database db, int version) async {
-    // await createTables(db);
+    await createTables(db);
   }
 
   static FutureOr<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -139,22 +140,23 @@ class DatabaseService {
     String createMultimediaSql = getCreateTableString(Multimedia.columnDeclarations, Multimedia.tableName);
     String createLevelSql = getCreateTableString(Level.columnDeclarations, Level.tableName);
 
-    sqlTry(db, createHabitTableSql);
-    sqlTry(db, createUserTableSql);
-    sqlTry(db, createHabitEntryTableSql);
-    sqlTry(db, createExperienceSql);
-    sqlTry(db, createMementoSql);
-    sqlTry(db, createDomainSql);
-    sqlTry(db, createHabitEntryNoteSql);
-    sqlTry(db, createUserLevelSql);
-    sqlTry(db, createMultimediaSql);
-    sqlTry(db, createLevelSql);
+    await sqlTry(db, createUserTableSql);
+    await sqlTry(db, createHabitTableSql);
+    await sqlTry(db, createHabitEntryTableSql);
+    await sqlTry(db, createExperienceSql);
+    await sqlTry(db, createMementoSql);
+    await sqlTry(db, createDomainSql);
+    await sqlTry(db, createHabitEntryNoteSql);
+    await sqlTry(db, createUserLevelSql);
+    await sqlTry(db, createMultimediaSql);
+    await sqlTry(db, createLevelSql);
   }
 
   static FutureOr<void> sqlTry(Database db, String sql) async {
     try {
       await db.execute(sql);
     } catch (e) {
+      log("Sql try error: " + e.toString());
       print(e.toString());
     }
   }

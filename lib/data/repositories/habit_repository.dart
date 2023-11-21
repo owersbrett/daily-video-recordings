@@ -27,9 +27,9 @@ class HabitRepository implements IHabitRepository {
   }
 
   @override
-  Future<bool> delete(Habit t) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<bool> delete(Habit t) async {
+    await db.delete(tableName, where: 'id = ?', whereArgs: [t.id]);
+    return true;
   }
 
   @override
@@ -49,9 +49,9 @@ class HabitRepository implements IHabitRepository {
   }
 
   @override
-  Future<bool> update(Habit t) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<bool> update(Habit t) async {
+    int i = await db.update(tableName, t.toMap(), where: 'id = ?', whereArgs: [t.id]);
+    return Future.value(i > 0);
   }
 
   @override
@@ -106,8 +106,7 @@ class HabitRepository implements IHabitRepository {
             habitEntity = habitEntity.copyWith(habitEntries: habitEntries);
             habitEntityMap[habitHabitEntryRow["id"] as int] = habitEntity;
           } else {
-            habitEntityMap.putIfAbsent(
-                habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: [], habitEntryNotes: []));
+            habitEntityMap.putIfAbsent(habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: [], habitEntryNotes: []));
           }
         }
       } catch (e) {

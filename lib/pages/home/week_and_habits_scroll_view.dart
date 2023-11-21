@@ -4,11 +4,13 @@ import 'package:mementoh/habit_card.dart';
 import 'package:mementoh/habit_entry_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mementoh/pages/create_habit/update_a_habit.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
 import '../../bloc/user/user.dart';
 import '../../data/habit.dart';
+import '../../navigation/navigation.dart';
 import '../../widgets/weekday_hero.dart';
 
 class WeekAndHabitsScrollView extends StatelessWidget {
@@ -67,10 +69,18 @@ class WeekAndHabitsScrollView extends StatelessWidget {
 
   List<Widget> dayWidgets(BuildContext context) => days(context);
   List<Widget> habitWidgets(BuildContext context) => todaysHabitEntries
-      .map((e) => HabitEntryCard(
-            habit: habitsMap[e.habitId] ?? Habit.empty(),
-            habitEntry: e,
-            currentListDate: currentDay,
+      .map((e) => GestureDetector(
+            onTap: () {
+              if (habitsState.getHabit(e.habitId) != null){
+
+                Navigation.createRoute(UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);
+              }
+            },
+            child: HabitEntryCard(
+              habit: habitsMap[e.habitId] ?? Habit.empty(),
+              habitEntry: e,
+              currentListDate: currentDay,
+            ),
           ))
       .toList();
 

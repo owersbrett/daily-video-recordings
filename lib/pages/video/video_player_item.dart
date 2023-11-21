@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:mementoh/main.dart';
 import 'package:flutter/material.dart';
+import 'package:mementoh/pages/video/delete_dialog.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../bloc/habits/habits.dart';
@@ -108,34 +109,20 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
               InkWell(
                 onTap: () {
                   showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                            title: const Text(
-                              "Delete Video?",
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                            ),
-                            content: const Text("Are you sure you want to delete this video?"),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(ctx).pop();
-                                  },
-                                  child: const Text(
-                                    "Cancel",
-                                    style: TextStyle(color: Colors.black),
-                                  )),
-                              TextButton(
-                                  onPressed: () {
-                                    BlocProvider.of<MultimediaBloc>(context).add(DeleteMultimedia(widget.path));
-                                    Navigator.of(ctx).pop();
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text(
-                                    "Delete",
-                                    style: TextStyle(color: Colors.red),
-                                  ))
-                            ],
-                          ));
+                    context: context,
+                    builder: (ctx) => DeleteDialog(
+                      title: "Delete Video?",
+                      description: "Are you sure you want to delete this video?",
+                      onDelete: () {
+                        BlocProvider.of<MultimediaBloc>(context).add(DeleteMultimedia(widget.path));
+                        Navigator.of(ctx).pop();
+                        Navigator.of(context).pop();
+                      },
+                      onCancel: () {
+                        Navigator.of(ctx).pop();
+                      },
+                    ),
+                  );
                 },
                 child: const Icon(
                   Icons.delete,

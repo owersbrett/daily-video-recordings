@@ -22,6 +22,5 @@ class ExperienceBloc extends Bloc<ExperienceEvent, ExperienceState> {
         log("Experience sum: " + state.sumOfAllExperience().toString());
       }
     });
-    add(FetchExperience());
   }
 }

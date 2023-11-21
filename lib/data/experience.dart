@@ -19,7 +19,7 @@ class Experience {
     "description TEXT",
     "domainId INTEGER",
     "FOREIGN KEY(userId) REFERENCES ${User.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
-        "FOREIGN KEY(habitEntryId) REFERENCES ${HabitEntry.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
+    "FOREIGN KEY(habitEntryId) REFERENCES ${HabitEntry.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
   ];
 
   final int? id;

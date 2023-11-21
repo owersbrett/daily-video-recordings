@@ -24,7 +24,8 @@ class UpdateHabit extends HabitsEvent {
 
 class DeleteHabit extends HabitsEvent {
   final Habit habit;
-  DeleteHabit(this.habit);
+  final int userId;
+  DeleteHabit(this.habit, this.userId);
 }
 
 class UpdateHabitEntry extends HabitsEvent {

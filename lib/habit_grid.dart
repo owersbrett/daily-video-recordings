@@ -29,7 +29,7 @@ class _HabitGridState extends State<HabitGrid> {
       height: 42,
       width: first ? 75 : 42,
       child: Center(
-        child: Text(value, style: TextStyle(color: Colors.white, fontSize: 16)),
+        child: Text(value, style: TextStyle(color: Colors.black, fontSize: 16)),
       ),
     );
   }
@@ -66,7 +66,7 @@ class _HabitGridState extends State<HabitGrid> {
           ),
           Text(
             "Begun",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
           )
         ],
       ),
@@ -77,7 +77,7 @@ class _HabitGridState extends State<HabitGrid> {
               CustomProgressIndicator(
                 value: state.percentageToNextLevel() * 100,
                 label: "Lvl " + state.currentLevel().toString(),
-                textColor: Colors.white,
+                textColor: Colors.black,
                 size: ProgressIndicatorSize.medium,
               ),
               SizedBox(
@@ -85,7 +85,7 @@ class _HabitGridState extends State<HabitGrid> {
               ),
               Text(
                 (state.percentageToNextLevel() * 100).toStringAsPrecision(2) + "%",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
               )
             ],
           );
@@ -103,19 +103,36 @@ class _HabitGridState extends State<HabitGrid> {
           ),
           Text(
             "Streak",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
           )
         ],
       )
     ],
   );
 
+  List<Widget> _grid() {
+        int i = 1;
+
+    return [
+      SizedBox(height: kToolbarHeight / 2),
+      Row(
+        children: daysOfWeek.map((day) => cell(day, i++ == 1)).toList(),
+      ),
+      for (List<Widget> row in habitRows())
+        Row(
+          children: row,
+        ),
+      SizedBox(
+        height: 16,
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-    int i = 1;
     return Scaffold(
       body: Container(
-        color: Colors.black,
+        color: Colors.white,
         child: Stack(
           children: [
             Column(
@@ -126,41 +143,36 @@ class _HabitGridState extends State<HabitGrid> {
                       SizedBox(
                         height: kToolbarHeight / 3,
                       ),
-                      Center(child: Text("Mementoh", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24))),
+                      Center(child: Text("Mementoh", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24))),
                       SizedBox(height: kToolbarHeight / 2),
                       Row(
                         children: [
-                          IconButton(onPressed: () {
-                            BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!, widget.startInterval.subtract(Duration(days: 7)), widget.endInterval.subtract(Duration(days: 7))));
-
-                          }, icon: Icon(Icons.arrow_left, color: Colors.white)),
+                          IconButton(
+                              onPressed: () {
+                                BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
+                                    widget.startInterval.subtract(Duration(days: 7)), widget.endInterval.subtract(Duration(days: 7))));
+                              },
+                              icon: Icon(Icons.arrow_left, color: Colors.black)),
                           Expanded(
                               child: Center(
                                   child: Text(
                                       "Week of ${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
-                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)))),
-                          IconButton(onPressed: () {
-                            BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!, widget.startInterval.add(Duration(days: 7)), widget.endInterval.add(Duration(days: 7))));
-                          }, icon: Icon(Icons.arrow_right, color: Colors.white)),
+                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16)))),
+                          IconButton(
+                              onPressed: () {
+                                BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
+                                    widget.startInterval.add(Duration(days: 7)), widget.endInterval.add(Duration(days: 7))));
+                              },
+                              icon: Icon(Icons.arrow_right, color: Colors.black)),
                         ],
                       ),
-                      SizedBox(height: kToolbarHeight / 2),
-                      Row(
-                        children: daysOfWeek.map((day) => cell(day, i++ == 1)).toList(),
-                      ),
-                      for (List<Widget> row in habitRows())
-                        Row(
-                          children: row,
-                        ),
-                      SizedBox(
-                        height: 16,
-                      ),
+                      ..._grid()
                     ],
                   ),
                 ),
               ],
             ),
-            DVRCloseButton(onPressed: () => Navigator.of(context).pop()),
+            DVRCloseButton(onPressed: () => Navigator.of(context).pop(), color: Colors.black,),
           ],
         ),
       ),

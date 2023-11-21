@@ -5,6 +5,7 @@ import '_repository.dart';
 
 abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future createIfDoesntExistForDate(HabitEntry t);
+  Future deleteWhere(String where, List<dynamic> whereArgs);
   Future createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(HabitEntry t);
   Future createForTodayIfDoesntExistBetweenStartDateAndEndDate(HabitEntry t, DateTime startDate, DateTime endDate);
 }
@@ -70,5 +71,10 @@ class HabitEntryRepository implements IHabitEntryRepository {
     if(q.isEmpty){
       await create(t);
     }
+  }
+  
+  @override
+  Future deleteWhere(String where, List whereArgs) async {
+    await db.delete(tableName, where: where, whereArgs: whereArgs);
   }
 }

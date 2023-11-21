@@ -112,7 +112,21 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     }
   }
 
-  Future _updateHabit(UpdateHabit event, Emitter<HabitsState> emit) async {}
+  Future _updateHabit(UpdateHabit event, Emitter<HabitsState> emit) async {
+    if (state is HabitsLoaded) {
+      await habitRepository.update(event.habit);
+      Map<int, HabitEntity> habitEntities = await habitRepository.getHabitEntities(event.habit.userId);
+      await validateHabitEntries(event.habit, habitEntities);
+      emit(HabitsLoaded(habitEntities, state.currentDate));
+    } else {
+      Logger.root.severe("Error updating habit: " + event.habit.toString());
+    }
+  }
+
+  Future validateHabitEntries(Habit habit, Map<int, HabitEntity> habitEntities) async {
+    await habitEntryRepository.deleteWhere("habitId = ? AND createDate >= ?", [habit.id, state.currentDate.millisecondsSinceEpoch]);
+    await _backFillHabitEntries(state.currentDate, state.habitsMap.values.toList());
+  }
 
   Future _deleteHabit(DeleteHabit event, Emitter<HabitsState> emit) async {
     if (state is HabitsLoaded) {
@@ -122,6 +136,8 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       if (habitEntity != null) {
         await habitRepository.delete(event.habit);
       }
+      List<DateTime> intervals = getInterval(loadedState.currentDate);
+      habits = await _getHabitEntries(event.userId, intervals[0], intervals[1]);
       emit(HabitsLoaded(habits, state.currentDate));
     } else {
       Logger.root.severe("Error deleting habit: " + event.habit.toString());

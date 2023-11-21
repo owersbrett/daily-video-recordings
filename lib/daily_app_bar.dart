@@ -55,23 +55,33 @@ class DailyAppBar extends StatelessWidget {
               //   ),
               // ),
               IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                            title: const Text(
-                              "Admin Service",
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                            ),
-                            content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: AdminService.adminCommands
-                                    .map((e) => TextButton(
-                                        onPressed: () => AdminService.handleAdminCommand(context, e).then((value) => Navigator.of(ctx).pop()),
-                                        child: Text(e, style: TextStyle(color: Colors.black))))
-                                    .toList())));
-                  },
-                  icon: Icon(Icons.admin_panel_settings)),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text(
+                        "Admin Service",
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: AdminService.adminCommands
+                            .map(
+                              (e) => TextButton(
+                                onPressed: () => AdminService.handleAdminCommand(context, e).then((value) => Navigator.of(ctx).pop()),
+                                child: Text(
+                                  e,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.admin_panel_settings),
+              ),
               Expanded(
                 child: Container(),
               ),
