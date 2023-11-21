@@ -4,6 +4,8 @@ import 'package:mementoh/habit_card.dart';
 import 'package:mementoh/habit_entry_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mementoh/pages/create_habit/create_a_habit.dart';
+import 'package:mementoh/pages/create_habit/display_habit_card.dart';
 import 'package:mementoh/pages/create_habit/update_a_habit.dart';
 
 import '../../bloc/experience/experience.dart';
@@ -68,21 +70,47 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   }
 
   List<Widget> dayWidgets(BuildContext context) => days(context);
-  List<Widget> habitWidgets(BuildContext context) => todaysHabitEntries
-      .map((e) => GestureDetector(
-            onTap: () {
-              if (habitsState.getHabit(e.habitId) != null){
-
-                Navigation.createRoute(UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);
-              }
-            },
-            child: HabitEntryCard(
-              habit: habitsMap[e.habitId] ?? Habit.empty(),
-              habitEntry: e,
-              currentListDate: currentDay,
+  List<Widget> habitWidgets(BuildContext context) {
+    if (todaysHabitEntries.isEmpty) {
+      return [
+        const SizedBox(height: kToolbarHeight),
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, right: 24),
+          child: Center(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(24),
+              onTap: () {
+                Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  "No habit entries.\nTap to create one!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
-          ))
-      .toList();
+          ),
+        ),
+        const SizedBox(height: kToolbarHeight),
+      ];
+    }
+    return todaysHabitEntries
+        .map((e) => GestureDetector(
+              onTap: () {
+                if (habitsState.getHabit(e.habitId) != null) {
+                  Navigation.createRoute(UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);
+                }
+              },
+              child: HabitEntryCard(
+                habit: habitsMap[e.habitId] ?? Habit.empty(),
+                habitEntry: e,
+                currentListDate: currentDay,
+              ),
+            ))
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,22 +1,16 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/foundation.dart' as foundation;
 import 'package:mementoh/pages/create_habit/display_habit_card.dart';
 import 'package:mementoh/util/color_util.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
 import 'package:mementoh/data/frequency_type.dart';
-import 'package:mementoh/habit_card.dart';
 import 'package:mementoh/pages/create_habit/color_picker_dialog.dart';
-import 'package:mementoh/pages/create_habit/selector_dialog.dart';
 import 'package:mementoh/pages/video/dvr_close_button.dart';
 import 'package:mementoh/theme/theme.dart';
 import 'package:mementoh/widgets/custom_form_field.dart';
 import 'package:mementoh/widgets/stylized_checkbox.dart';
 
 import '../../bloc/habits/habits.dart';
-import '../../data/db.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entity.dart';
 import '../../util/string_util.dart';
@@ -34,6 +28,7 @@ class UpdateHabitPage extends StatefulWidget {
 class _UpdateHabitPageState extends State<UpdateHabitPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emojiController = TextEditingController();
+  FocusNode emojiFocusNode = FocusNode();
   bool emojiShowing = false;
   void _onBackspacePressed() {}
 
@@ -117,12 +112,8 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
   final FocusNode _stringValueFocus = FocusNode();
   final FocusNode _quantityFocus = FocusNode();
   final FocusNode _suffixFocus = FocusNode();
-  final FocusNode _unitTypeFocus = FocusNode();
   final FocusNode _frequencyFocus = FocusNode();
-  final FocusNode _goalFocus = FocusNode();
-  final FocusNode _emojiFocus = FocusNode();
-  final FocusNode _streakEmojiFocus = FocusNode();
-  final FocusNode _colorFocus = FocusNode();
+
 
   // You might want to initialize these if they have default values
   Color currentColor = Colors.limeAccent;
@@ -185,7 +176,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                   width: 12,
                 ),
                 Text(
-                  "Update a Habit",
+                  "Edit a Habit",
                   style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 Expanded(
@@ -194,21 +185,28 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                 SizedBox(
                   width: 4,
                 ),
-                IconButton(onPressed: (){
-                  showDialog(context: context, builder: (ctx)=> DeleteDialog(
-                      title: "Delete Habit?",
-                      description: "Are you sure you want to delete this habit?",
-                      onDelete: () {
-                        BlocProvider.of<HabitsBloc>(context).add(DeleteHabit(habit, widget.habit.userId));
-                        Navigator.of(ctx).pop();
-                        Navigator.of(context).pop();
-                      },
-                      onCancel: () {
-                        Navigator.of(ctx).pop();
-                      },
-                    ),
-                  );
-                }, icon: Icon(Icons.delete, color: ruby,)),
+                IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => DeleteDialog(
+                          title: "Delete Habit?",
+                          description: "Are you sure you want to delete this habit?",
+                          onDelete: () {
+                            BlocProvider.of<HabitsBloc>(context).add(DeleteHabit(habit, widget.habit.userId));
+                            Navigator.of(ctx).pop();
+                            Navigator.of(context).pop();
+                          },
+                          onCancel: () {
+                            Navigator.of(ctx).pop();
+                          },
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: ruby,
+                    )),
                 SizedBox(
                   width: 4,
                 ),
@@ -266,69 +264,14 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            emojiShowing = !emojiShowing;
-                            emojiController.clear();
-                          });
-                          setHabit(habit.copyWith(emoji: ""));
-                        },
-                        child: CustomFormField(
-                          focusNode: FocusNode(),
-                          label: "Emoji",
-                          enabled: false,
-                          onChanged: (val) {},
-                          validator: (str) => FormValidator.nonEmpty(str, "Emoji"),
-                          onEditingComplete: () => FocusScope.of(context).unfocus(),
-                          value: emojiController,
-                        ),
+                      child: CustomFormField(
+                        focusNode: emojiFocusNode,
+                        label: "Emoji",
+                        onChanged: (val) {},
+                        validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Emoji"),
+                        onEditingComplete: () => FocusScope.of(context).unfocus(),
+                        value: emojiController,
                       ),
-                    ),
-                    Offstage(
-                      offstage: !emojiShowing,
-                      child: SizedBox(
-                          height: 250,
-                          child: EmojiPicker(
-                            textEditingController: emojiController,
-                            onBackspacePressed: _onBackspacePressed,
-                            onEmojiSelected: (category, emoji) {
-                              setHabit(habit.copyWith(emoji: emoji.emoji));
-                              setState(() {
-                                emojiShowing = false;
-                              });
-                            },
-                            config: Config(
-                              columns: 7,
-                              // Issue: https://github.com/flutter/flutter/issues/28894
-                              emojiSizeMax: 32 * (foundation.defaultTargetPlatform == TargetPlatform.iOS ? 1.30 : 1.0),
-                              verticalSpacing: 0,
-                              horizontalSpacing: 0,
-                              gridPadding: EdgeInsets.zero,
-                              initCategory: Category.RECENT,
-                              bgColor: const Color(0xFFF2F2F2),
-                              indicatorColor: Colors.blue,
-                              iconColor: Colors.grey,
-                              iconColorSelected: emerald,
-                              backspaceColor: Colors.blue,
-                              skinToneDialogBgColor: Colors.white,
-                              skinToneIndicatorColor: Colors.grey,
-                              enableSkinTones: true,
-                              recentTabBehavior: RecentTabBehavior.RECENT,
-                              recentsLimit: 28,
-                              replaceEmojiOnLimitExceed: false,
-                              noRecents: const Text(
-                                'No Recents',
-                                style: TextStyle(fontSize: 20, color: Colors.black26),
-                                textAlign: TextAlign.center,
-                              ),
-                              loadingIndicator: const SizedBox.shrink(),
-                              tabIndicatorAnimDuration: kTabScrollDuration,
-                              categoryIcons: const CategoryIcons(),
-                              buttonMode: ButtonMode.MATERIAL,
-                              checkPlatformCompatibility: true,
-                            ),
-                          )),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -340,8 +283,11 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                               child: InkWell(
                                 onTap: () {
                                   Logger.root.info("Habit: $habit");
-                                  BlocProvider.of<HabitsBloc>(context).add(UpdateHabit(habit));
-                                  Navigator.of(context).pop();
+                                  if (_formKey.currentState?.validate() ?? false){
+                                      BlocProvider.of<HabitsBloc>(context).add(UpdateHabit(habit.copyWith(emoji: emojiController.text.trim())));
+                                      Navigator.of(context).pop();
+                                  }
+                                  
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

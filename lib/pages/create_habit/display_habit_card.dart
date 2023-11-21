@@ -1,10 +1,8 @@
 import 'package:mementoh/data/habit.dart';
 import 'package:mementoh/pages/create_habit/typewriter_widget.dart';
 import 'package:flutter/material.dart';
-
 import '../../custom_progress_indicator.dart';
 import '../../data/habit_entity.dart';
-import '../../data/habit_entry.dart';
 import '../../widgets/stylized_checkbox.dart';
 
 class DisplayHabitCard extends StatefulWidget {
@@ -85,7 +83,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
                   Row(
                     children: [
                       SizedBox(
-                        width: 16,
+                        width: 16
                       ),
                       Expanded(
                         child: Container(

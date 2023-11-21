@@ -12,7 +12,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: 
   audioplayers:
-  emoji_picker_flutter:
   flutter_colorpicker:
   equatable:
   bloc:

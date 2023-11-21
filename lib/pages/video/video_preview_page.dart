@@ -89,29 +89,48 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
           return const LoadingPage();
         }
         var files = state.multimediaList;
+        if (files.isEmpty) {
+          return Center(
+            child: InkWell(
+              onTap: () {
+                Navigation.createRoute(RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
+                    context, AnimationEnum.pageAscend);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  "No video entries.\nTap to create one!",
+                  style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          );
+        }
         return Scaffold(
           backgroundColor: Colors.black,
           body: Stack(
             children: [
               Center(
-                  child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 9 / 19.5 * 1.5,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 9 / 19.5 * 1.5,
+                  ),
+                  itemCount: files.length,
+                  itemBuilder: (ctx, i) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => VideoSwipePage(multimediaFile: files[i], page: i)),
+                        );
+                      },
+                      child: gridItem(files[i], i, files[i].photoFile != null),
+                    );
+                  },
                 ),
-                itemCount: files.length,
-                itemBuilder: (ctx, i) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => VideoSwipePage(multimediaFile: files[i], page: i)),
-                      );
-                    },
-                    child: gridItem(files[i], i, files[i].photoFile != null),
-                  );
-                },
-              )),
+              ),
             ],
           ),
         );
