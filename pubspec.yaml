@@ -1,4 +1,4 @@
-name: daily_video_reminders
+name: mementoh
 description: A new Flutter project for daily video reminders.
 version: 1.0.0+1
 publish_to: 'none' # Prevent accidental publishing to pub.dev
@@ -11,20 +11,20 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   image_picker: 
-  emoji_picker_flutter:
+  audioplayers:
   flutter_colorpicker:
   equatable:
   bloc:
   logging:
+  shared_preferences:
   swipable_stack:
-
   flutter_slidable:
   hydrated_bloc:
   uuid:
   flutter_bloc:
   video_player:
   camera:
-
+  image_gallery_saver:
   intl: ^0.17.0 # For date formatting.
   sqflite: any # It's better to specify a version number for production apps.
   path_provider: ^2.1.1 # Used for finding commonly used locations on the filesystem.
@@ -32,6 +32,7 @@ dependencies:
   grpc: ^3.2.4
   protobuf: ^3.1.0
   path: ^1.8.3
+  flutter_launcher_icons: ^0.13.1
   # Add other dependencies you might need for your project.
 
 dev_dependencies:
@@ -43,9 +44,9 @@ flutter:
   uses-material-design: true
 
   # Include any assets like fonts, images, and videos.
-  # assets:
-  #   - assets/videos/
-  #   - assets/images/
+  assets:
+    - assets/audio/
+    - assets/icon/
 
   # fonts:
   #   - family: MyCustomFont

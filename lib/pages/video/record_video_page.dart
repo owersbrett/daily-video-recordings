@@ -2,12 +2,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
-import 'package:daily_video_reminders/data/multimedia_file.dart';
-import 'package:daily_video_reminders/main.dart';
-import 'package:daily_video_reminders/pages/video/dvr_close_button.dart';
-import 'package:daily_video_reminders/service/media_service.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
-import 'package:daily_video_reminders/service/file_directories_service.dart';
+import 'package:mementoh/data/multimedia_file.dart';
+import 'package:mementoh/main.dart';
+import 'package:mementoh/pages/video/dvr_close_button.dart';
+import 'package:mementoh/service/media_service.dart';
+import 'package:mementoh/theme/theme.dart';
+import 'package:mementoh/service/file_directories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -29,7 +29,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   bool _isRecording = false;
   bool _isPreviewingVideo = false;
   bool videoPlaying = false;
-  double _aspectRatio = 9 / 19.5;
+  double _aspectRatio = 9 / 19;
 
   late CameraController _cameraController;
   late VideoPlayerController _videoPlayerController;
@@ -48,8 +48,6 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     setState(() {
       String clipPath = clips[0].path;
       _videoPlayerController = VideoPlayerController.file(File(clipPath));
-      Logger.root.info(clipPath);
-      Logger.root.info(_aspectRatio);
       _videoPlayerController.initialize();
 
       _isPreviewingVideo = !_isPreviewingVideo;
@@ -63,9 +61,9 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
       ResolutionPreset.max,
     );
     await _cameraController.initialize();
-    Size aspectSize = _cameraController.value.previewSize ?? Size(1, 1);
+    Size aspectSize = _cameraController.value.previewSize ?? const Size(1, 1);
     setState(() {
-      _aspectRatio = aspectSize.height / aspectSize.width;
+      _aspectRatio = aspectSize.aspectRatio;
     });
   }
 
@@ -99,11 +97,17 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
           child: VideoPlayer(_videoPlayerController),
         ),
       );
-  Widget _videoRecorder() => CameraPreview(_cameraController);
+  Widget _videoRecorder() => Column(
+        children: [
+          Container(
+            height: kToolbarHeight,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.black,
+          ),
+          CameraPreview(_cameraController),
+        ],
+      );
   void _toggleVideoPlayer() {
-    log("Toggling video player");
-    log("Video playing: ${clips.last.path}");
-    log(videoPlaying.toString());
     setState(() {
       if (videoPlaying) {
         _videoPlayerController.pause();
@@ -115,20 +119,29 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     });
   }
 
-  Widget _closeButton() => DVRCloseButton(
-        onPressed: () {
-          if (_isPreviewingVideo) {
-            setState(() {
-              _isPreviewingVideo = false;
-            });
-          } else if (_isRecording) {
-            setState(() {
-              _isRecording = false;
-            });
-          } else {
-            Navigator.of(context).pop();
-          }
-        },
+  Widget _closeButton() => Padding(
+        padding: const EdgeInsets.only(top: kToolbarHeight),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            DVRCloseButton(
+              positioned: false,
+              onPressed: () {
+                if (_isPreviewingVideo) {
+                  setState(() {
+                    _isPreviewingVideo = false;
+                  });
+                } else if (_isRecording) {
+                  setState(() {
+                    _isRecording = false;
+                  });
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        ),
       );
   Widget _recordingControls() {
     return Positioned(

@@ -2,6 +2,18 @@
 import 'dart:convert';
 
 class HabitEntryNote {
+
+  static String tableName = "HabitEntryNote";
+
+  static List<String> columnDeclarations = [
+    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
+    "habitEntryId INTEGER",
+    "note TEXT",
+    "createDate INTEGER",
+    "updateDate INTEGER",
+    "title TEXT"
+  ];
+
   final int id;
   final int habitEntryId;
   final String note;

@@ -1,12 +1,13 @@
-import 'package:daily_video_reminders/data/bottom_sheet_state.dart';
-import 'package:daily_video_reminders/data/db.dart';
-import 'package:daily_video_reminders/habit_grid.dart';
-import 'package:daily_video_reminders/pages/home/mementoh.dart';
-import 'package:daily_video_reminders/pages/home/now_data.dart';
-import 'package:daily_video_reminders/pages/video/_video_preview_deprecated.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:mementoh/data/bottom_sheet_state.dart';
+import 'package:mementoh/data/db.dart';
+import 'package:mementoh/habit_grid.dart';
+import 'package:mementoh/pages/home/mementoh.dart';
+import 'package:mementoh/pages/home/now_data.dart';
+import 'package:mementoh/pages/video/_video_preview_deprecated.dart';
+import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../bloc/experience/experience.dart';
 import '../../data/habit_entry.dart';
 import '../video/video_preview_page.dart';
 
@@ -20,7 +21,7 @@ class HomePageBottom extends StatelessWidget {
   final NowData nowData;
   final BottomSheetState bottomSheetState;
   final Function onStartTimer;
-
+  final Function setBottomSheetState;
   HomePageBottom(
       {required this.value1,
       required this.value2,
@@ -30,6 +31,7 @@ class HomePageBottom extends StatelessWidget {
       required this.value6,
       required this.nowData,
       required this.bottomSheetState,
+      required this.setBottomSheetState,
       required this.onStartTimer});
   Widget customSlider(double value, Color color, [double minHeight = 10]) {
     return LinearProgressIndicator(
@@ -75,6 +77,13 @@ class HomePageBottom extends StatelessWidget {
 
   Widget _list(BuildContext context) {
     if (large) return VideoPreviewPage();
+    if (mid)
+      return Mementoh(
+        nowData: nowData,
+        onStart: () {
+          onStartTimer();
+        },
+      );
     return Container();
   }
 
@@ -92,17 +101,25 @@ class HomePageBottom extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (mid)
-                  Mementoh(
-                    nowData: nowData,
-                    onStart: () {
-                      onStartTimer();
-                    },
-                  ),
                 Expanded(
                   child: _list(context),
                 ),
-                _buildHorizontalProgressBars(),
+                Row(
+                  children: [
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setBottomSheetState();
+                        },
+                        child: Container(
+                          color: Colors.black,
+                          child: _buildHorizontalProgressBars(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).padding.bottom > 0 ? 0 : 24,
                 )
@@ -112,7 +129,15 @@ class HomePageBottom extends StatelessWidget {
           ),
           Expanded(
             flex: mid || large ? 3 : 2,
-            child: _buildVerticalProgressBars(),
+            child: GestureDetector(
+              onTap: () {
+                setBottomSheetState();
+              },
+              child: Container(
+color: Colors.black,
+                child: _buildVerticalProgressBars(),
+              ),
+            ),
           ),
         ],
       ),
@@ -128,11 +153,11 @@ class HomePageBottom extends StatelessWidget {
         _horizontalLabelText("Daily"),
 
         customSlider(value1, emerald),
-        SizedBox(height: mid || large? 4 : 8),
+        SizedBox(height: mid || large ? 4 : 8),
         // monthly
         _horizontalLabelText("Weekly"),
         customSlider(value2, emerald),
-        SizedBox(height: mid || large? 4 : 8),
+        SizedBox(height: mid || large ? 4 : 8),
         // annual
         _horizontalLabelText("Experience"),
         customSlider(value3, emerald),
@@ -147,7 +172,7 @@ class HomePageBottom extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildVerticalProgressBar(value4, rubyDark, (nowData.currentTime.minute).toString() + " / 60 Minutes"),
+          _buildVerticalProgressBar(value4, rubyDark, (nowData.currentTime.second).toString()),
           _buildVerticalProgressBar(
               value5,
               goldDark,

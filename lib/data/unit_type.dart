@@ -1,4 +1,4 @@
-import 'package:daily_video_reminders/util/string_util.dart';
+import 'package:mementoh/util/string_util.dart';
 
 enum UnitType {
   fluidOunce,
@@ -25,11 +25,14 @@ enum UnitType {
   }
 
   static UnitType fromMap(Map<String, dynamic> map) {
-    return UnitType.values
-        .firstWhere((element) => element.toString() == map['unitType']);
+    return UnitType.values.firstWhere((element) => element.toString() == map['unitType']);
   }
 
   String toPrettyString() {
     return StringUtil.capitalize(toString().split('.').last);
+  }
+
+  static UnitType fromPrettyString(String prettyString) {
+    return UnitType.values.firstWhere((element) => element.toPrettyString().toLowerCase() == prettyString.toLowerCase());
   }
 }

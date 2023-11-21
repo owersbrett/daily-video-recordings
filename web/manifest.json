@@ -1,6 +1,6 @@
 {
-    "name": "daily_video_reminders",
-    "short_name": "daily_video_reminders",
+    "name": "mementoh",
+    "short_name": "mementoh",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

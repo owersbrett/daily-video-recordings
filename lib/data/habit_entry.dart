@@ -1,28 +1,68 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'habit.dart';
 import 'unit_type.dart';
 
 class HabitEntry {
-  final int id;
+  static const String tableName = "HabitEntry";
+  static const List<String> columnDeclarations = [
+    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
+    "habitId INTEGER",
+    "booleanValue INTEGER",
+    "integerValue INTEGER",
+    "decimalValue REAL",
+    "stringValue TEXT",
+    "unitType TEXT",
+    "createDate INTEGER",
+    "updateDate INTEGER",
+    "FOREIGN KEY(habitId) REFERENCES ${Habit.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION"
+    
+
+  ];
+  final int? id;
   final int habitId;
-  final dynamic value;
+  final bool booleanValue;
+  final int? integerValue;
+  final int? streakAtEntry;
+  final double? decimalValue;
+  final String? stringValue;
   final UnitType unitType;
   final DateTime createDate;
   final DateTime updateDate;
   HabitEntry({
-    required this.id,
+    this.id,
     required this.habitId,
-    required this.value,
+    required this.booleanValue,
+    this.integerValue,
+    this.decimalValue,
+    this.stringValue,
+    this.streakAtEntry,
     required this.unitType,
     required this.createDate,
     required this.updateDate,
   });
+  bool get isEmpty => habitId == -1;
+  static HabitEntry empty() {
+    return HabitEntry(habitId: -1, unitType: UnitType.blank, createDate: DateTime.now(), updateDate: DateTime.now(), booleanValue: false);
+  }
+
+  static HabitEntry fromHabit(Habit habit) {
+    return HabitEntry(
+      habitId: habit.id!,
+      unitType: habit.unitType,
+      createDate: DateTime.now(),
+      updateDate: DateTime.now(), booleanValue: false,
+    );
+  }
 
   HabitEntry copyWith({
     int? id,
     int? habitId,
-    dynamic? value,
+    bool? booleanValue,
+    int? integerValue,
+    double? decimalValue,
+    String? stringValue,
     UnitType? unitType,
     DateTime? createDate,
     DateTime? updateDate,
@@ -30,7 +70,10 @@ class HabitEntry {
     return HabitEntry(
       id: id ?? this.id,
       habitId: habitId ?? this.habitId,
-      value: value ?? this.value,
+      booleanValue: booleanValue ?? this.booleanValue,
+      integerValue: integerValue ?? this.integerValue,
+      decimalValue: decimalValue ?? this.decimalValue,
+      stringValue: stringValue ?? this.stringValue,
       unitType: unitType ?? this.unitType,
       createDate: createDate ?? this.createDate,
       updateDate: updateDate ?? this.updateDate,
@@ -41,18 +84,22 @@ class HabitEntry {
     return <String, dynamic>{
       'id': id,
       'habitId': habitId,
-      'value': value,
-      'unitType': unitType.toMap(),
+      'integerValue': integerValue,
+      'decimalValue': decimalValue,
+      // 'streakAtEntry': streakAtEntry,
+      'stringValue': stringValue,
+      'unitType': unitType.toPrettyString(),
       'createDate': createDate.millisecondsSinceEpoch,
       'updateDate': updateDate.millisecondsSinceEpoch,
+      'booleanValue': booleanValue ? 1 : 0,
     };
   }
 
   factory HabitEntry.bool(int id, int habitId, bool value, [int daysFromNow = 0]) {
     return HabitEntry(
       id: id,
+      booleanValue: value,
       habitId: habitId,
-      value: value,
       unitType: UnitType.boolean,
       createDate: DateTime.now().add(Duration(days: daysFromNow)),
       updateDate: DateTime.now().add(Duration(days: daysFromNow)),
@@ -60,10 +107,14 @@ class HabitEntry {
   }
   factory HabitEntry.fromMap(Map<String, dynamic> map) {
     return HabitEntry(
-      id: map['id'] as int,
+      id: map['id'] != null ? map['id'] as int : null,
       habitId: map['habitId'] as int,
-      value: map['value'] as dynamic,
-      unitType: UnitType.fromMap(map['unitType'] as Map<String,dynamic>),
+      // streakAtEntry: map['streakAtEntry'] as int?,
+      booleanValue:( map['booleanValue'] as int) == 1,
+      integerValue: map['integerValue'] != null ? map['integerValue'] as int : null,
+      decimalValue: map['decimalValue'] != null ? map['decimalValue'] as double : null,
+      stringValue: map['stringValue'] != null ? map['stringValue'] as String : null,
+      unitType: UnitType.fromPrettyString(map['unitType'] as String),
       createDate: DateTime.fromMillisecondsSinceEpoch(map['createDate'] as int),
       updateDate: DateTime.fromMillisecondsSinceEpoch(map['updateDate'] as int),
     );
@@ -75,7 +126,7 @@ class HabitEntry {
 
   @override
   String toString() {
-    return 'HabitEntry(id: $id, habitId: $habitId, value: $value, unitType: $unitType, createDate: $createDate, updateDate: $updateDate)';
+    return 'HabitEntry(id: $id, habitId: $habitId, booleanValue: $booleanValue, integerValue: $integerValue, decimalValue: $decimalValue, stringValue: $stringValue, unitType: $unitType, createDate: $createDate, updateDate: $updateDate)';
   }
 
   @override
@@ -85,7 +136,11 @@ class HabitEntry {
     return 
       other.id == id &&
       other.habitId == habitId &&
-      other.value == value &&
+      other.booleanValue == booleanValue &&
+      other.integerValue == integerValue &&
+      other.decimalValue == decimalValue &&
+      other.streakAtEntry == streakAtEntry &&
+      other.stringValue == stringValue &&
       other.unitType == unitType &&
       other.createDate == createDate &&
       other.updateDate == updateDate;
@@ -95,7 +150,11 @@ class HabitEntry {
   int get hashCode {
     return id.hashCode ^
       habitId.hashCode ^
-      value.hashCode ^
+      booleanValue.hashCode ^
+      integerValue.hashCode ^
+      decimalValue.hashCode ^
+      streakAtEntry.hashCode ^
+      stringValue.hashCode ^
       unitType.hashCode ^
       createDate.hashCode ^
       updateDate.hashCode;

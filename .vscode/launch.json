@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "daily_video_reminders",
+            "name": "mementoh",
             "request": "launch",
             "type": "dart",
             "deviceId": "00008120-0018096A14D8C01E"
@@ -17,13 +17,13 @@
             "deviceId": "00008030-001C35E02232402E"
         },
         {
-            "name": "daily_video_reminders (profile mode)",
+            "name": "mementoh (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "daily_video_reminders (release mode)",
+            "name": "mementoh (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

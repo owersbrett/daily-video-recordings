@@ -1,9 +1,24 @@
-import 'package:daily_video_reminders/data/habit.dart';
-import 'package:daily_video_reminders/data/habit_entry.dart';
+import 'package:equatable/equatable.dart';
 
-class HabitEntity {
+import 'habit.dart';
+import 'habit_entry.dart';
+import 'habit_entry_note.dart';
+
+class HabitEntity extends Equatable {
   final Habit habit;
-  final List<HabitEntry> habitEntities;
+  final List<HabitEntry> habitEntries;
+  final List<HabitEntryNote> habitEntryNotes;
 
-  HabitEntity(this.habit, this.habitEntities);
+  HabitEntity({required this.habit, required this.habitEntries, required this.habitEntryNotes});
+
+  @override
+  List<Object?> get props => [habit, ...habitEntries, ...habitEntryNotes];
+
+  HabitEntity copyWith({Habit? habit, List<HabitEntry>? habitEntries, List<HabitEntryNote>? habitEntryNotes}) {
+    return HabitEntity(
+      habit: habit ?? this.habit,
+      habitEntries: habitEntries ?? this.habitEntries,
+      habitEntryNotes: habitEntryNotes ?? this.habitEntryNotes,
+    );
+  }
 }

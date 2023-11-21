@@ -1,4 +1,4 @@
-import 'package:daily_video_reminders/custom_progress_indicator.dart';
+import 'package:mementoh/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -29,7 +29,7 @@ class WeekdayHero extends StatelessWidget {
               ),
               const SizedBox(height: 8), //
               CustomProgressIndicator(
-                size: expanded ? ProgressIndicatorSize.large : ProgressIndicatorSize.small,
+                size: expanded ? ProgressIndicatorSize.medium : ProgressIndicatorSize.small,
                 value: score.toDouble(),
                 label: dayOfMonth,
                 textColor: textColor,

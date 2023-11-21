@@ -1,47 +1,43 @@
-import 'package:daily_video_reminders/custom_progress_indicator.dart';
-import 'package:daily_video_reminders/data/frequency_type.dart';
-import 'package:daily_video_reminders/dropdown_chip.dart';
-import 'package:daily_video_reminders/habit_card.dart';
-import 'package:daily_video_reminders/pages/create_habit/color_picker_dialog.dart';
-import 'package:daily_video_reminders/pages/create_habit/custom_slider.dart';
-import 'package:daily_video_reminders/pages/create_habit/selector_dialog.dart';
-import 'package:daily_video_reminders/pages/video/dvr_close_button.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
-import 'package:daily_video_reminders/widgets/custom_form_field.dart';
+import 'package:mementoh/pages/create_habit/display_habit_card.dart';
+import 'package:mementoh/util/color_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:logging/logging.dart';
-
-import '../../data/db.dart';
+import 'package:mementoh/data/frequency_type.dart';
+import 'package:mementoh/pages/create_habit/color_picker_dialog.dart';
+import 'package:mementoh/pages/video/dvr_close_button.dart';
+import 'package:mementoh/theme/theme.dart';
+import 'package:mementoh/widgets/custom_form_field.dart';
+import 'package:mementoh/widgets/stylized_checkbox.dart';
+import '../../bloc/habits/habits.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entity.dart';
-import '../../data/unit_type.dart';
 import '../../util/string_util.dart';
 import '../../validators/form_validator.dart'; // Include this package for color picker
 
 class CreateHabitPage extends StatefulWidget {
+  const CreateHabitPage({super.key, required this.dateToAddHabit});
+  final DateTime dateToAddHabit;
   @override
   _CreateHabitPageState createState() => _CreateHabitPageState();
 }
 
 class _CreateHabitPageState extends State<CreateHabitPage> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController emojiController = TextEditingController();
+  FocusNode emojiFocusNode = FocusNode();
+  bool emojiShowing = false;
 
-  bool hasFocusedOnVerb = false;
-  bool hasFocusedOnQuantity = false;
-  bool hasFocusedOnSuffix = false;
+  bool hasCompletedHabit = false;
   bool hasFocusedOnFrequency = false;
+  TextEditingController colorTextEdittingController = TextEditingController(text: "Red");
   bool hasFocusedOnColor = false;
   Habit habit = Habit.empty();
   bool get complete => progress == 100;
   int get progress {
     int _progress = 0;
-    if (hasFocusedOnColor) _progress += 20;
-    if (hasFocusedOnVerb) _progress += 20;
-    if (hasFocusedOnQuantity) _progress += 20;
-    if (hasFocusedOnSuffix) _progress += 20;
-    if (hasFocusedOnFrequency) _progress += 20;
+    if (hasCompletedHabit) _progress += 35;
+    if (habit.hexColor.isNotEmpty) _progress += 35;
+    _progress += 30;
 
     return _progress;
   }
@@ -108,24 +104,16 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         onFieldSubmitted: (value) {});
   }
 
-  final FocusNode _verbFocus = FocusNode();
+  final FocusNode _stringValueFocus = FocusNode();
   final FocusNode _quantityFocus = FocusNode();
   final FocusNode _suffixFocus = FocusNode();
-  final FocusNode _unitTypeFocus = FocusNode();
   final FocusNode _frequencyFocus = FocusNode();
-  final FocusNode _goalFocus = FocusNode();
-  final FocusNode _emojiFocus = FocusNode();
-  final FocusNode _streakEmojiFocus = FocusNode();
-  final FocusNode _colorFocus = FocusNode();
-
-  // You might want to initialize these if they have default values
   Color currentColor = Colors.limeAccent;
-
-  // Add any other state variables or controllers you might need
 
   void onPickColor(Color color) {
     setState(() {
       habit = habit.copyWith(hexColor: '#${color.value.toRadixString(16).padLeft(8, '0')}');
+      colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
     });
     Navigator.of(context).pop();
   }
@@ -134,8 +122,10 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   void initState() {
     super.initState();
     _frequencyController.text = "Daily";
-    habit = habit.copyWith(verb: _verbController.text, valueGoal: 10, suffix: "Pages", frequencyType: FrequencyType.daily);
-    _verbFocus.requestFocus();
+    habit = habit.copyWith(
+        stringValue: _stringValueController.text, valueGoal: 1, suffix: "", frequencyType: FrequencyType.daily, hexColor: Colors.red.toHex());
+
+    _stringValueFocus.requestFocus();
   }
 
   void setHabit(Habit habit) {
@@ -148,16 +138,17 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ColorPickerDialog(onSubmit: (color) => onPickColor(color));
+        return ColorPickerDialog(
+          onSubmit: (color) => onPickColor(color),
+          initialColor: ColorUtil.getColorFromHex(habit.hexColor),
+        );
       },
     );
   }
 
-  bool get focused => _verbFocus.hasFocus || _quantityFocus.hasFocus || _suffixFocus.hasFocus;
+  bool get focused => _stringValueFocus.hasFocus || _quantityFocus.hasFocus || _suffixFocus.hasFocus;
 
-  TextEditingController _verbController = TextEditingController(text: "Read");
-  TextEditingController _quantityController = TextEditingController(text: "10");
-  TextEditingController _suffixController = TextEditingController(text: "Pages");
+  TextEditingController _stringValueController = TextEditingController(text: "");
   TextEditingController _frequencyController = TextEditingController();
 
   @override
@@ -175,7 +166,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                   width: 12,
                 ),
                 Text(
-                  "Track a Habit",
+                  "Create a Habit",
                   style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 Expanded(
@@ -204,47 +195,44 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           pickColor();
                         }
                       },
-                      child: HabitCard(habitEntity: HabitEntity(habit, Database.habitEntries), progress: progress, checkable: false),
+                      child: DisplayHabitCard(
+                        habitEntity: HabitEntity(habit: habit, habitEntries: [], habitEntryNotes: []),
+                        progress: progress,
+                        checkable: false,
+                      ),
                     ),
-                    _verbField(context),
-                    _quantityField(context),
-                    _suffixField(context),
+                    _habitField(context),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
                         onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (ctx) {
-                                return SelectorDialog(
-                                  values: FrequencyType.values.map((e) => e.toPrettyString()).toList(),
-                                  onSelect: (String prettyString) {
-                                    setState(() {
-                                      _frequencyController.text = prettyString;
-                                    });
-                                    setHabit(
-                                      habit.copyWith(
-                                          frequencyType: FrequencyType.values.where((element) => element.toPrettyString() == prettyString).first),
-                                    );
-                                    Navigator.of(context).pop();
-                                  },
-                                );
-                              });
+                          pickColor();
                         },
                         child: CustomFormField(
                           focusNode: _frequencyFocus,
-                          label: "Frequency",
+                          label: "Color",
                           enabled: false,
                           onChanged: (val) {
                             setState(() {
                               hasFocusedOnFrequency = true;
                             });
-                            setHabit(habit.copyWith(verb: val));
+                            setHabit(habit.copyWith(stringValue: val));
                           },
-                          validator: (str) => FormValidator.nonEmpty(str, "Frequency"),
+                          validator: (str) => FormValidator.nonEmpty(str, "Color"),
                           onEditingComplete: () => FocusScope.of(context).unfocus(),
-                          value: _frequencyController,
+                          value: colorTextEdittingController,
                         ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomFormField(
+                        focusNode: emojiFocusNode,
+                        label: "Emoji",
+                        onChanged: (val) {},
+                        validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Emoji"),
+                        onEditingComplete: () => FocusScope.of(context).unfocus(),
+                        value: emojiController,
                       ),
                     ),
                     Padding(
@@ -253,11 +241,14 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                         children: [
                           Expanded(
                             child: Visibility(
-                              visible: progress >= 80,
+                              visible: progress >= 70,
                               child: InkWell(
                                 onTap: () {
                                   Logger.root.info("Habit: $habit");
-                                  // BlocProvider.of<HabitBloc>(context).add(HabitAdded(habit));
+                                  if (_formKey.currentState?.validate() ?? false) {
+                                    BlocProvider.of<HabitsBloc>(context).add(AddHabit(habit.copyWith(emoji: emojiController.text), widget.dateToAddHabit));
+                                    Navigator.of(context).pop();
+                                  }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -280,7 +271,49 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           )
                         ],
                       ),
-                    )
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text("Daily: "),
+                        StylizedCheckbox(
+                          isChecked: habit.frequencyType == FrequencyType.daily,
+                          onTap: () {
+                            setHabit(habit.copyWith(frequencyType: FrequencyType.daily));
+                          },
+                          size: Size(50, 50),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text("Every Other Day: "),
+                          StylizedCheckbox(
+                            isChecked: habit.frequencyType == FrequencyType.everyOtherDay,
+                            onTap: () {
+                              setHabit(habit.copyWith(frequencyType: FrequencyType.everyOtherDay));
+                            },
+                            size: Size(50, 50),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text("Weekly: "),
+                        StylizedCheckbox(
+                          isChecked: habit.frequencyType == FrequencyType.weekly,
+                          onTap: () {
+                            setHabit(habit.copyWith(frequencyType: FrequencyType.weekly));
+                          },
+                          size: Size(50, 50),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -291,73 +324,38 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     );
   }
 
-  Padding _suffixField(BuildContext context) {
+  Padding _habitField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CustomFormField(
-          focusNode: _suffixFocus,
-          value: _suffixController,
-          label: "Suffix",
-          onChanged: (val) {
-            setState(() {
-              hasFocusedOnSuffix = true;
-            });
-            setHabit(habit.copyWith(suffix: val));
-          },
-          validator: (str) => FormValidator.nonEmpty(str, "Suffix"),
-          onEditingComplete: () {
-            setState(() {
-              hasFocusedOnFrequency = true;
-            });
-            FocusScope.of(context).unfocus();
-          }),
-    );
-  }
-
-  Padding _quantityField(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: CustomFormField(
-        focusNode: _quantityFocus,
-        label: "Quantity",
-        value: _quantityController,
+        value: _stringValueController,
+        focusNode: _stringValueFocus,
+        label: "Habit",
         onChanged: (val) {
-          setState(() {
-            hasFocusedOnQuantity = true;
-          });
-          setHabit(habit.copyWith(valueGoal: int.tryParse(val)));
+          setHabit(habit.copyWith(stringValue: val));
         },
-        validator: (str) => FormValidator.mustBeAnInt(str, "Quantity"),
+        validator: (str) => FormValidator.nonEmpty(str, "stringValue"),
         onEditingComplete: () {
           setState(() {
-            hasFocusedOnSuffix = true;
+            if (habit.stringValue.isNotEmpty) hasCompletedHabit = true;
           });
-          FocusScope.of(context).requestFocus(_suffixFocus);
+          FocusScope.of(context).requestFocus(_quantityFocus);
         },
       ),
     );
   }
 
-  Padding _verbField(BuildContext context) {
+  Padding _selectColor(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CustomFormField(
-        value: _verbController,
-        focusNode: _verbFocus,
-        label: "Verb",
-        onChanged: (val) {
-          setState(() {
-            hasFocusedOnVerb = true;
-          });
-          setHabit(habit.copyWith(verb: val));
-        },
-        validator: (str) => FormValidator.nonEmpty(str, "Verb"),
-        onEditingComplete: () {
-          setState(() {
-            hasFocusedOnQuantity = true;
-          });
-          FocusScope.of(context).requestFocus(_quantityFocus);
-        },
+        value: _stringValueController,
+        focusNode: _stringValueFocus,
+        label: "Habit",
+        enabled: false,
+        onChanged: (val) {},
+        validator: (str) => null,
+        onEditingComplete: () {},
       ),
     );
   }

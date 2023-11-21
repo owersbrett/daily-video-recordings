@@ -1,16 +1,36 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:daily_video_reminders/data/frequency_type.dart';
-import 'package:daily_video_reminders/habit_card.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:mementoh/pages/create_habit/display_habit_card.dart';
 import 'package:flutter/material.dart';
 
-import 'unit_type.dart';
+import 'package:mementoh/data/frequency_type.dart';
+import 'package:mementoh/data/unit_type.dart';
+
+import 'user.dart';
 
 class Habit {
-  final int id;
-  final String verb;
+  static const String tableName = "Habit";
+  static const List<String> columnDeclarations = [
+    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
+    "userId INTEGER",
+    "stringValue TEXT",
+    "value INTEGER",
+    "unitIncrement INTEGER",
+    "valueGoal INTEGER",
+    "suffix TEXT",
+    "unitType TEXT",
+    "frequencyType TEXT",
+    "emoji TEXT",
+    "streakEmoji TEXT",
+    "hexColor TEXT",
+    "createDate INTEGER",
+    "updateDate INTEGER",
+    "FOREIGN KEY(userId) REFERENCES ${User.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION"
+  ];
+  final int? id;
+  final int userId;
+  final String stringValue;
   final int value;
   final int unitIncrement;
   final int valueGoal;
@@ -24,8 +44,9 @@ class Habit {
   final DateTime createDate;
   final DateTime updateDate;
   Habit({
-    required this.id,
-    required this.verb,
+    this.id,
+    required this.userId,
+    required this.stringValue,
     required this.value,
     required this.unitIncrement,
     required this.valueGoal,
@@ -41,7 +62,8 @@ class Habit {
 
   Habit copyWith({
     int? id,
-    String? verb,
+    int? userId,
+    String? stringValue,
     int? value,
     int? unitIncrement,
     int? valueGoal,
@@ -56,7 +78,8 @@ class Habit {
   }) {
     return Habit(
       id: id ?? this.id,
-      verb: verb ?? this.verb,
+      userId: userId ?? this.userId,
+      stringValue: stringValue ?? this.stringValue,
       value: value ?? this.value,
       unitIncrement: unitIncrement ?? this.unitIncrement,
       valueGoal: valueGoal ?? this.valueGoal,
@@ -74,13 +97,14 @@ class Habit {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'verb': verb,
+      'userId': userId,
+      'stringValue': stringValue,
       'value': value,
       'unitIncrement': unitIncrement,
       'valueGoal': valueGoal,
       'suffix': suffix,
-      'unitType': unitType.toMap(),
-      'frequencyType': frequencyType.toMap(),
+      'unitType': unitType.toPrettyString(),
+      'frequencyType': frequencyType.toPrettyString(),
       'emoji': emoji,
       'streakEmoji': streakEmoji,
       'hexColor': hexColor,
@@ -92,8 +116,7 @@ class Habit {
   factory Habit.empty() {
     return Habit(
       unitIncrement: 1,
-      id: -1,
-      verb: "",
+      stringValue: "",
       value: 0,
       valueGoal: 1,
       suffix: "",
@@ -104,20 +127,21 @@ class Habit {
       createDate: DateTime.now(),
       updateDate: DateTime.now(),
       frequencyType: FrequencyType.daily,
+      userId: 1,
     );
   }
 
   factory Habit.fromMap(Map<String, dynamic> map) {
     return Habit(
       id: map['id'] as int,
-      verb: map['verb'] as String,
+      userId: map['userId'] as int,
+      stringValue: map['stringValue'] as String,
       value: map['value'] as int,
       unitIncrement: map['unitIncrement'] as int,
       valueGoal: map['valueGoal'] as int,
       suffix: map['suffix'] as String,
-      unitType: UnitType.fromMap(map['unitType'] as Map<String, dynamic>),
-      frequencyType:
-          FrequencyType.fromMap(map['frequencyType'] as Map<String, dynamic>),
+      unitType: UnitType.fromPrettyString(map['unitType']),
+      frequencyType: FrequencyType.fromPrettyString(map['frequencyType']),
       emoji: map['emoji'] as String,
       streakEmoji: map['streakEmoji'] as String,
       hexColor: map['hexColor'] as String,
@@ -128,12 +152,11 @@ class Habit {
 
   String toJson() => json.encode(toMap());
 
-  factory Habit.fromJson(String source) =>
-      Habit.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Habit.fromJson(String source) => Habit.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Habit(id: $id, verb: $verb, value: $value, unitIncrement: $unitIncrement, valueGoal: $valueGoal, suffix: $suffix, unitType: $unitType, frequencyType: $frequencyType, emoji: $emoji, streakEmoji: $streakEmoji, hexColor: $hexColor, createDate: $createDate, updateDate: $updateDate)';
+    return 'Habit(id: $id, userId: $userId, stringValue: $stringValue, value: $value, unitIncrement: $unitIncrement, valueGoal: $valueGoal, suffix: $suffix, unitType: $unitType, frequencyType: $frequencyType, emoji: $emoji, streakEmoji: $streakEmoji, hexColor: $hexColor, createDate: $createDate, updateDate: $updateDate)';
   }
 
   @override
@@ -141,7 +164,8 @@ class Habit {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.verb == verb &&
+        other.userId == userId &&
+        other.stringValue == stringValue &&
         other.value == value &&
         other.unitIncrement == unitIncrement &&
         other.valueGoal == valueGoal &&
@@ -158,7 +182,8 @@ class Habit {
   @override
   int get hashCode {
     return id.hashCode ^
-        verb.hashCode ^
+        userId.hashCode ^
+        stringValue.hashCode ^
         value.hashCode ^
         unitIncrement.hashCode ^
         valueGoal.hashCode ^

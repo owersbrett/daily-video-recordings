@@ -1,19 +1,23 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:daily_video_reminders/data/db.dart';
-import 'package:daily_video_reminders/data/multimedia_file.dart';
-import 'package:daily_video_reminders/main.dart';
-import 'package:daily_video_reminders/navigation/navigation.dart';
-import 'package:daily_video_reminders/pages/video/record_video_page.dart';
-import 'package:daily_video_reminders/pages/video/video_swipe_page.dart';
-import 'package:daily_video_reminders/service/file_directories_service.dart';
-import 'package:daily_video_reminders/service/media_service.dart';
-import 'package:daily_video_reminders/theme/theme.dart';
+import 'package:mementoh/data/db.dart';
+import 'package:mementoh/data/multimedia_file.dart';
+import 'package:mementoh/main.dart';
+import 'package:mementoh/navigation/navigation.dart';
+import 'package:mementoh/pages/video/loading_page.dart';
+import 'package:mementoh/pages/video/record_video_page.dart';
+import 'package:mementoh/pages/video/video_swipe_page.dart';
+import 'package:mementoh/service/file_directories_service.dart';
+import 'package:mementoh/service/media_service.dart';
+import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../bloc/multimedia/multimedia.dart';
 
 class VideoPreviewPage extends StatefulWidget {
   @override
@@ -70,87 +74,67 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
 
   Widget gridItem(MultimediaFile file, int i, bool hasThumbnail) {
     return GridTile(
-      child: GestureDetector(
-        onTap: () {
-          Navigation.createRoute(VideoSwipePage(multimediaFile: file), context);
-        },
-        child: Image.file(
-          file.photoFile ?? File(""),
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return GestureDetector(
-              onTap: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.grey,
-                    size: 50,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-      footer: Container(
-        padding: EdgeInsets.all(8.0),
-        color: Colors.black54,
-        child: Text(
-          "Video ${i + 1}",
-          style: TextStyle(color: Colors.white),
-        ),
+      child: Image.file(
+        file.photoFile ?? File(""),
+        fit: BoxFit.cover,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Center(
-            child: FutureBuilder(
-              future: _multimediaFiles,
-              builder: (ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasData) {
-                  var files = snapshot.data as List<MultimediaFile>;
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 9 / 19.5 * 1.5,
-                    ),
-                    itemCount: files.length,
-                    itemBuilder: (ctx, i) {
-                      return GestureDetector(
-                        onTap: () {
-                          log(files[i].videoFile!.path);
-                          log("What");
-                          Navigation.createRoute(VideoSwipePage(multimediaFile: files[i]), context);
-                        },
-                        child: gridItem(files[i], i, files[i].photoFile != null),
-                      );
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text("Error loading videos"));
-                }
-                return Center(
-                  child: Text("No videos found"),
-                );
+    return BlocBuilder<MultimediaBloc, MultimediaState>(
+      builder: (context, state) {
+        if (state is! MultimediaLoaded) {
+          return const LoadingPage();
+        }
+        var files = state.multimediaList;
+        if (files.isEmpty) {
+          return Center(
+            child: InkWell(
+              onTap: () {
+                Navigation.createRoute(RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
+                    context, AnimationEnum.pageAscend);
               },
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  "No video entries.\nTap to create one!",
+                  style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
+          );
+        }
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            children: [
+              Center(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 9 / 19.5 * 1.5,
+                  ),
+                  itemCount: files.length,
+                  itemBuilder: (ctx, i) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => VideoSwipePage(multimediaFile: files[i], page: i)),
+                        );
+                      },
+                      child: gridItem(files[i], i, files[i].photoFile != null),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
