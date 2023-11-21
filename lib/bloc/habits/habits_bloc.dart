@@ -19,14 +19,11 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   }
 
   Future _onEvent(HabitsEvent event, Emitter<HabitsState> emit) async {
-    Logger.root.info("HabitsBloc: " + event.toString());
-
     if (event is FetchHabits) await _fetchHabits(event, emit);
     if (event is AddHabit) await _addHabit(event, emit);
     if (event is UpdateHabit) await _updateHabit(event, emit);
     if (event is DeleteHabit) await _deleteHabit(event, emit);
     if (event is UpdateHabitEntry) await _updateHabitEntry(event, emit);
-    Logger.root.info("HabitsBloc: " + event.toString());
   }
 
   Future _fetchHabits(FetchHabits event, Emitter<HabitsState> emit) async {

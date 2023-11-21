@@ -82,25 +82,15 @@ class ExperienceState extends Equatable {
   }
 
   double percentageToNextLevel() {
-    log("-------------------");
-    log("sumOfAllExperience: " + sumOfAllExperience().toString());
-    log("currentLevelsPointsToUnlock: " + currentLevelsPointsToUnlock().toString());
     int allExp = sumOfAllExperience();
     int _currentLevel = currentLevel();
     int sumOfLevelsToLevel = sumOfLevelToLevel(_currentLevel);
-    log("_currentLevel: " + _currentLevel.toString());
     if (allExp + currentLevelsPointsToUnlock() == sumOfLevelsToLevel) {
       return 0;
     }
-
-    log("sum of levels to level: " + sumOfLevelsToLevel.toString());
     int numerator = (allExp - sumOfLevelToLevel(_currentLevel - 1));
     int denominator = sumOfLevelsToLevel - sumOfLevelToLevel(_currentLevel - 1);
     double percentage = numerator / denominator;
-    log(numerator.toString());
-    log("---");
-
-    log(denominator.toString());
     return percentage;
   }
 

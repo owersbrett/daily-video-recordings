@@ -28,7 +28,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   Future _fetchUser(FetchUser event, Emitter<UserState> emit) async {
     try {
-      log("Fetching user...");
+
       User user = await userRepository.get();
       List<Experience> experienceList = await experienceRepository.getAll();
       emit(UserLoaded(user, experienceList));

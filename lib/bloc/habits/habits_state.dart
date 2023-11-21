@@ -109,7 +109,6 @@ class HabitsLoaded extends HabitsState {
       var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
       return [...previousValue, ...filteredEntries];
     });
-    log("weeksHabitEntries: " + weeksHabitEntries.length.toString());
     return weeksHabitEntries;
   }
 

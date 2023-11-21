@@ -41,8 +41,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _timer = Timer.periodic(const Duration(seconds: 1), minuteFunction);
-    log(monthlyValue.toString());
-    log("Oi mate");
     BlocProvider.of<HabitsBloc>(context).add(FetchHabits(widget.user.id!, DateTime.now()));
   }
 
@@ -248,9 +246,7 @@ class _HomePageState extends State<HomePage> {
           thisWeeksHabitsTogether.addAll(value);
         });
         var percentageForToday = state.todaysCompletionPercentage;
-        log(percentageForToday.toString());
         var percentageForTheWeek = state.weeksCompletionPercentage;
-        log(percentageForTheWeek.toString());
         var percentageToNextLevel = experienceState.percentageToNextLevel();
 
         return HomePageBottom(
