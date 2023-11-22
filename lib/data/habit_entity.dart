@@ -21,4 +21,18 @@ class HabitEntity extends Equatable {
       habitEntryNotes: habitEntryNotes ?? this.habitEntryNotes,
     );
   }
+
+  int streakValue(DateTime fromDate) {
+    int value = 0;
+    List<HabitEntry> previousEntries = this.habitEntries.where((element) => element.createDate.isBefore(fromDate)).toList();
+    previousEntries.sort((a, b) => b.createDate.compareTo(a.createDate));
+    for (var entry in previousEntries) {
+      if (entry.booleanValue) {
+        value++;
+      } else {
+        return value;
+      }
+    }
+    return value;
+  }
 }

@@ -30,6 +30,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     DateTime now = event.currentDate;
     List<DateTime> interval = getInterval(now);
     Map<int, HabitEntity> habitEntities = await _getHabitEntries(event.userId, interval[0], interval[1]);
+
     List<Habit> habits = await habitRepository.getAll();
 
     DateTime threeDaysAgo = now.subtract(const Duration(days: 3));
@@ -89,6 +90,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       }
     }
   }
+
 
   Future _addHabit(AddHabit event, Emitter<HabitsState> emit) async {
     if (state is HabitsLoaded) {

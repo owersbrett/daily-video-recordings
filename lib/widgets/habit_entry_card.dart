@@ -4,6 +4,7 @@ import 'package:mementoh/bloc/habits/habits.dart';
 import 'package:flutter/material.dart';
 
 import '../data/habit.dart';
+import '../data/habit_entity.dart';
 import '../data/habit_entry.dart';
 import 'stylized_checkbox.dart';
 
@@ -32,12 +33,14 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
         content: Text("You're a liar, that's in the future."),
         backgroundColor: Colors.black,
       ));
-    } else if (widget.currentListDate.isBefore(startOfDay)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("You can't change the past."),
-        backgroundColor: Colors.black,
-      ));
-    } else {
+    }
+    //  else if (widget.currentListDate.isBefore(startOfDay)) {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //     content: Text("You can't change the past."),
+    //     backgroundColor: Colors.black,
+    //   ));
+    // }
+     else {
       if (!widget.habitEntry.booleanValue) {
         AudioPlayer().play(AssetSource("audio/shimmer.wav"));
       }
@@ -46,17 +49,12 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     }
   }
 
-  String get _starBuilder {
-    String stars = "";
-    if (habit.value < 1) {
-      stars = "⭐";
-    } else if (habit.value < 10) {
-      stars = "⭐⭐";
-    } else if (habit.value < 100) {
-      stars = "⭐⭐⭐";
+  String _starBuilder(HabitEntity? habitEntity) {
+    if (habitEntity == null) {
+      return "";
     }
-    if (_completed) stars += "⭐";
-
+    String stars = widget.habit.streakEmoji.isEmpty ? "🔥" : widget.habit.streakEmoji;
+    stars = habitEntity.streakValue(widget.currentListDate).toString() + stars;
     return stars;
   }
 
@@ -103,21 +101,6 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                                 height: 24,
                               ),
                               _titleRow(),
-                              if (buttonsExpanded)
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: TextButton(
-                                        style: ButtonStyle(
-                                          backgroundColor: MaterialStateProperty.all(Colors.black),
-                                        ),
-                                        child: const Text("Edit", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                                        onPressed: () {},
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               const SizedBox(
                                 height: 24,
                               ),
@@ -125,14 +108,22 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                           ),
                         ),
                         Padding(
-                            padding: const EdgeInsets.only(right: 16, top: 16, bottom: 16),
-                            child:
-                                StylizedCheckbox(isChecked: _completed, color: HexColor.fromHex(habit.hexColor), onTap: () => _onCheck(_completed))),
+                          padding: const EdgeInsets.only(right: 16, top: 16, bottom: 16),
+                          child: StylizedCheckbox(
+                            isChecked: _completed,
+                            color: HexColor.fromHex(habit.hexColor),
+                            onTap: () => _onCheck(_completed),
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
-                // starAndStreakRow(),
+                BlocBuilder<HabitsBloc, HabitsState>(
+                  builder: (context, state) {
+                    return starAndStreakRow(state.habitMap[habit.id]);
+                  },
+                ),
                 Positioned(
                     left: 8,
                     bottom: 8,
@@ -148,14 +139,14 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     );
   }
 
-  Column starAndStreakRow() {
+  Column starAndStreakRow(HabitEntity? habitEntity) {
     return Column(
       children: [
         Row(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-              child: Text(_starBuilder),
+              child: Text(_starBuilder(habitEntity)),
             ),
             Expanded(
               child: Container(),

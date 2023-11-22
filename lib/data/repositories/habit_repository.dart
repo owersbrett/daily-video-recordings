@@ -106,14 +106,18 @@ class HabitRepository implements IHabitRepository {
             habitEntity = habitEntity.copyWith(habitEntries: habitEntries);
             habitEntityMap[habitHabitEntryRow["id"] as int] = habitEntity;
           } else {
-            habitEntityMap.putIfAbsent(habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []));
+            habitEntityMap.putIfAbsent(
+                habitHabitEntryRow["id"] as int, () => HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []));
           }
         }
       } catch (e) {
         log("YOU FOUND ME!");
         log(e.toString());
+
       }
     }
+
+
     return habitEntityMap;
   }
 }
