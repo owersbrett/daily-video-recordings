@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../data/habit.dart';
 import '../data/habit_entity.dart';
 import '../data/habit_entry.dart';
+import '../util/date_util.dart';
 import 'stylized_checkbox.dart';
 
 class HabitEntryCard extends StatefulWidget {
@@ -40,7 +41,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     //     backgroundColor: Colors.black,
     //   ));
     // }
-     else {
+    else {
       if (!widget.habitEntry.booleanValue) {
         AudioPlayer().play(AssetSource("audio/shimmer.wav"));
       }
@@ -48,13 +49,24 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
           habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue), BlocProvider.of<ExperienceBloc>(context)));
     }
   }
+  
 
-  String _starBuilder(HabitEntity? habitEntity) {
-    if (habitEntity == null) {
+  String streakEmoji(HabitEntity? habitEntity) {
+    if (habitEntity == null || habitEntity.streakValue(widget.currentListDate) == 0) {
       return "";
     }
-    String stars = widget.habit.streakEmoji.isEmpty ? "🔥" : widget.habit.streakEmoji;
-    stars = habitEntity.streakValue(widget.currentListDate).toString() + stars;
+    String emoji = widget.habit.streakEmoji.isEmpty ? "🔥" : widget.habit.streakEmoji;
+    return emoji;
+  }
+
+  String streakCount(HabitEntity? habitEntity) {
+    if (habitEntity == null || habitEntity.streakValue(widget.currentListDate) == 0) {
+      return "";
+    }
+    String stars =
+        (habitEntity.streakValue(widget.currentListDate) + (_completed && DateUtil.isSameDay(DateTime.now(), widget.currentListDate) ? 1 : 0))
+            .toString();
+
     return stars;
   }
 
@@ -145,8 +157,12 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-              child: Text(_starBuilder(habitEntity)),
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(streakEmoji(habitEntity), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(streakCount(habitEntity), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
             Expanded(
               child: Container(),
