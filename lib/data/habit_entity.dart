@@ -24,15 +24,21 @@ class HabitEntity extends Equatable {
 
   int streakValue(DateTime fromDate) {
     int value = 0;
-    List<HabitEntry> previousEntries = this.habitEntries.where((element) => element.createDate.isBefore(fromDate)).toList();
+    List<HabitEntry> previousEntries = habitEntries.where((element) => element.createDate.isBefore(fromDate)).toList();
     previousEntries.sort((a, b) => b.createDate.compareTo(a.createDate));
+    DateTime initialDate = fromDate;
     for (var entry in previousEntries) {
-      if (entry.booleanValue) {
+      if (entry.booleanValue && isConsecutiveDays(initialDate, entry.createDate)) {
         value++;
       } else {
         return value;
       }
+      initialDate = entry.createDate;
     }
     return value;
+  }
+
+  bool isConsecutiveDays(DateTime dateOne, DateTime dateTwo) {
+    return dateOne.difference(dateTwo).inDays.abs() <= 1;
   }
 }

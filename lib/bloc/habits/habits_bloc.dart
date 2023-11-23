@@ -55,9 +55,9 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
 
   List<DateTime> getInterval(DateTime now) {
     DateTime startInterval = now.subtract(const Duration(days: 3));
-    startInterval = DateTime(startInterval.year, startInterval.month, startInterval.day);
+    startInterval = DateTime(2020, 1, 1);
     DateTime endInterval = now.add(const Duration(days: 3));
-    endInterval = DateTime(endInterval.year, endInterval.month, endInterval.day, 23, 59, 59);
+    endInterval = DateTime(2120, 1, 1);
     return [startInterval, endInterval];
   }
 

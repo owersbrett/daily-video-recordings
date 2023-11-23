@@ -64,7 +64,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
       return "";
     }
     String stars =
-        (habitEntity.streakValue(widget.currentListDate) + (_completed && DateUtil.isSameDay(DateTime.now(), widget.currentListDate) ? 1 : 0))
+        (habitEntity.streakValue(widget.currentListDate))
             .toString();
 
     return stars;
