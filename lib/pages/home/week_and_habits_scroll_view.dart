@@ -129,8 +129,3 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   }
 }
 
-class HabitEntryEntity {
-  HabitEntryEntity({required this.habitEntry, required this.habit});
-  HabitEntry habitEntry;
-  Habit habit;
-}

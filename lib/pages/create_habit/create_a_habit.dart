@@ -23,7 +23,7 @@ class CreateHabitPage extends StatefulWidget {
 
 class _CreateHabitPageState extends State<CreateHabitPage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emojiController = TextEditingController();
+  TextEditingController emojiController = TextEditingController(text: "🔥");
   FocusNode emojiFocusNode = FocusNode();
   bool emojiShowing = false;
 
@@ -35,9 +35,9 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   bool get complete => progress == 100;
   int get progress {
     int _progress = 0;
-    if (hasCompletedHabit) _progress += 35;
+    if (habit.stringValue.isNotEmpty) _progress += 35;
     if (habit.hexColor.isNotEmpty) _progress += 35;
-    _progress += 30;
+    if (habit.emoji.isNotEmpty) _progress += 30;
 
     return _progress;
   }
@@ -229,7 +229,9 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                       child: CustomFormField(
                         focusNode: emojiFocusNode,
                         label: "Emoji",
-                        onChanged: (val) {},
+                        onChanged: (val) {
+                          setHabit(habit.copyWith(emoji: val));
+                        },
                         validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Emoji"),
                         onEditingComplete: () => FocusScope.of(context).unfocus(),
                         value: emojiController,
