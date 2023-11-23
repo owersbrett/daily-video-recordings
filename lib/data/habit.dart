@@ -34,7 +34,6 @@ class Habit {
   final int value;
   final int unitIncrement;
   final int valueGoal;
-  final int ordinal;
 
   final String suffix;
   final UnitType unitType;
@@ -51,7 +50,6 @@ class Habit {
     required this.value,
     required this.unitIncrement,
     required this.valueGoal,
-    required this.ordinal,
     required this.suffix,
     required this.unitType,
     required this.frequencyType,
@@ -69,7 +67,6 @@ class Habit {
     int? value,
     int? unitIncrement,
     int? valueGoal,
-    int? ordinal,
     String? suffix,
     UnitType? unitType,
     FrequencyType? frequencyType,
@@ -84,7 +81,6 @@ class Habit {
       userId: userId ?? this.userId,
       stringValue: stringValue ?? this.stringValue,
       value: value ?? this.value,
-      ordinal: ordinal ?? this.ordinal,
       unitIncrement: unitIncrement ?? this.unitIncrement,
       valueGoal: valueGoal ?? this.valueGoal,
       suffix: suffix ?? this.suffix,
@@ -107,7 +103,6 @@ class Habit {
       'unitIncrement': unitIncrement,
       'valueGoal': valueGoal,
       'suffix': suffix,
-      'ordinal': ordinal,
       'unitType': unitType.toPrettyString(),
       'frequencyType': frequencyType.toPrettyString(),
       'emoji': emoji,
@@ -125,7 +120,6 @@ class Habit {
       value: 0,
       valueGoal: 1,
       suffix: "",
-      ordinal: 0,
       unitType: UnitType.count,
       emoji: "",
       streakEmoji: "",
@@ -144,7 +138,6 @@ class Habit {
       stringValue: map['stringValue'] as String,
       value: map['value'] as int,
       unitIncrement: map['unitIncrement'] as int,
-      ordinal: (map['ordinal'] ?? 0) as int,
       valueGoal: map['valueGoal'] as int,
       suffix: map['suffix'] as String,
       unitType: UnitType.fromPrettyString(map['unitType']),
@@ -183,7 +176,6 @@ class Habit {
         other.streakEmoji == streakEmoji &&
         other.hexColor == hexColor &&
         other.createDate == createDate &&
-        other.ordinal == ordinal &&
         other.updateDate == updateDate;
   }
 
@@ -202,7 +194,6 @@ class Habit {
         streakEmoji.hashCode ^
         hexColor.hashCode ^
         createDate.hashCode ^
-        ordinal.hashCode ^
         updateDate.hashCode;
   }
 }
