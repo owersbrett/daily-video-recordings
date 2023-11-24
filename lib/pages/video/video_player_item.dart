@@ -87,61 +87,53 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
           height: 100,
         ),
         Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [infoColumn(), Expanded(child: actionColumn())],
-          ),
+          child: Container()
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(child: infoColumn()),
+          ],
         ),
       ],
     );
   }
 
-  Widget actionColumn() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Column(
-          children: [
-            InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => DeleteDialog(
-                    title: "Delete Video?",
-                    description: "Are you sure you want to delete this video?",
-                    onDelete: () {
-                      BlocProvider.of<MultimediaBloc>(context).add(DeleteMultimedia(widget.path));
-                      Navigator.of(ctx).pop();
-                      Navigator.of(context).pop();
-                    },
-                    onCancel: () {
-                      Navigator.of(ctx).pop();
-                    },
-                  ),
-                );
-              },
-              child: const Icon(
-                Icons.delete,
-                size: 40,
-                color: Colors.red,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 12,
-        ),
-        // CircleAnimation(
-        //   child: buildMusicAlbum(data.profilePhoto),
-        // ),
-      ],
+  Widget deleteIcon() {
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (ctx) => DeleteDialog(
+            title: "Delete Video?",
+            description: "Are you sure you want to delete this video?",
+            onDelete: () {
+              BlocProvider.of<MultimediaBloc>(context).add(DeleteMultimedia(widget.path));
+              Navigator.of(ctx).pop();
+              Navigator.of(context).pop();
+            },
+            onCancel: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        );
+      },
+      child: const Icon(
+        Icons.delete,
+        size: 32,
+        color: Colors.red,
+      ),
     );
   }
+
+  
 
   Widget _videoSlider() {
     return Expanded(
       child: Slider(
+        activeColor: Colors.white,
+        inactiveColor: Colors.white.withOpacity(.5),
         value: secondsElapsed.toDouble(),
         min: 0,
         max: _controller.value.duration.inSeconds.toDouble(),
@@ -166,14 +158,10 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(formattedTimer, style: const TextStyle(color: Colors.white)),
           Row(
             children: [
-              const Icon(
-                Icons.music_note,
-                size: 15,
-                color: Colors.white,
-              ),
+          Text(formattedTimer, style: const TextStyle(color: Colors.white)),
+             
               _videoSlider()
             ],
           )
@@ -218,11 +206,19 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
               Positioned(
                   left: 8,
                   top: kToolbarHeight / 2,
-                  child: IconButton(
-                    icon: const Icon(Icons.download),
-                    onPressed: () async {
-                      downloadVideo();
-                    },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.download),
+                        iconSize: 32,
+                        onPressed: () async {
+                          downloadVideo();
+                        },
+                      ),
+                      SizedBox(height: 16,),
+                      deleteIcon()
+                    ],
                   )),
               DVRCloseButton(onPressed: () => Navigator.of(context).pop())
             ],

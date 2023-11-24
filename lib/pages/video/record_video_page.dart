@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:mementoh/pages/video/dvr_close_button.dart';
+import 'package:mementoh/service/media_service.dart';
 import 'package:mementoh/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -20,6 +21,7 @@ class RecordVideoPage extends StatefulWidget {
 }
 
 class _RecordVideoPageState extends State<RecordVideoPage> {
+  int currentClipIndex = 0;
   bool _isRecording = false;
   bool _isPreviewingVideo = false;
   bool videoPlaying = false;
@@ -38,10 +40,9 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     );
   }
 
-  void _toggleBetweenRecordingAndPreviewing() {
+  void _toggleBetweenRecordingAndPreviewing() async {
     setState(() {
-      String clipPath = clips[0].path;
-      _videoPlayerController = VideoPlayerController.file(File(clipPath));
+      _videoPlayerController = VideoPlayerController.file(File(clips[currentClipIndex].path));
       _videoPlayerController.initialize();
 
       _isPreviewingVideo = !_isPreviewingVideo;
@@ -82,8 +83,24 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     });
   }
 
+  void updateClipIndex(bool increment) {
+    setState(() {
+      currentClipIndex = (currentClipIndex + (increment ? 1 : -1)) % clips.length;
+      _videoPlayerController.dispose();
+      _videoPlayerController = VideoPlayerController.file(File(clips[currentClipIndex].path));
+      _videoPlayerController.initialize();
+    });
+  }
+
   Widget _videoPlayerAndRecorder() => _isPreviewingVideo ? _videoPlayer() : _videoRecorder();
   Widget _videoPlayer() => GestureDetector(
+        onHorizontalDragStart: (details) {
+          if (details.localPosition.dx > MediaQuery.of(context).size.width / 2) {
+            updateClipIndex(true);
+          } else {
+            updateClipIndex(false);
+          }
+        },
         onTap: _toggleVideoPlayer,
         child: AspectRatio(
           aspectRatio: _aspectRatio,
@@ -92,12 +109,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
       );
   Widget _videoRecorder() => Column(
         children: [
-          Container(
-            height: kToolbarHeight,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.black,
-          ),
-          CameraPreview(_cameraController),
+          Expanded(child: CameraPreview(_cameraController)),
         ],
       );
   void _toggleVideoPlayer() {

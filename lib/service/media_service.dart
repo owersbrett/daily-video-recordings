@@ -19,17 +19,10 @@ class MediaService {
     path += videoId + "-" + formattedDate;
 
     String mp4Path = path + ".mp4";
+    await MediaService.mergeClipsAndGetPath(videoClips, mp4Path);
     // String txtPath = path + ".txt";
     String jpgPath = path + ".jpg";
-    BytesBuilder combinedBytes = BytesBuilder();
-    for (XFile file in videoClips) {
-      Uint8List bytes = await file.readAsBytes();
-      combinedBytes.add(bytes);
-    }
-
-    Uint8List fullVideoBytes = combinedBytes.toBytes();
     File mp4 = File(mp4Path);
-    await mp4.writeAsBytes(fullVideoBytes);
     File jpg = File(jpgPath);
     await _captureThumbnail(mp4Path, jpgPath);
 
@@ -151,5 +144,35 @@ class MediaService {
       log("Error parsing date from filename: $e");
       return 0; // Default to current time in case of parsing error
     }
+  }
+
+  static Future<String> mergeClipsAndGetPath(List<XFile> clips, String outputPath) async {
+    if (clips.isEmpty) {
+      throw Exception('No clips to merge.');
+    }
+
+    final FlutterFFmpeg _flutterFFmpeg = FlutterFFmpeg();
+
+    String inputCommand = clips.map((clip) => "-i '${clip.path}'").join(' ');
+
+    // Construct filter_complex for both video and audio
+    String filterComplexVideo = clips.asMap().keys.map((i) => "[$i:v]").join('') + "concat=n=${clips.length}:v=1:a=0[video]";
+    String filterComplexAudio = clips.asMap().keys.map((i) => "[$i:a]").join('') + "concat=n=${clips.length}:v=0:a=1[audio]";
+
+    String command = "$inputCommand -filter_complex '$filterComplexVideo;$filterComplexAudio' -map '[video]' -map '[audio]' $outputPath";
+
+    int rc = await _flutterFFmpeg.execute(command).then((rc) {
+      return rc;
+    }, onError: (err) {
+      log("FFmpeg error: $err");
+      return -1;
+    });
+
+    if (rc == 0) {
+      log("Successfully merged clips");
+    } else {
+      log("Failed to merge clips with return code: $rc");
+    }
+    return outputPath;
   }
 }
