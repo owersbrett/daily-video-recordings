@@ -28,7 +28,9 @@ class UpdateHabitPage extends StatefulWidget {
 class _UpdateHabitPageState extends State<UpdateHabitPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emojiController = TextEditingController();
+  TextEditingController streakEmojiController = TextEditingController();
   FocusNode emojiFocusNode = FocusNode();
+  FocusNode streakEmojiFocusNode = FocusNode();
   bool emojiShowing = false;
 
   bool hasCompletedHabit = false;
@@ -113,7 +115,6 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
   final FocusNode _suffixFocus = FocusNode();
   final FocusNode _frequencyFocus = FocusNode();
 
-
   // You might want to initialize these if they have default values
   Color currentColor = Colors.limeAccent;
 
@@ -134,6 +135,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
     habit = widget.habit;
     _stringValueController.text = habit.stringValue;
     emojiController.text = habit.emoji;
+    streakEmojiController.text = habit.streakEmoji;
     colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
   }
 
@@ -233,6 +235,8 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                         }
                       },
                       child: DisplayHabitCard(
+                        emoji: emojiController.text,
+                        streakEmoji: streakEmojiController.text,
                         habitEntity: HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []),
                         progress: progress,
                         checkable: false,
@@ -274,6 +278,19 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
+                      child: CustomFormField(
+                        focusNode: streakEmojiFocusNode,
+                        label: "Streak Emoji",
+                        onChanged: (val) {
+                          setHabit(habit.copyWith(streakEmoji: val));
+                        },
+                        validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Streak Emoji"),
+                        onEditingComplete: () => FocusScope.of(context).unfocus(),
+                        value: streakEmojiController,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
                           Expanded(
@@ -282,11 +299,10 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                               child: InkWell(
                                 onTap: () {
                                   Logger.root.info("Habit: $habit");
-                                  if (_formKey.currentState?.validate() ?? false){
-                                      BlocProvider.of<HabitsBloc>(context).add(UpdateHabit(habit.copyWith(emoji: emojiController.text.trim())));
-                                      Navigator.of(context).pop();
+                                  if (_formKey.currentState?.validate() ?? false) {
+                                    BlocProvider.of<HabitsBloc>(context).add(UpdateHabit(habit.copyWith(emoji: emojiController.text.trim())));
+                                    Navigator.of(context).pop();
                                   }
-                                  
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

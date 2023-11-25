@@ -23,8 +23,10 @@ class CreateHabitPage extends StatefulWidget {
 
 class _CreateHabitPageState extends State<CreateHabitPage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emojiController = TextEditingController(text: "🔥");
+  TextEditingController emojiController = TextEditingController(text: StringUtil.getRandomEmoji());
+  TextEditingController streakEmojiController = TextEditingController(text: "🔥");
   FocusNode emojiFocusNode = FocusNode();
+  FocusNode streakEmojiFocusNode = FocusNode();
   bool emojiShowing = false;
 
   bool hasCompletedHabit = false;
@@ -123,7 +125,14 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
     super.initState();
     _frequencyController.text = "Daily";
     habit = habit.copyWith(
-        stringValue: _stringValueController.text, valueGoal: 1, suffix: "", frequencyType: FrequencyType.daily, hexColor: Colors.red.toHex());
+      stringValue: _stringValueController.text,
+      valueGoal: 1,
+      suffix: "",
+      frequencyType: FrequencyType.daily,
+      hexColor: Colors.red.toHex(),
+      emoji: emojiController.text,
+      streakEmoji: streakEmojiController.text,
+    );
 
     _stringValueFocus.requestFocus();
   }
@@ -199,6 +208,8 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                         habitEntity: HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []),
                         progress: progress,
                         checkable: false,
+                        streakEmoji: habit.streakEmoji,
+                        emoji: habit.emoji,
                       ),
                     ),
                     _habitField(context),
@@ -239,6 +250,19 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
+                      child: CustomFormField(
+                        focusNode: streakEmojiFocusNode,
+                        label: "Streak Emoji",
+                        onChanged: (val) {
+                          setHabit(habit.copyWith(streakEmoji: val));
+                        },
+                        validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Streak Emoji"),
+                        onEditingComplete: () => FocusScope.of(context).unfocus(),
+                        value: streakEmojiController,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
                           Expanded(
@@ -248,7 +272,8 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                                 onTap: () {
                                   Logger.root.info("Habit: $habit");
                                   if (_formKey.currentState?.validate() ?? false) {
-                                    BlocProvider.of<HabitsBloc>(context).add(AddHabit(habit.copyWith(emoji: emojiController.text), widget.dateToAddHabit));
+                                    BlocProvider.of<HabitsBloc>(context)
+                                        .add(AddHabit(habit.copyWith(emoji: emojiController.text), widget.dateToAddHabit));
                                     Navigator.of(context).pop();
                                   }
                                 },

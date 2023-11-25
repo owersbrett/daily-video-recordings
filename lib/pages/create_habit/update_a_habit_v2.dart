@@ -198,7 +198,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                       child: DisplayHabitCard(
                         habitEntity: HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []),
                         progress: progress,
-                        checkable: false,
+                        checkable: false, streakEmoji: habit.streakEmoji, emoji: habit.emoji,
                       ),
                     ),
                     _habitField(context),

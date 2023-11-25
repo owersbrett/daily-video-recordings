@@ -6,10 +6,21 @@ import '../../data/habit_entity.dart';
 import '../../widgets/stylized_checkbox.dart';
 
 class DisplayHabitCard extends StatefulWidget {
-  const DisplayHabitCard({super.key, required this.habitEntity, this.onCheck, this.onUncheck, this.progress = 100, this.checkable = true});
+  const DisplayHabitCard(
+      {super.key,
+      required this.habitEntity,
+      this.onCheck,
+      this.onUncheck,
+      this.progress = 100,
+      this.checkable = true,
+      required this.streakEmoji,
+      required this.emoji});
   final HabitEntity habitEntity;
   final int progress;
   final bool checkable;
+  final String streakEmoji;
+  final String emoji;
+
   Habit get habit => habitEntity.habit;
 
   final VoidCallback? onCheck;
@@ -40,20 +51,6 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
     });
   }
 
-  String get _starBuilder {
-    String stars = "";
-    if (habit.value < 1) {
-      stars = "⭐";
-    } else if (habit.value < 10) {
-      stars = "⭐⭐";
-    } else if (habit.value < 100) {
-      stars = "⭐⭐⭐";
-    }
-    if (_completed) stars += "⭐";
-
-    return stars;
-  }
-
   double get gradientStop => _completed ? 1.0 : habit.value / 100.0;
 
   @override
@@ -81,9 +78,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
                 children: [
                   Row(
                     children: [
-                      const SizedBox(
-                        width: 16
-                      ),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: Container(
                           child: _titleRow(),
@@ -103,7 +98,11 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
                   ),
                 ],
               ),
-              starAndStreakRow(),
+              Positioned(
+                top: 0,
+                left: 8,
+                child: Text(widget.streakEmoji + "365", style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold)),
+              ),
               Positioned(
                   left: 8,
                   bottom: 8,
@@ -118,15 +117,13 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
     );
   }
 
-  Column starAndStreakRow() {
+  Column streak() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-              child: Text(_starBuilder),
-            ),
             Expanded(
               child: Container(),
             ),

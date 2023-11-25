@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../util/date_util.dart';
 import 'habit.dart';
 import 'habit_entry.dart';
 import 'habit_entry_note.dart';
@@ -30,6 +31,8 @@ class HabitEntity extends Equatable {
     for (var entry in previousEntries) {
       if (entry.booleanValue && isConsecutiveDays(initialDate, entry.createDate)) {
         value++;
+      } else if (DateUtil.isSameDay(fromDate, entry.createDate)) {
+        value++;
       } else {
         return value;
       }
@@ -39,6 +42,6 @@ class HabitEntity extends Equatable {
   }
 
   bool isConsecutiveDays(DateTime dateOne, DateTime dateTwo) {
-    return dateOne.difference(dateTwo).inDays.abs() <= 1;
+    return dateOne.difference(dateTwo).inDays.abs() == 1;
   }
 }

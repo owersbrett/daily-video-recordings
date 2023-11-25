@@ -8,6 +8,7 @@ import '../data/habit_entity.dart';
 import '../data/habit_entry.dart';
 import '../util/date_util.dart';
 import 'stylized_checkbox.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 
 class HabitEntryCard extends StatefulWidget {
   const HabitEntryCard({super.key, required this.habit, required this.habitEntry, required this.currentListDate});
@@ -20,6 +21,8 @@ class HabitEntryCard extends StatefulWidget {
 
 class _HabitEntryCardState extends State<HabitEntryCard> {
   String get habitString => habit.stringValue;
+  AudioPlayer audioPlayer = AudioPlayer();
+
   Habit get habit => widget.habit;
   bool buttonsExpanded = false;
   bool noteExpanded = false;
@@ -43,31 +46,28 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     // }
     else {
       if (!widget.habitEntry.booleanValue) {
-        AudioPlayer().play(AssetSource("audio/shimmer.wav"));
+        audioPlayer.setPlayerMode(PlayerMode.lowLatency);
+        audioPlayer.setVolume(0.3);
+        audioPlayer.play(AssetSource("audio/shimmer.wav"));
       }
       BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(
           habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue), BlocProvider.of<ExperienceBloc>(context)));
     }
   }
-  
 
-  String streakEmoji(HabitEntity? habitEntity) {
-    if (habitEntity == null || habitEntity.streakValue(widget.currentListDate) == 0) {
-      return "";
-    }
-    String emoji = widget.habit.streakEmoji.isEmpty ? "🔥" : widget.habit.streakEmoji;
-    return emoji;
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
   }
 
-  String streakCount(HabitEntity? habitEntity) {
-    if (habitEntity == null || habitEntity.streakValue(widget.currentListDate) == 0) {
-      return "";
-    }
-    String stars =
-        (habitEntity.streakValue(widget.currentListDate))
-            .toString();
+  String streakEmoji(HabitEntity? habitEntity) {
+   return habitEntity!.habit.streakEmoji;
+  }
 
-    return stars;
+  Widget streakCount(HabitEntity? habitEntity) {
+    return Text(habitEntity!.streakValue(widget.currentListDate).toString(),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
   }
 
   double get gradientStop => _completed ? 1.0 : habit.value / 100.0;
@@ -160,10 +160,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(streakEmoji(habitEntity), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: Text(streakCount(habitEntity), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
+            Padding(padding: const EdgeInsets.only(top: 6), child: streakCount(habitEntity)),
             Expanded(
               child: Container(),
             ),
