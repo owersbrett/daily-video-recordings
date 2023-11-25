@@ -57,13 +57,13 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   void uncheckHabit(HabitEntity e, BuildContext context) {
     var habitEntry = e.habitEntries.firstWhere((element) => element.habitId == e.habit.id);
     habitEntry = habitEntry.copyWith(booleanValue: !habitEntry.booleanValue);
-    BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(e.habit, habitEntry, BlocProvider.of<ExperienceBloc>(context)));
+    BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(e.habit, habitEntry, BlocProvider.of<ExperienceBloc>(context), currentDay));
   }
 
   void checkHabit(HabitEntity e, BuildContext context) {
     var habitEntry = e.habitEntries.firstWhere((element) => element.habitId == e.habit.id);
     habitEntry = habitEntry.copyWith(booleanValue: !habitEntry.booleanValue);
-    BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(e.habit, habitEntry, BlocProvider.of<ExperienceBloc>(context)));
+    BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(e.habit, habitEntry, BlocProvider.of<ExperienceBloc>(context), currentDay));
   }
 
   List<Widget> dayWidgets(BuildContext context) => days(context);

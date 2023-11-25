@@ -34,14 +34,12 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   late VideoPlayerController _videoPlayerController;
   List<XFile> clips = [];
 
-
   Future updateProgress() async {
     setState(() {
       progress += 1;
     });
     await Future.delayed(const Duration(milliseconds: 25));
   }
-
 
   @override
   void initState() {
@@ -273,7 +271,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                   },
                   icon: const Icon(
                     Icons.delete,
-                    color: rubyLight,
+                    color: lightRuby,
                   )),
             )),
             GestureDetector(
@@ -290,7 +288,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                   width: 55,
                   child: Icon(
                     videoPlaying ? Icons.stop : Icons.play_arrow,
-                    color: videoPlaying ? rubyLight : emeraldLight,
+                    color: videoPlaying ? lightRuby : lightEmerald,
                     size: 55,
                   ),
                 ),
@@ -341,8 +339,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
               ),
             ),
           ),
-                  _isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
-
+          _isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
         ],
       ),
     );

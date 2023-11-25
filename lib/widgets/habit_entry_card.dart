@@ -51,7 +51,11 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
         audioPlayer.play(AssetSource("audio/shimmer.wav"));
       }
       BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(
-          habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue), BlocProvider.of<ExperienceBloc>(context)));
+        habit,
+        widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue),
+        BlocProvider.of<ExperienceBloc>(context),
+        widget.currentListDate
+      ));
     }
   }
 
@@ -62,12 +66,11 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
   }
 
   String streakEmoji(HabitEntity? habitEntity) {
-   return habitEntity!.habit.streakEmoji;
+    return habitEntity!.habit.streakEmoji;
   }
 
   Widget streakCount(HabitEntity? habitEntity) {
-    return Text(habitEntity!.streakValue(widget.currentListDate).toString(),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
+    return Text(habitEntity!.streakValue(widget.currentListDate).toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
   }
 
   double get gradientStop => _completed ? 1.0 : habit.value / 100.0;

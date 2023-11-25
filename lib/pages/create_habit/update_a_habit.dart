@@ -308,7 +308,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(color: Colors.black, width: 2),
-                                      color: emeraldLight),
+                                      color: lightEmerald),
                                   height: MediaQuery.of(context).size.height * .2,
                                   child: Center(
                                       child: Text(

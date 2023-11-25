@@ -44,7 +44,7 @@ class CustomProgressIndicator extends StatelessWidget {
     if (value < 10) {
       return cs.outlineVariant;
     } else if (value < 20) {
-      return rubyLight;
+      return lightRuby;
     } else if (value < 30) {
       return cs.surfaceVariant;
     } else if (value < 40) {

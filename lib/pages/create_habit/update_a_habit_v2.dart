@@ -198,7 +198,9 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                       child: DisplayHabitCard(
                         habitEntity: HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []),
                         progress: progress,
-                        checkable: false, streakEmoji: habit.streakEmoji, emoji: habit.emoji,
+                        checkable: false,
+                        streakEmoji: habit.streakEmoji,
+                        emoji: habit.emoji,
                       ),
                     ),
                     _habitField(context),
@@ -245,7 +247,6 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                         ),
                       ),
                     ),
-                    
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -263,7 +264,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(color: Colors.black, width: 2),
-                                      color: emeraldLight),
+                                      color: lightEmerald),
                                   height: MediaQuery.of(context).size.height * .2,
                                   child: Center(
                                       child: Text(

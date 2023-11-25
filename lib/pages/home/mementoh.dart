@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mementoh/pages/home/custom_circular_indicator_v2.dart';
 import 'package:mementoh/pages/home/now_data.dart';
+import 'package:mementoh/pages/home/orbital_indicator.dart';
+import 'package:mementoh/pages/home/orbital_page.dart';
 import 'package:mementoh/widgets/custom_circular_indicator.dart';
 import '../../bloc/experience/experience.dart';
+import '../../bloc/habits/habits.dart';
+import '../../navigation/navigation.dart';
 
 class Mementoh extends StatefulWidget {
   const Mementoh({
@@ -17,11 +22,11 @@ class Mementoh extends StatefulWidget {
 }
 
 class _MementohState extends State<Mementoh> {
+  static String experienceTag = "experience-hero";
   DateTime get currentTime => DateTime.now();
   Duration countdownDuration = const Duration(hours: 1);
   Duration get remainingTime => countdownDuration - currentTime.difference(widget.nowData.startTimerTimer ?? DateTime.now());
   double get remainingDurationExpressedAsDouble => remainingTime.inSeconds / countdownDuration.inSeconds;
-  
 
   double getremainingDurationPercentage(Duration originalDuration, Duration remainingDuration) {
     if (originalDuration.inSeconds == 0) {
@@ -30,6 +35,26 @@ class _MementohState extends State<Mementoh> {
     double percentage = (remainingDuration.inSeconds / originalDuration.inSeconds) * 100;
     return percentage.clamp(0, 100); // Ensures the value is between 0 and 100
   }
+
+  Hero hero(double percentageToNextLevel, [Size size =const  Size(300, 300)]) => Hero(
+        tag: experienceTag,
+        child: orbitalIndicator(percentageToNextLevel, size),
+      );
+  Widget orbitalIndicatorPage(double percentageToNextLevel) => OrbitalPage(
+        tag: experienceTag,
+        progress: percentageToNextLevel,
+        hero: hero(percentageToNextLevel, Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.width)),
+      );
+  Widget orbitalIndicator(double percentageToNextLevel, Size size) => BlocBuilder<HabitsBloc, HabitsState>(
+        builder: (context, state) {
+          return OrbitalIndicator(
+            progress: percentageToNextLevel,
+            key: const ValueKey("weekday-hero"),
+            size: size,
+            incrementCount: state.todaysHabitEntries.length,
+          );
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +95,20 @@ class _MementohState extends State<Mementoh> {
                   ),
                 ),
                 const SizedBox(height: 16), // Space between subtitle and button
-                CustomCircularIndicator(
-                  expanded: true,
-                  score: (percentageToNextLevel * 100).toInt(),
-                  key: const ValueKey("weekday-hero"),
-                  textColor: Colors.white,
-                  centerValue: level.toString(),
-                  title: "Level",
-                ),
+                // CustomCircularIndicator(
+                //   expanded: true,
+                //   score: (percentageToNextLevel * 100).toInt(),
+                //   key: const ValueKey("weekday-hero"),
+                //   textColor: Colors.white,
+                //   centerValue: level.toString(),
+                //   title: "Level",
+                // ),
+                GestureDetector(
+                    onTap: () {
+                      Navigation.createRoute(orbitalIndicatorPage(percentageToNextLevel), context, AnimationEnum.fadeIn);
+                    },
+                    child: hero(percentageToNextLevel)),
+                // CustomProgressIndicator(progress: percentageToNextLevel * 100, ),
                 const SizedBox(height: 18), // Space between subtitle and button
                 // const SizedBox(height: 18), // Space between subtitle and button
                 // const Center(
@@ -108,7 +139,6 @@ class _MementohState extends State<Mementoh> {
                     Text("- Gain Experience To Level Up", style: TextStyle(color: Colors.white, fontSize: 12)),
                     SizedBox(height: 12), // Space between subtitle and button
                     Text("- Access Weekly Reports", style: TextStyle(color: Colors.white, fontSize: 12)),
-
                   ],
                 ),
                 // GestureDetector(

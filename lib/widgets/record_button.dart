@@ -8,7 +8,7 @@ class RecordingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: rubyLight.withOpacity(.5),
+      backgroundColor: lightRuby.withOpacity(.5),
       child: Container(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
@@ -19,7 +19,7 @@ class RecordingButton extends StatelessWidget {
           child: Icon(
             CupertinoIcons.circle_fill,
             size: 36,
-            color: rubyLight,
+            color: lightRuby,
           ),
         ),
       ),

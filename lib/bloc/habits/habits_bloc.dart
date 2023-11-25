@@ -54,7 +54,6 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   }
 
   List<DateTime> getInterval(DateTime now) {
-
     DateTime startInterval = now.subtract(const Duration(days: 3));
     DateTime endInterval = now.add(const Duration(days: 7));
     return [startInterval, endInterval];
@@ -140,7 +139,13 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   Future _updateHabitEntry(UpdateHabitEntry event, Emitter<HabitsState> emit) async {
     if (state is HabitsLoaded) {
       await habitEntryRepository.update(event.habitEntry);
-      var habitEntities = await habitRepository.getHabitEntities(event.habit.userId);
+      Map<int, HabitEntity> habitEntities = Map<int, HabitEntity>.from(state.habitMap);
+      HabitEntity entity = habitEntities[event.habit.id!]!.copyWith();
+      List<HabitEntry> habitEntries = List<HabitEntry>.from(entity.habitEntries);
+      
+      habitEntries.removeWhere((element) => element.id == event.habitEntry.id);
+      habitEntries.add(event.habitEntry);
+      habitEntities[event.habit.id!] = entity.copyWith(habitEntries: habitEntries);
       if (event.habitEntry.booleanValue) {
         event.experienceBloc.add(ExperienceAdded(Experience.fromHabitEntry(event.habit, event.habitEntry)));
       } else {

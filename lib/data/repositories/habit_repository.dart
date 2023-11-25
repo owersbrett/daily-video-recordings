@@ -57,8 +57,26 @@ class HabitRepository implements IHabitRepository {
   @override
   Future<Map<int, HabitEntity>> getHabitEntities(int userId, [DateTime? startingRange, DateTime? endingRange]) async {
     Map<int, HabitEntity> habitEntityMap = {};
+    DateTime now = DateTime.now();
+    DateTime weekAgo = now.subtract(Duration(days: 7));
+    DateTime weekAhead = now.add(Duration(days: 7));
 
     StringBuffer buffer = StringBuffer();
+    buffer.write("SELECT ");
+    buffer.write(
+        "H.id id, H.userId userId, H.stringValue stringValue, H.value value, H.unitIncrement unitIncrement, H.valueGoal valueGoal, H.suffix suffix, H.unitType unitType, H.frequencyType frequencyType, H.emoji emoji, H.streakEmoji streakEmoji, H.hexColor hexColor, H.createDate createDate, H.updateDate updateDate, ");
+    buffer.write(
+        "HE.id HE_ID, HE.booleanValue HE_BOOLEAN_VALUE, HE.integerValue HE_INTEGER_VALUE, HE.stringValue HE_STRING_VALUE, HE.createDate HE_CREATE_DATE, HE.updateDate HE_UPDATE_DATE");
+    buffer.write(" FROM  ");
+    buffer.write("$tableName H ");
+    buffer.write("LEFT JOIN ");
+    buffer.write("${HabitEntry.tableName} HE on H.id = HE.habitId ");
+    buffer.write("WHERE ");
+    buffer.write("H.userId = $userId ");
+    if (startingRange != null && endingRange != null) {
+      buffer.write("AND HE.createDate BETWEEN ${weekAgo.millisecondsSinceEpoch} AND ${weekAhead.millisecondsSinceEpoch} ");
+    }
+    buffer.write("UNION ");
     buffer.write("SELECT ");
     buffer.write(
         "H.id id, H.userId userId, H.stringValue stringValue, H.value value, H.unitIncrement unitIncrement, H.valueGoal valueGoal, H.suffix suffix, H.unitType unitType, H.frequencyType frequencyType, H.emoji emoji, H.streakEmoji streakEmoji, H.hexColor hexColor, H.createDate createDate, H.updateDate updateDate, ");
@@ -77,7 +95,6 @@ class HabitRepository implements IHabitRepository {
     for (var habitHabitEntryRow in response) {
       Habit habit = Habit.fromMap(habitHabitEntryRow);
       try {
-
         if (habitHabitEntryRow.containsKey("HE_ID")) {
           HabitEntry habitEntry = HabitEntry(
             id: habitHabitEntryRow["HE_ID"] as int,
@@ -113,10 +130,8 @@ class HabitRepository implements IHabitRepository {
       } catch (e) {
         log("YOU FOUND ME!");
         log(e.toString());
-
       }
     }
-
 
     return habitEntityMap;
   }

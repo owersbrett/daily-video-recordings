@@ -170,14 +170,14 @@ class HomePageBottom extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildVerticalProgressBar(value4, rubyDark, (nowData.currentTime.second).toString()),
+          _buildVerticalProgressBar(value4, darkRuby, (nowData.currentTime.second).toString()),
           _buildVerticalProgressBar(
               value5,
-              goldDark,
+              darkGold,
               nowData.formattedMonth(DateTime.now()) +
                   " - " +
                   nowData.formattedMonth(DateTime(DateTime.now().year, DateTime.now().month + 1, 1).subtract(const Duration(days: 1)))),
-          _buildVerticalProgressBar(value6, emeraldDark, nowData.formattedDate + " / 365 Days"),
+          _buildVerticalProgressBar(value6, darkEmerald, nowData.formattedDate + " / 365 Days"),
         ],
       ),
     );

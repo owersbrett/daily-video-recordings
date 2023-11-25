@@ -32,5 +32,6 @@ class UpdateHabitEntry extends HabitsEvent {
   final Habit habit;
   final HabitEntry habitEntry;
   final ExperienceBloc experienceBloc;
-  UpdateHabitEntry(this.habit, this.habitEntry, this.experienceBloc);
+  final DateTime updateDate;
+  UpdateHabitEntry(this.habit, this.habitEntry, this.experienceBloc, this.updateDate);
 }

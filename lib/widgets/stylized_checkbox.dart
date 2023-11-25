@@ -7,7 +7,7 @@ class StylizedCheckbox extends StatelessWidget {
   final Color color;
   final Size size;
 
-  const StylizedCheckbox({super.key, required this.isChecked, required this.onTap, this.color = emeraldLight, this.size = const Size(80, 80)});
+  const StylizedCheckbox({super.key, required this.isChecked, required this.onTap, this.color = lightEmerald, this.size = const Size(80, 80)});
 
   @override
   Widget build(BuildContext context) {
