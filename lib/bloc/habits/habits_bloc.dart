@@ -54,7 +54,8 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   }
 
   List<DateTime> getInterval(DateTime now) {
-    DateTime startInterval = now.subtract(const Duration(days: 7));
+
+    DateTime startInterval = now.subtract(const Duration(days: 3));
     DateTime endInterval = now.add(const Duration(days: 7));
     return [startInterval, endInterval];
   }
@@ -70,16 +71,16 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     for (var habit in habits) {
       switch (habit.frequencyType) {
         case FrequencyType.daily:
-          HabitEntry t = HabitEntry.fromHabit(habit);
+          HabitEntry t = HabitEntry.fromHabit(habit, day);
           t = t.copyWith(updateDate: day, createDate: day);
           await habitEntryRepository.createIfDoesntExistForDate(t);
           break;
         case FrequencyType.everyOtherDay:
-          HabitEntry t = HabitEntry.fromHabit(habit);
+          HabitEntry t = HabitEntry.fromHabit(habit, day);
           t = t.copyWith(updateDate: day, createDate: day);
           await habitEntryRepository.createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(t);
         case FrequencyType.weekly:
-          HabitEntry t = HabitEntry.fromHabit(habit);
+          HabitEntry t = HabitEntry.fromHabit(habit, day);
           t = t.copyWith(updateDate: day, createDate: day);
           await habitEntryRepository.createForTodayIfDoesntExistBetweenStartDateAndEndDate(t, beginningOfSixDaysAgo, endOfSixDaysFromNow);
           break;
@@ -89,12 +90,11 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     }
   }
 
-
   Future _addHabit(AddHabit event, Emitter<HabitsState> emit) async {
     if (state is HabitsLoaded) {
       Habit habit = event.habit.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
       habit = await habitRepository.create(habit);
-      HabitEntry habitEntry = HabitEntry.fromHabit(habit);
+      HabitEntry habitEntry = HabitEntry.fromHabit(habit, habit.createDate);
       habitEntry = habitEntry.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
       habitEntry = await habitEntryRepository.create(habitEntry);
       Map<int, HabitEntity> habitEntities = await habitRepository.getHabitEntities(event.habit.userId);

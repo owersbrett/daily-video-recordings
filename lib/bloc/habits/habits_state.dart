@@ -23,7 +23,7 @@ abstract class HabitsState extends Equatable {
   /// -3 days ago - 3 days from now [-3,-2,-1,0,1,2,3]
   Map<int, List<HabitEntity>> segregatedHabits() => {};
   @override
-  List<Object?> get props => [currentDate.day, ...habitMap.values.map((e) => e.habitEntries).toList()];
+  List<Object?> get props => [currentDate.day, ...(habitMap.values.map((e) => e.habitEntries).toList())];
 
   List<HabitEntry> get todaysHabitEntries => [];
   List<HabitEntry> get weeksHabitEntries => [];
@@ -72,6 +72,7 @@ class HabitsLoaded extends HabitsState {
       var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
       return [...previousValue, ...filteredEntries];
     });
+  
     return todaysHabitEntries;
   }
 
@@ -145,7 +146,7 @@ class HabitsLoaded extends HabitsState {
   @override
   Map<int, List<HabitEntry>> get getWeekOfHabitEntrys {
     Map<int, List<HabitEntry>> weekOfHabitEntrys = {};
-    
+
     return weekOfHabitEntrys;
   }
 }

@@ -45,12 +45,12 @@ class HabitEntry {
     return HabitEntry(habitId: -1, unitType: UnitType.blank, createDate: DateTime.now(), updateDate: DateTime.now(), booleanValue: false);
   }
 
-  static HabitEntry fromHabit(Habit habit) {
+  static HabitEntry fromHabit(Habit habit, DateTime date) {
     return HabitEntry(
       habitId: habit.id!,
       unitType: habit.unitType,
-      createDate: DateTime.now(),
-      updateDate: DateTime.now(), booleanValue: false,
+      createDate: date.add(Duration(hours: 1)),
+      updateDate: date.add(Duration(hours: 1)), booleanValue: false,
     );
   }
 

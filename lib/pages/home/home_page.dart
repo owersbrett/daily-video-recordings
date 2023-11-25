@@ -98,6 +98,7 @@ class _HomePageState extends State<HomePage> {
                     appBar: AppBar(
                       backgroundColor: Colors.white,
                       title: DailyAppBar(
+                        currentDate: state.currentDate,
                         icon: IconButton(
                           icon: const Icon(Icons.add_circle),
                           iconSize: 32,

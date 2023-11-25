@@ -50,7 +50,7 @@ class HabitEntryRepository implements IHabitEntryRepository {
   
   @override
   Future createIfDoesntExistForDate(HabitEntry t)async {
-    DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day);
+    DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day).subtract(Duration(seconds: 1));
     DateTime end = DateTime(t.createDate.year, t.createDate.month, t.createDate.day, 23, 59, 59);
     var q = await db.query(tableName, where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
     if(q.isEmpty){

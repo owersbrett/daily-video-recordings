@@ -77,7 +77,7 @@ class HabitRepository implements IHabitRepository {
     for (var habitHabitEntryRow in response) {
       Habit habit = Habit.fromMap(habitHabitEntryRow);
       try {
-        log(habitHabitEntryRow.toString());
+
         if (habitHabitEntryRow.containsKey("HE_ID")) {
           HabitEntry habitEntry = HabitEntry(
             id: habitHabitEntryRow["HE_ID"] as int,
