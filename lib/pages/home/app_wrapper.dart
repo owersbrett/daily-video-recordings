@@ -11,6 +11,7 @@ import 'package:mementoh/data/repositories/user_repository.dart';
 import 'package:mementoh/pages/home/user_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:sqflite_common/sqlite_api.dart';
 import '../../bloc/multimedia/multimedia.dart';
 import '../../bloc/user/user_bloc.dart';
 import '../../data/repositories/multimedia_repository.dart';
@@ -25,8 +26,10 @@ class AppWrapper extends StatelessWidget {
       required this.experienceRepository,
       required this.habitRepository,
       required this.habitEntryRepository,
-      required this.habitEntryNoteRepository});
+      required this.habitEntryNoteRepository,
+      required this.db});
 
+  final Database db;
   final IUserRepository userRepository;
   final IMultimediaRepository multimediaRepository;
   final IDomainRepository domainRepository;
@@ -43,6 +46,7 @@ class AppWrapper extends StatelessWidget {
         RepositoryProvider(create: (context) => multimediaRepository),
         RepositoryProvider(create: (context) => domainRepository),
         RepositoryProvider(create: (context) => experienceRepository),
+        RepositoryProvider(create: (context) => db),
         RepositoryProvider(create: (context) => habitRepository),
         RepositoryProvider(create: (context) => habitEntryRepository),
         RepositoryProvider(create: (context) => habitEntryNoteRepository),

@@ -38,11 +38,27 @@ const ColorScheme myColorScheme = ColorScheme(
 );
 
 final ThemeData theme = ThemeData(
+  tabBarTheme: TabBarTheme(
+    
+    labelColor: Colors.black,
+    unselectedLabelColor: Colors.black.withOpacity(.5),
+    dividerColor: Colors.white,
+    overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+    indicatorColor: emerald
+  
+  ),
   // This is the theme of your application.
   //
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Colors.black,
+    selectionColor: Colors.black.withOpacity(.3),
+    selectionHandleColor: Colors.black,
+  ),
+  
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white
   ),
+progressIndicatorTheme: ProgressIndicatorThemeData(color: emerald, refreshBackgroundColor: emerald.withOpacity(.3), linearTrackColor: emerald.withOpacity(.3)),
   dropdownMenuTheme:
       const DropdownMenuThemeData(textStyle: TextStyle(color: Colors.white)),
   textTheme: const TextTheme(

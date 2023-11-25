@@ -21,7 +21,10 @@ class RecordVideoPage extends StatefulWidget {
 }
 
 class _RecordVideoPageState extends State<RecordVideoPage> {
+  double progress = 0;
+  bool _isSaving = false;
   int currentClipIndex = 0;
+
   bool _isRecording = false;
   bool _isPreviewingVideo = false;
   bool videoPlaying = false;
@@ -30,6 +33,15 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   late CameraController _cameraController;
   late VideoPlayerController _videoPlayerController;
   List<XFile> clips = [];
+
+
+  Future updateProgress() async {
+    setState(() {
+      progress += 1;
+    });
+    await Future.delayed(const Duration(milliseconds: 25));
+  }
+
 
   @override
   void initState() {
@@ -104,7 +116,17 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
         onTap: _toggleVideoPlayer,
         child: AspectRatio(
           aspectRatio: _aspectRatio,
-          child: VideoPlayer(_videoPlayerController),
+          child: Column(
+            children: [
+              Expanded(child: VideoPlayer(_videoPlayerController)),
+              LinearProgressIndicator(
+                value: progress,
+                color: emerald,
+                minHeight: kToolbarHeight,
+                backgroundColor: emerald.withOpacity(.3),
+              )
+            ],
+          ),
         ),
       );
   Widget _videoRecorder() => Column(
@@ -216,6 +238,9 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   }
 
   void _saveVideos() {
+    setState(() {
+      _isSaving = true;
+    });
     BlocProvider.of<MultimediaBloc>(context).add(AddMultimedia(clips, context));
   }
 
@@ -295,22 +320,30 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.black,
-        child: Scaffold(
-          // The CameraPreview widget displays the live camera feed to the user
-          body: Stack(
-            children: [
-              Column(
-                children: [
-                  Expanded(child: _videoPlayerAndRecorder()),
-                ],
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              color: Colors.black,
+              child: Scaffold(
+                // The CameraPreview widget displays the live camera feed to the user
+                body: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Expanded(child: _videoPlayerAndRecorder()),
+                      ],
+                    ),
+                    _closeButton(),
+                    _controls()
+                  ],
+                ),
               ),
-              _closeButton(),
-              _controls()
-            ],
+            ),
           ),
-        ),
+                  _isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
+
+        ],
       ),
     );
   }

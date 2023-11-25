@@ -4,9 +4,13 @@ import 'package:mementoh/service/admin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mementoh/widgets/today_is_widget.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../bloc/user/user.dart';
+import '../navigation/navigation.dart';
+import '../service/database_service.dart';
 import '../util/date_util.dart';
+import 'sql_editor.dart';
 
 class DailyAppBar extends StatefulWidget {
   const DailyAppBar({super.key, required this.icon, required this.currentDate});
@@ -60,12 +64,12 @@ class _DailyAppBarState extends State<DailyAppBar> {
                               Container(
                                 height: 100,
                                 child: CupertinoButton(
-                                
                                   onPressed: () {
                                     if (currentDay == null) {
                                       return;
                                     }
-                                    BlocProvider.of<HabitsBloc>(ctx).add(FetchHabits(BlocProvider.of<UserBloc>(context).state.user.id!, DateTime.now()));
+                                    BlocProvider.of<HabitsBloc>(ctx)
+                                        .add(FetchHabits(BlocProvider.of<UserBloc>(context).state.user.id!, DateTime.now()));
                                     Navigator.of(ctx).pop();
                                   },
                                   child: const Text(
@@ -119,29 +123,30 @@ class _DailyAppBarState extends State<DailyAppBar> {
             // ),
             IconButton(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text(
-                      "Admin Service",
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: AdminService.adminCommands
-                          .map(
-                            (e) => TextButton(
-                              onPressed: () => AdminService.handleAdminCommand(context, e).then((value) => Navigator.of(ctx).pop()),
-                              child: Text(
-                                e,
-                                style: const TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ),
-                );
+                Navigation.createRoute(SQLEditor(db: RepositoryProvider.of<Database>(context),), context, AnimationEnum.fadeIn);
+                // showDialog(
+                //   context: context,
+                //   builder: (ctx) => AlertDialog(
+                //     title: const Text(
+                //       "Admin Service",
+                //       style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                //     ),
+                //     content: Column(
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: AdminService.adminCommands
+                //           .map(
+                //             (e) => TextButton(
+                //               onPressed: () => AdminService.handleAdminCommand(context, e).then((value) => Navigator.of(ctx).pop()),
+                //               child: Text(
+                //                 e,
+                //                 style: const TextStyle(color: Colors.black),
+                //               ),
+                //             ),
+                //           )
+                //           .toList(),
+                //     ),
+                //   ),
+                // );
               },
               icon: const Icon(Icons.admin_panel_settings),
             ),

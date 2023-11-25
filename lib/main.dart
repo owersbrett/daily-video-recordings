@@ -65,6 +65,7 @@ class MyApp extends StatelessWidget {
       habitRepository: habitRepository,
       habitEntryRepository: habitEntryRepository,
       habitEntryNoteRepository: habitEntryNoteRepository,
+      db: db
     );
   }
 }
