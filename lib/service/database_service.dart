@@ -27,9 +27,10 @@ class DatabaseService {
     return _singleton;
   }
 
+  static String schemaQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'";
   static Future<void> logTableColumns(Database database) async {
     // First, get all table names (except sqlite system tables)
-    var tableNames = await database.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+    var tableNames = await database.rawQuery(DatabaseService.schemaQuery);
 
     // Iterate over each table
     for (var tableMap in tableNames) {
