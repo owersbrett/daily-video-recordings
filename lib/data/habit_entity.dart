@@ -32,7 +32,10 @@ class HabitEntity extends Equatable {
       if (entry.booleanValue && isConsecutiveDays(initialDate, entry.createDate)) {
         value++;
       } else if (DateUtil.isSameDay(fromDate, entry.createDate)) {
+        if (entry.booleanValue){
+
         value++;
+        }
       } else {
         return value;
       }
