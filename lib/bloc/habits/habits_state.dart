@@ -23,7 +23,7 @@ abstract class HabitsState extends Equatable {
   /// -3 days ago - 3 days from now [-3,-2,-1,0,1,2,3]
   Map<int, List<HabitEntity>> segregatedHabits() => {};
   @override
-  List<Object?> get props => [currentDate.day, ...habitMap.values];
+  List<Object?> get props => [currentDate.day, ...habitMap.values.map((e) => e.habitEntries).toList()];
 
   List<HabitEntry> get todaysHabitEntries => [];
   List<HabitEntry> get weeksHabitEntries => [];
