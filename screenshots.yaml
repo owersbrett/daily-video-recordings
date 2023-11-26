@@ -1,0 +1,13 @@
+tests:
+  - test_driver/app.dart
+
+staging: /tmp/screenshots
+
+devices:
+  ios:
+    iPhone 11 Pro Max:
+       frame: true
+  android:
+    Nexus 6P:
+      frame: true
+    

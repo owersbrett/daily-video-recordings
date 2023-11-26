@@ -1,4 +1,5 @@
 import 'package:mementohr/pages/create_habit/display_habit_card.dart';
+import 'package:mementohr/tooltip_text.dart';
 import 'package:mementohr/util/color_util.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -203,12 +204,15 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           pickColor();
                         }
                       },
-                      child: DisplayHabitCard(
-                        habitEntity: HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []),
-                        progress: progress,
-                        checkable: false,
-                        streakEmoji: habit.streakEmoji,
-                        emoji: habit.emoji,
+                      child: Tooltip(
+                        message: TooltipText.getHabitCardTooltip(habit.stringValue),
+                        child: DisplayHabitCard(
+                          habitEntity: HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []),
+                          progress: progress,
+                          checkable: false,
+                          streakEmoji: habit.streakEmoji,
+                          emoji: habit.emoji,
+                        ),
                       ),
                     ),
                     _habitField(context),

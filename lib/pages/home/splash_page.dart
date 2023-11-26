@@ -7,6 +7,7 @@ import '../../bloc/habits/habits.dart';
 import '../../bloc/user/user_bloc.dart';
 import '../../data/habit.dart';
 import '../../data/user.dart';
+import '../../tooltip_text.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({required this.user, super.key});
@@ -46,16 +47,19 @@ class _SplashPageState extends State<SplashPage> {
       .toList();
 
   Widget chip(Habit habit) {
-    return Material(
-      elevation: 5,
-      borderRadius: BorderRadius.circular(8),
-      color: habitsToAdd.contains(habit) ? Colors.black : Colors.white,
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            habit.stringValue,
-            style: TextStyle(color: habitsToAdd.contains(habit) ? Colors.white : Colors.black, fontSize: 14),
+    return Tooltip(
+      message: TooltipText.getHabitCardTooltip(habit.stringValue),
+      child: Material(
+        elevation: 5,
+        borderRadius: BorderRadius.circular(8),
+        color: habitsToAdd.contains(habit) ? Colors.black : Colors.white,
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              habit.stringValue,
+              style: TextStyle(color: habitsToAdd.contains(habit) ? Colors.white : Colors.black, fontSize: 14),
+            ),
           ),
         ),
       ),
@@ -74,11 +78,14 @@ class _SplashPageState extends State<SplashPage> {
         child: Container(
           color: Colors.white,
           child: Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                BlocProvider.of<HabitsBloc>(context).add(AddHabits(habitsToAdd, DateTime.now(), widget.user.id!, close));
-              },
-              child: Icon(Icons.check),
+            floatingActionButton: Tooltip(
+              message: TooltipText.clickCheck,
+              child: FloatingActionButton(
+                onPressed: () {
+                  BlocProvider.of<HabitsBloc>(context).add(AddHabits(habitsToAdd, DateTime.now(), widget.user.id!, close));
+                },
+                child: Icon(Icons.check),
+              ),
             ),
             body: Padding(
               padding: EdgeInsets.all(24.0),
