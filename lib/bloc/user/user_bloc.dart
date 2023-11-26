@@ -32,7 +32,6 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
 
   Future _splashPageRequested(SplashPageRequested event, Emitter<UserState> emit) async {
     if (state is UserLoaded) {
-      var loaded = state as UserLoaded;
           List<Experience> experienceList = await experienceRepository.getAll();
 
       emit(UserLoaded(state.user, experienceList, false));
@@ -53,7 +52,6 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
       List<Experience> experienceList = await experienceRepository.getAll();
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-      sharedPreferences.setBool("hasSeenSplashPage", false);
       bool hasSeenSharedPreferences = sharedPreferences.getBool("hasSeenSplashPage") ?? false;
       emit(UserLoaded(user, experienceList, hasSeenSharedPreferences));
     } catch (e) {
