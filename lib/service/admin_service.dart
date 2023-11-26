@@ -117,8 +117,8 @@ class AdminService {
 
     // Financial Habits
     habits.add(Habit.fromString(userId, "Budgeting", "💰", "📝"));
-    habits.add(Habit.fromString(userId, "Saving 10\$", "🐷", "💸"));
-    habits.add(Habit.fromString(userId, "Investing 100\$", "💹", "📊"));
+    habits.add(Habit.fromString(userId, "Save Money", "🐷", "💸"));
+    habits.add(Habit.fromString(userId, "Market Research", "💹", "📊"));
     habits.add(Habit.fromString(userId, "Avoid Unnecessary Debt", "❌💳", "🚫"));
     habits.add(Habit.fromString(userId, "Review Finances", "🔍💵", "📑"));
 

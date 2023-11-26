@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:mementohr/data/frequency_type.dart';
 import 'package:mementohr/data/unit_type.dart';
+import 'package:mementohr/theme/theme.dart';
 import 'package:mementohr/util/color_util.dart';
 
 import 'user.dart';
@@ -114,7 +115,7 @@ class Habit {
     };
   }
 
-  factory Habit.empty() {
+  factory Habit.empty([Color color = emerald]) {
     return Habit(
       unitIncrement: 1,
       stringValue: "",
@@ -124,7 +125,7 @@ class Habit {
       unitType: UnitType.count,
       emoji: "",
       streakEmoji: "",
-      hexColor: Colors.black.toHex(),
+      hexColor: color.toHex(),
       createDate: DateTime.now(),
       updateDate: DateTime.now(),
       frequencyType: FrequencyType.daily,

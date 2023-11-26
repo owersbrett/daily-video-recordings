@@ -54,6 +54,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
         keyboardType: widget.keyboardType,
         focusNode: widget.focusNode,
         decoration: InputDecoration(
+          
           suffixIcon: GestureDetector(
             onTap: () {
               controller.clear();
@@ -73,7 +74,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
                 widget.label,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),

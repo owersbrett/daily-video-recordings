@@ -1,4 +1,6 @@
 import 'package:mementohr/pages/create_habit/display_habit_card.dart';
+import 'package:mementohr/service/admin_service.dart';
+import 'package:mementohr/theme/theme.dart';
 import 'package:mementohr/tooltip_text.dart';
 import 'package:mementohr/util/color_util.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:mementohr/pages/video/dvr_close_button.dart';
 import 'package:mementohr/widgets/custom_form_field.dart';
 import 'package:mementohr/widgets/stylized_checkbox.dart';
 import '../../bloc/habits/habits.dart';
+import '../../bloc/user/user_bloc.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entity.dart';
 import '../../util/string_util.dart';
@@ -23,6 +26,7 @@ class CreateHabitPage extends StatefulWidget {
 
 class _CreateHabitPageState extends State<CreateHabitPage> {
   final _formKey = GlobalKey<FormState>();
+  int habitsIndex = 0;
   TextEditingController emojiController = TextEditingController(text: StringUtil.getRandomEmoji());
   TextEditingController streakEmojiController = TextEditingController(text: "🔥");
   FocusNode emojiFocusNode = FocusNode();
@@ -31,9 +35,9 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
 
   bool hasCompletedHabit = false;
   bool hasFocusedOnFrequency = false;
-  TextEditingController colorTextEdittingController = TextEditingController(text: "Red");
+  TextEditingController colorTextEdittingController = TextEditingController();
   bool hasFocusedOnColor = false;
-  Habit habit = Habit.empty();
+  Habit habit = Habit.empty(ColorUtil.randomColor());
   bool get complete => progress == 100;
   int get progress {
     int _progress = 0;
@@ -112,6 +116,8 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   final FocusNode _frequencyFocus = FocusNode();
   Color currentColor = Colors.limeAccent;
 
+  List<Habit> get exampleHabits => AdminService.get50Habits(BlocProvider.of<UserBloc>(context).state.user.id!, true);
+
   void onPickColor(Color color) {
     setState(() {
       habit = habit.copyWith(hexColor: '#${color.value.toRadixString(16).padLeft(8, '0')}');
@@ -129,11 +135,11 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
       valueGoal: 1,
       suffix: "",
       frequencyType: FrequencyType.daily,
-      hexColor: Colors.red.toHex(),
+      hexColor: ColorUtil.randomColor().toHex(),
       emoji: emojiController.text,
       streakEmoji: streakEmojiController.text,
     );
-
+    colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
     _stringValueFocus.requestFocus();
   }
 
@@ -164,7 +170,68 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton:
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.small(
+              backgroundColor: lightEmerald,
+              onPressed: () {
+                 setState(() {
+                habitsIndex = habitsIndex - 1;
+                if (habitsIndex < 0) {
+                  habitsIndex = exampleHabits.length - 1;
+                }
+                setHabit(habit.copyWith(stringValue: exampleHabits[habitsIndex].stringValue));
+                _stringValueController.text = exampleHabits[habitsIndex].stringValue;
+              });
+              },
+              child: Icon(
+                color: Colors.white,
+                Icons.arrow_left,
+                size: 35,
+              )),
+          
+          FloatingActionButton.small(
+              backgroundColor: lightEmerald,
+              onPressed: () {
+               
+                  setState(() {
+                    habitsIndex = habitsIndex + 1;
+                    if (habitsIndex > exampleHabits.length - 1) {
+                      habitsIndex = 0;
+                    }
+                    setHabit(habit.copyWith(stringValue: exampleHabits[habitsIndex].stringValue));
+                                    _stringValueController.text = exampleHabits[habitsIndex].stringValue;
+
+                  });
+              },
+              child: Icon(
+                color: Colors.white,
+                Icons.arrow_right,
+                size: 35,
+              )),
+              SizedBox(width: 8,),
+          Visibility(
+            visible: progress >= 70,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: FloatingActionButton(
+                  backgroundColor: darkEmerald,
+                  onPressed: () {
+                    Logger.root.info("Habit: $habit");
+                    if (_formKey.currentState?.validate() ?? false) {
+                      BlocProvider.of<HabitsBloc>(context).add(AddHabit(habit.copyWith(emoji: emojiController.text), widget.dateToAddHabit));
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Icon(
+                    Icons.save,
+                    color: Colors.white,
+                  )),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -264,90 +331,50 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                         value: streakEmojiController,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Visibility(
-                              visible: progress >= 70,
-                              child: InkWell(
-                                onTap: () {
-                                  Logger.root.info("Habit: $habit");
-                                  if (_formKey.currentState?.validate() ?? false) {
-                                    BlocProvider.of<HabitsBloc>(context)
-                                        .add(AddHabit(habit.copyWith(emoji: emojiController.text), widget.dateToAddHabit));
-                                    Navigator.of(context).pop();
-                                  }
-                                },
-                                  child: Material(
-                                  borderRadius: BorderRadius.circular(16),
-                                  elevation: 5,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: Colors.black, width: 2),
-                                        color: Colors.white),
-                                    height: MediaQuery.of(context).size.height * .2,
-                                    child: Center(
-                                        child: Text(
-                                      "Add",
-                                      style: TextStyle(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          shadows: StringUtil.outlinedText(strokeWidth: 1)),
-                                    )),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text("Daily: "),
-                        StylizedCheckbox(
-                          isChecked: habit.frequencyType == FrequencyType.daily,
-                          onTap: () {
-                            setHabit(habit.copyWith(frequencyType: FrequencyType.daily));
-                          },
-                          size: const Size(50, 50),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text("Every Other Day: "),
-                          StylizedCheckbox(
-                            isChecked: habit.frequencyType == FrequencyType.everyOtherDay,
-                            onTap: () {
-                              setHabit(habit.copyWith(frequencyType: FrequencyType.everyOtherDay));
-                            },
-                            size: const Size(50, 50),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text("Weekly: "),
-                        StylizedCheckbox(
-                          isChecked: habit.frequencyType == FrequencyType.weekly,
-                          onTap: () {
-                            setHabit(habit.copyWith(frequencyType: FrequencyType.weekly));
-                          },
-                          size: const Size(50, 50),
-                        ),
-                      ],
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         child: Visibility(
+                    //           visible: progress >= 70,
+                    //           child: InkWell(
+                    //             onTap: () {
+                    //               Logger.root.info("Habit: $habit");
+                    //               if (_formKey.currentState?.validate() ?? false) {
+                    //                 BlocProvider.of<HabitsBloc>(context)
+                    //                     .add(AddHabit(habit.copyWith(emoji: emojiController.text), widget.dateToAddHabit));
+                    //                 Navigator.of(context).pop();
+                    //               }
+                    //             },
+                    //             child: Material(
+                    //               borderRadius: BorderRadius.circular(16),
+                    //               elevation: 5,
+                    //               child: Container(
+                    //                 decoration: BoxDecoration(
+                    //                     borderRadius: BorderRadius.circular(10),
+                    //                     border: Border.all(color: Colors.black, width: 2),
+                    //                     color: Colors.white),
+                    //                 height: MediaQuery.of(context).size.height * .2,
+                    //                 child: Center(
+                    //                     child: Text(
+                    //                   "Add",
+                    //                   style: TextStyle(
+                    //                       fontSize: 32,
+                    //                       fontWeight: FontWeight.bold,
+                    //                       color: Colors.white,
+                    //                       shadows: StringUtil.outlinedText(strokeWidth: 1)),
+                    //                 )),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
+
+                    ...frequencyRows()
                   ],
                 ),
               ),
@@ -368,13 +395,44 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         onChanged: (val) {
           setHabit(habit.copyWith(stringValue: val));
         },
-        validator: (str) => FormValidator.nonEmpty(str, "stringValue"),
+        validator: (str) => FormValidator.nonEmpty(str, "Habit"),
         onEditingComplete: () {
           setState(() {
             if (habit.stringValue.isNotEmpty) hasCompletedHabit = true;
           });
           FocusScope.of(context).requestFocus(_quantityFocus);
         },
+      ),
+    );
+  }
+
+  List<Widget> frequencyRows() {
+    return FrequencyType.values.map((e) => frequencyRow(e)).toList();
+  }
+
+  Widget frequencyRow(FrequencyType type) {
+    return InkWell(
+      onTap: () {
+        setHabit(habit.copyWith(frequencyType: type));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            StylizedCheckbox(
+              isChecked: habit.frequencyType == type,
+              onTap: () {
+                setHabit(habit.copyWith(frequencyType: type));
+              },
+              size: const Size(50, 50),
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Text(type.toUiString()),
+          ],
+        ),
       ),
     );
   }

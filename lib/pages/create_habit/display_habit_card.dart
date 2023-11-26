@@ -1,6 +1,7 @@
 import 'package:mementohr/data/habit.dart';
 import 'package:mementohr/pages/create_habit/typewriter_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:mementohr/service/admin_service.dart';
 import '../../widgets/custom_progress_indicator.dart';
 import '../../data/habit_entity.dart';
 import '../../widgets/stylized_checkbox.dart';
@@ -141,13 +142,8 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
         Flexible(
           flex: 2,
           child: habitString.isEmpty
-              ? const TypewriterWidget(
-                  textList: [
-                    "Drink 64 oz of water per day...",
-                    "Refrain from smoking cigarettes...",
-                    "Exercise for 30 minutes...",
-                    "Reach out to an old friend..."
-                  ],
+              ?  TypewriterWidget(
+                  textList: AdminService.get50Habits(0, true).map((e) => e.stringValue).toList(),
                   typingSpeed: Duration(milliseconds: 100),
                 )
               : Text(

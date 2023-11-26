@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mementohr/bloc/user/user_bloc.dart';
 import 'package:mementohr/data/habit_entry.dart';
+import 'package:mementohr/main.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../bloc/habits/habits.dart';
@@ -20,26 +21,28 @@ class SQLEditor extends StatefulWidget {
 class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMixin {
   final TextEditingController _queryController = TextEditingController();
   String _result = '';
-  List<Map<String, dynamic>> _queryResult = [];
 
-  void _executeQuery(BuildContext context) async {
+  List<Map<String, dynamic>> _queryResult = [{}];
+
+  Future _executeQuery(BuildContext ctx) async {
     try {
+      _queryController.text = _queryController.text.trim();
       if (!isQueryReadOnly(_queryController.text)) {
-        throw new Exception('Query is not read-only');
+        throw Exception('Query is not read-only');
       } else {
         addCommandToHistory(_queryController.text);
       }
-      List<Map<String, dynamic>> queryResult = await widget.db.rawQuery(_queryController.text);
-      setState(() {
-        _result = queryResult.toString();
-        _queryResult = queryResult;
-      });
+      String query = _queryController.text;
+      log(query);
+      List queryResult = await widget.db.query("Habit");
+      log(queryResult.toString());
     } catch (e) {
-      setState(() {
-        _result = e.toString();
-      });
+      ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+        content: Text(e.toString()),
+        backgroundColor: Colors.red,
+      ));
     }
-    FocusScope.of(context).unfocus();
+    FocusScope.of(ctx).unfocus();
   }
 
   late TabController _tabController;
@@ -85,7 +88,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
             text,
             style: TextStyle(color: Colors.black),
           ),
-          onPressed: () => _queryController.text = _queryController.text + '\t $text',
+          onPressed: () => _queryController.text = _queryController.text + ' $text',
         ),
       ),
     );
@@ -163,7 +166,12 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
     return chips;
   }
 
-  List<Widget> get _queryRows => _queryResult.map((e) => Text(e.toString())).toList();
+  List<Widget> _queryRows() {
+    if (_queryResult.isEmpty) {
+      return [Text("Queries appear here")];
+    }
+    return _queryResult.map((e) => Text(e.toString(), style: TextStyle(color: Colors.black))).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -224,62 +232,95 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
       body: TabBarView(
         controller: _tabController,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView(
-              children: [
-                TextField(
-                  style: TextStyle(color: Colors.black),
-                  controller: _queryController,
-                  keyboardType: TextInputType.text,
-                  onSubmitted: (value) {
-                    _executeQuery(context);
+          Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView(
+                        children: [
+                          TextField(
+                            style: TextStyle(color: Colors.black),
+                            controller: _queryController,
+                            keyboardType: TextInputType.text,
+                            onSubmitted: (value) {
+                              _executeQuery(context);
+                            },
+                            maxLines: 2,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _executeQuery(context),
+                            child: const Text(
+                              'Execute',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0, left: 8, bottom: 8),
+                            child: Container(
+                              height: 50,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: _commandChips,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Container(
+                              height: 50,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: _tableChips,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0, left: 8, bottom: 8),
+                            child: Container(
+                              height: 50,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: _propertyChips,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              Container(
+                height: 200,
+                color: Colors.grey,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _queryResult.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 200,
+                        child: ListView(
+                          children: _queryResult[index].keys.map((e) {
+                            return ListTile(
+                              title: Text(e),
+                              subtitle: Text(_queryResult[index][e].toString(), style: TextStyle(color: Colors.black54),),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
                   },
-                  maxLines: 2,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () => _executeQuery(context),
-                  child: const Text(
-                    'Execute',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8, bottom: 8),
-                  child: Container(
-                    height: 50,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: _commandChips,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Container(
-                    height: 50,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: _tableChips,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8, bottom: 8),
-                  child: Container(
-                    height: 50,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: _propertyChips,
-                    ),
-                  ),
-                ),
-                ..._queryRows,
-              ],
-            ),
+              ),
+                ],
+              ),
+            ],
           ),
           // Tab 1: Schema
           FutureBuilder(

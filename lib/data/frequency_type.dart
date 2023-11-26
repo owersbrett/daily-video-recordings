@@ -4,7 +4,12 @@ enum FrequencyType {
   // once,
   daily,
   everyOtherDay,
+  // everyThreeDays,
+  // everyFourDays,
+  // everyFiveDays,
+  // everySixDays,
   weekly,
+  // twoDaysOnOneDayOff,
   // biweekly,
   // monthly,
   // yearly,
@@ -30,10 +35,22 @@ enum FrequencyType {
 
   String toUiString() {
     switch (this) {
+      // case FrequencyType.once:
+      //   return 'Once';
       case FrequencyType.daily:
         return 'Daily';
       case FrequencyType.everyOtherDay:
         return 'Every Other Day';
+      // case FrequencyType.everyThreeDays:
+      //   return 'One Day On, Two Days Off';
+      // case FrequencyType.everyFourDays:
+      //   return 'One Day On, Three Days Off';
+      // case FrequencyType.everyFiveDays:
+      //   return 'One Day On, Three Days Off';
+      // case FrequencyType.everySixDays:
+      //   return 'One Day On, Three Days Off';
+      // case FrequencyType.twoDaysOnOneDayOff:
+      //   return 'Two Days On, One Day Off';
       case FrequencyType.weekly:
         return 'Weekly';
       // ... handle other cases

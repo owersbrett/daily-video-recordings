@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FormValidator {
   static String? nonEmpty(String? val, String field) {
     if (val == null || val.isEmpty) {
-      return "Empty " + field + " value is invalid.";
+      return "Cannot save. " + field + " field cannot be empty.";
     }
     return null;
   }

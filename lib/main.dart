@@ -35,7 +35,6 @@ void main() async {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
   Database database = await DatabaseService.initialize();
-
   await DatabaseService.logTableColumns(database);
 
   HydratedBloc.storage = await HydratedStorage.build(
