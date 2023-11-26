@@ -28,7 +28,6 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
   bool _isRecording = false;
   bool _isPreviewingVideo = false;
   bool videoPlaying = false;
-  double _aspectRatio = 9 / 19;
 
   late CameraController _cameraController;
   late VideoPlayerController _videoPlayerController;
@@ -66,10 +65,7 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
       ResolutionPreset.max,
     );
     await _cameraController.initialize();
-    Size aspectSize = _cameraController.value.previewSize ?? const Size(1, 1);
-    setState(() {
-      _aspectRatio = aspectSize.aspectRatio;
-    });
+    setState(() {});
   }
 
   @override
@@ -102,7 +98,6 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
     });
   }
 
-  Widget _videoPlayerAndRecorder() => _isPreviewingVideo ? _videoPlayer() : _videoRecorder();
   Widget _videoPlayer() => GestureDetector(
         onHorizontalDragStart: (details) {
           if (details.localPosition.dx > MediaQuery.of(context).size.width / 2) {
@@ -112,31 +107,9 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
           }
         },
         onTap: _toggleVideoPlayer,
-        child: AspectRatio(
-          aspectRatio: _aspectRatio,
-          child: Column(
-            children: [
-              Expanded(child: VideoPlayer(_videoPlayerController)),
-              LinearProgressIndicator(
-                value: progress,
-                color: emerald,
-                minHeight: kToolbarHeight,
-                backgroundColor: emerald.withOpacity(.3),
-              )
-            ],
-          ),
-        ),
+        child: VideoPlayer(_videoPlayerController),
       );
-  Widget _videoRecorder() => Column(
-        children: [
-          Expanded(
-            child: AspectRatio(
-              aspectRatio: _aspectRatio,
-              child: CameraPreview(_cameraController),
-            ),
-          ),
-        ],
-      );
+  Widget _videoRecorder() => CameraPreview(_cameraController);
   void _toggleVideoPlayer() {
     setState(() {
       if (videoPlaying) {
@@ -185,19 +158,24 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
+              child: Visibility(
+                visible: clips.isNotEmpty,
                 child: IconButton(
-                    onPressed: () {
-                      Logger.root.info("Delete the most recent clip");
-                      if (clips.isNotEmpty) {
-                        setState(() {
-                          clips.removeLast();
-                        });
-                      }
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: clips.isEmpty ? Colors.grey : Colors.red,
-                    ))),
+                  onPressed: () {
+                    Logger.root.info("Delete the most recent clip");
+                    if (clips.isNotEmpty) {
+                      setState(() {
+                        clips.removeLast();
+                      });
+                    }
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: clips.isEmpty ? Colors.grey : Colors.red,
+                  ),
+                ),
+              ),
+            ),
             Center(
               child: GestureDetector(
                 onTap: _isPreviewingVideo ? _toggleVideoPlayer : _toggleRecording,
@@ -322,30 +300,50 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              color: Colors.black,
-              child: Scaffold(
-                // The CameraPreview widget displays the live camera feed to the user
-                body: Stack(
-                  children: [
-                    Column(
+    return Container(
+      color: Colors.black,
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  color: Colors.black,
+                  child: Scaffold(
+                    // The CameraPreview widget displays the live camera feed to the user
+                    body: Stack(
                       children: [
-                        Expanded(child: _videoPlayerAndRecorder()),
+                        Column(
+                          children: [
+                            Container(
+                              height: kToolbarHeight,
+                              color: Colors.black,
+                            ),
+                            _isPreviewingVideo ? Expanded(child: _videoPlayer()) : _videoRecorder()
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            LinearProgressIndicator(
+                              value: progress,
+                              color: emerald,
+                              minHeight: kToolbarHeight,
+                              backgroundColor: emerald.withOpacity(.3),
+                            ),
+                          ],
+                        ),
+                        _closeButton(),
+                        _controls()
                       ],
                     ),
-                    _closeButton(),
-                    _controls()
-                  ],
+                  ),
                 ),
               ),
-            ),
+              _isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
+            ],
           ),
-          _isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
-        ],
+        ),
       ),
     );
   }

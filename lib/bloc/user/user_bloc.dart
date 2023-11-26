@@ -27,6 +27,16 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
   Future _onEvent(UserEvent event, Emitter<UserState> emit) async {
     if (event is FetchUser) await _fetchUser(event, emit);
     if (event is SplashPageClosed) await _splashPageClosed(event, emit);
+    if (event is SplashPageRequested) await _splashPageRequested(event, emit);
+  }
+
+  Future _splashPageRequested(SplashPageRequested event, Emitter<UserState> emit) async {
+    if (state is UserLoaded) {
+      var loaded = state as UserLoaded;
+          List<Experience> experienceList = await experienceRepository.getAll();
+
+      emit(UserLoaded(state.user, experienceList, false));
+    }
   }
 
   Future _splashPageClosed(SplashPageClosed event, Emitter<UserState> emit) async {

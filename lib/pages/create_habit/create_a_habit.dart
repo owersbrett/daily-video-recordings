@@ -5,7 +5,6 @@ import 'package:logging/logging.dart';
 import 'package:mementohr/data/frequency_type.dart';
 import 'package:mementohr/pages/create_habit/color_picker_dialog.dart';
 import 'package:mementohr/pages/video/dvr_close_button.dart';
-import 'package:mementohr/theme/theme.dart';
 import 'package:mementohr/widgets/custom_form_field.dart';
 import 'package:mementohr/widgets/stylized_checkbox.dart';
 import '../../bloc/habits/habits.dart';

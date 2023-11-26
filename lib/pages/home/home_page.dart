@@ -147,7 +147,10 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.add_circle, color: Colors.black,),
+                              const Icon(
+                                Icons.add_circle,
+                                color: Colors.black,
+                              ),
                               const SizedBox(
                                 width: 4,
                               ),
@@ -183,7 +186,10 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(
                                 width: 4,
                               ),
-                              Text("Video", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black)),
+                              Text(
+                                "Video",
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                              ),
                             ],
                           ),
                         ),
@@ -207,7 +213,8 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               const Icon(Icons.download_rounded, color: Colors.black),
                               const SizedBox(width: 4),
-                              Text("Report", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black)),
+                              Text("Report",                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                              )
                             ],
                           ),
                         ),

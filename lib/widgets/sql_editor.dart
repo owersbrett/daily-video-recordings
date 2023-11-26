@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mementohr/bloc/user/user_bloc.dart';
 import 'package:mementohr/data/habit_entry.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import '../bloc/habits/habits.dart';
+import '../bloc/user/user.dart';
 import '../data/habit.dart';
 import '../service/database_service.dart';
 import '../theme/theme.dart';
@@ -167,21 +170,45 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'SQL Editor',
+          'sqlflite 2.3.0',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              FocusScope.of(context).unfocus();
-              setState(() {
-                _queryController.text = '';
-                _result = '';
-              });
-            },
-            child: const Text(
-              'Clear',
-              style: TextStyle(color: Colors.black),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              borderRadius: BorderRadius.circular(8),
+              elevation: 5,
+              child: TextButton(
+                onPressed: () {
+                  BlocProvider.of<UserBloc>(context).add(SplashPageRequested());
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Habits',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              borderRadius: BorderRadius.circular(8),
+              elevation: 5,
+              child: TextButton(
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  setState(() {
+                    _queryController.text = '';
+                    _result = '';
+                  });
+                },
+                child: const Text(
+                  'Clear',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
             ),
           ),
         ],

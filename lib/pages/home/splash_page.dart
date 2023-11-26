@@ -69,60 +69,65 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white.withOpacity(0),
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            BlocProvider.of<HabitsBloc>(context).add(AddHabits(habitsToAdd, DateTime.now(), widget.user.id!, close));
-          },
-          child: Icon(Icons.check),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(24.0),
-          child: ListView(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                
+      color: Colors.white,
+      child: SafeArea(
+        child: Container(
+          color: Colors.white,
+          child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                BlocProvider.of<HabitsBloc>(context).add(AddHabits(habitsToAdd, DateTime.now(), widget.user.id!, close));
+              },
+              child: Icon(Icons.check),
+            ),
+            body: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: ListView(
                 children: [
-                  Text("Welcome!", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, top:8, right:8),
-                    child: Material(
-                      elevation: 10,
-                      borderRadius: BorderRadius.circular(8),
-                      child: TextButton(
-                          onPressed: () {
-                            BlocProvider.of<UserBloc>(context).add(SplashPageClosed());
-                          },
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(color: Colors.black),
-                          )),
-                    ),
-                  )
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    
+                    children: [
+                      Text("Welcome!", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, top:8, right:8),
+                        child: Material(
+                          elevation: 5,
+                          borderRadius: BorderRadius.circular(8),
+                          child: TextButton(
+                              onPressed: () {
+                                BlocProvider.of<UserBloc>(context).add(SplashPageClosed());
+                              },
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                              )),
+                        ),
+                      )
+                    ],
+                  ),
+      
+                  Text(
+                    "Select habits you'd like to track.",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    "Don't worry, you can always add custom habits later.",
+                    style: TextStyle(fontSize: 10),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Wrap(
+                    children: items(),
+                  ),
                 ],
               ),
-              
-              Text(
-                "Select habits you'd like to track.",
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Text(
-                "Don't worry, you can always add custom habits later.",
-                style: TextStyle(fontSize: 10),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Wrap(
-                children: items(),
-              ),
-            ],
+            ),
           ),
         ),
       ),

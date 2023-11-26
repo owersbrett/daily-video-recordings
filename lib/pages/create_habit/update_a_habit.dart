@@ -13,7 +13,6 @@ import 'package:mementohr/widgets/stylized_checkbox.dart';
 import '../../bloc/habits/habits.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entity.dart';
-import '../../util/string_util.dart';
 import '../../validators/form_validator.dart';
 import '../video/delete_dialog.dart'; // Include this package for color picker
 

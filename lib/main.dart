@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:mementohr/data/repositories/domain_repository.dart';
 import 'package:mementohr/data/repositories/experience_repository.dart';
 import 'package:mementohr/data/repositories/habit_entry_note_repository.dart';
@@ -22,6 +23,12 @@ List<CameraDescription> cameras = <CameraDescription>[];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FileDirectoriesService().init();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarBrightness: Brightness.dark,
+    statusBarIconBrightness: Brightness.dark
+  ));
 
   Logger.root.level = Level.ALL; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {
