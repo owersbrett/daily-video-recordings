@@ -10,11 +10,17 @@ import 'package:mementohr/util/color_util.dart';
 class OrbitalIndicator extends StatefulWidget {
   final double progress; // Progress value between 0 and 1
   final Size size;
-  final int incrementCount;
+  final int totalTicks;
+  final int currentTicks;
   final String centerText;
 
   OrbitalIndicator(
-      {required this.progress, this.size = const Size(300, 300), required this.incrementCount, required ValueKey<String> key, this.centerText = ''})
+      {required this.progress,
+      this.size = const Size(300, 300),
+      required this.totalTicks,
+      required this.currentTicks,
+      required ValueKey<String> key,
+      this.centerText = ''})
       : super(key: key);
 
   @override
@@ -25,7 +31,7 @@ class _OrbitalIndicatorState extends State<OrbitalIndicator> {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _OrbProgressPainter(widget.progress, 1, widget.incrementCount, widget.centerText),
+      painter: _OrbProgressPainter(widget.progress, 1, widget.currentTicks, widget.totalTicks, widget.centerText),
       size: widget.size,
     );
   }
@@ -37,10 +43,11 @@ class _OrbProgressPainter extends CustomPainter {
 
   final double progress;
   final double animationValue;
-  final int tickCount;
+  final int currentTicks;
+  final int totalTicks;
   final String centerText;
-  _OrbProgressPainter(this.progress, this.animationValue, this.tickCount, this.centerText);
-  int get orbCount => (progress / tickCount).floor();
+  _OrbProgressPainter(this.progress, this.animationValue, this.currentTicks, this.totalTicks, this.centerText);
+  int get orbCount => currentTicks;
 
   Color orbColor(int i) {
     Color color = darkEmerald;
@@ -57,16 +64,25 @@ class _OrbProgressPainter extends CustomPainter {
     return color;
   }
 
-  Color unfilledColor = lightEmerald.withOpacity(.5);
+  Color unfilledColor = lightEmerald.withOpacity(.3);
   Color filledColor = emerald;
   Color getOrbColor(int i) {
-    if (i == 0 && orbCount != tickCount) {
+    if (i == 0 && orbCount != totalTicks) {
       return unfilledColor;
     }
     if (orbCount >= i) {
       return filledColor;
     }
     return unfilledColor;
+  }
+  double getOrbSize(int i) {
+    if (i == 0 && orbCount != totalTicks) {
+      return 5;
+    }
+    if (orbCount >= i) {
+      return 7;
+    }
+    return 5;
   }
 
   Color get progressColor => emerald;
@@ -91,15 +107,15 @@ class _OrbProgressPainter extends CustomPainter {
   // }
 
   void drawOrbs(Canvas canvas, Size size) {
-    for (int i = 0; i < tickCount; i++) {
+    for (int i = 0; i < totalTicks; i++) {
       // 12 orbs for each 30 degrees
-      var angle = 2 * pi * (i / tickCount);
+      var angle = 2 * pi * (i / totalTicks);
       var orbCenter = size.center(Offset.zero) + Offset(-cos(angle + pi / 2), -sin(angle + pi / 2)) * (orbDiameter);
       Color orbColor = getOrbColor(i);
       if (i == 0) {
-        canvas.drawCircle(orbCenter, 5, progressPaint(style: PaintingStyle.fill, color: orbColor)); // Orb radius is 10
+        canvas.drawCircle(orbCenter, getOrbSize(i), progressPaint(style: PaintingStyle.fill, color: orbColor)); // Orb radius is 10
       } else {
-        canvas.drawCircle(orbCenter, 5, progressPaint(style: PaintingStyle.fill, color: orbColor)); // Orb radius is 10
+        canvas.drawCircle(orbCenter, getOrbSize(i), progressPaint(style: PaintingStyle.fill, color: orbColor)); // Orb radius is 10
       }
     }
   }

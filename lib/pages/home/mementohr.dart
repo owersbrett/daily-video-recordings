@@ -48,11 +48,12 @@ class _MementohState extends State<Mementohr> {
   Widget orbitalIndicator(double percentageToNextLevel, Size size, int level) => BlocBuilder<HabitsBloc, HabitsState>(
         builder: (context, state) {
           return OrbitalIndicator(
+            currentTicks: state.todaysHabitEntries.fold(0, (previousValue, element) => (previousValue +( element.booleanValue ? 1 : 0))),
             progress: percentageToNextLevel,
             key: const ValueKey("weekday-hero"),
             size: size,
             centerText: level.toString(),
-            incrementCount: state.todaysHabitEntries.length,
+            totalTicks: state.todaysHabitEntries.length,
           );
         },
       );

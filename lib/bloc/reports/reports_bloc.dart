@@ -40,12 +40,12 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
       fullEntities[entity.habit.id!] = _fillMissingEntity(entity, startInterval, endInterval);
     }
     return fullEntities;
-  }
+  } 
 
   HabitEntity _fillMissingEntity(HabitEntity entity, DateTime startInterval, DateTime endInterval) {
     List<DateTime> weekDates = List.generate(
       7,
-      (index) => DateTime(startInterval.year, startInterval.month, startInterval.day).add(Duration(days: index)),
+      (index) => startInterval.add(Duration(days: index)),
     );
 
     // Creating a map for quick lookup

@@ -174,9 +174,17 @@ class _HabitGridState extends State<HabitGrid> {
                 ),
               ],
             ),
-            DVRCloseButton(
-              onPressed: () => Navigator.of(context).pop(),
-              color: Colors.black,
+            SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  DVRCloseButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    positioned: false,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
