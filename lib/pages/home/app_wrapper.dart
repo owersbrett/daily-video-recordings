@@ -1,14 +1,14 @@
-import 'package:mementoh/bloc/experience/experience.dart';
-import 'package:mementoh/bloc/habits/habits.dart';
-import 'package:mementoh/bloc/reports/reports.dart';
-import 'package:mementoh/data/repositories/domain_repository.dart';
-import 'package:mementoh/data/repositories/experience_repository.dart';
-import 'package:mementoh/data/repositories/habit_entry_note_repository.dart';
-import 'package:mementoh/data/repositories/habit_entry_repository.dart';
-import 'package:mementoh/data/repositories/habit_repository.dart';
-import 'package:mementoh/data/repositories/user_repository.dart';
+import 'package:mementohr/bloc/experience/experience.dart';
+import 'package:mementohr/bloc/habits/habits.dart';
+import 'package:mementohr/bloc/reports/reports.dart';
+import 'package:mementohr/data/repositories/domain_repository.dart';
+import 'package:mementohr/data/repositories/experience_repository.dart';
+import 'package:mementohr/data/repositories/habit_entry_note_repository.dart';
+import 'package:mementohr/data/repositories/habit_entry_repository.dart';
+import 'package:mementohr/data/repositories/habit_repository.dart';
+import 'package:mementohr/data/repositories/user_repository.dart';
 
-import 'package:mementoh/pages/home/user_page.dart';
+import 'package:mementohr/pages/home/user_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite_common/sqlite_api.dart';
@@ -125,7 +125,7 @@ class _DailyVideoRemindersState extends State<DailyVideoReminders> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Mementoh',
+        title: 'Mementohr',
         theme: theme,
         home: const UserPage(),
       ),

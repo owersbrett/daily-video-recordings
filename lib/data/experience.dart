@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:mementoh/data/habit_entry.dart';
+import 'package:mementohr/data/habit_entry.dart';
 
 import 'habit.dart';
 import 'user.dart';
@@ -19,7 +19,7 @@ class Experience {
     "description TEXT",
     "domainId INTEGER",
     "FOREIGN KEY(userId) REFERENCES ${User.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
-    "FOREIGN KEY(habitEntryId) REFERENCES ${HabitEntry.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
+        "FOREIGN KEY(habitEntryId) REFERENCES ${HabitEntry.tableName}(id) ON DELETE CASCADE ON UPDATE NO ACTION "
   ];
 
   final int? id;

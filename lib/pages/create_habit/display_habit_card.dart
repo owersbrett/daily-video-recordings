@@ -1,5 +1,5 @@
-import 'package:mementoh/data/habit.dart';
-import 'package:mementoh/pages/create_habit/typewriter_widget.dart';
+import 'package:mementohr/data/habit.dart';
+import 'package:mementohr/pages/create_habit/typewriter_widget.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/custom_progress_indicator.dart';
 import '../../data/habit_entity.dart';

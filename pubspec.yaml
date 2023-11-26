@@ -1,4 +1,4 @@
-name: mementoh
+name: mementohr
 description: A new Flutter project for daily video reminders.
 version: 1.0.0+3
 publish_to: 'none' # Prevent accidental publishing to pub.dev
@@ -52,6 +52,7 @@ flutter:
   assets:
     - assets/audio/
     - assets/icon/
+    - assets/images/
 
   # fonts:
   #   - family: MyCustomFont

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:mementoh/bloc/reports/reports.dart';
+import 'package:mementohr/bloc/reports/reports.dart';
 
 import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';
@@ -54,13 +54,13 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
     };
 
     for (var element in weekDates) {
-      if (!entryMap.containsKey(element)){
-        entryMap[element]= HabitEntry(
+      if (!entryMap.containsKey(element)) {
+        entryMap[element] = HabitEntry(
           id: null,
           habitId: entity.habit.id!,
           createDate: element,
           booleanValue: false,
-          unitType: UnitType.boolean, 
+          unitType: UnitType.boolean,
           updateDate: element,
         );
       }

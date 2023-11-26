@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mementoh/theme/theme.dart';
-import 'package:mementoh/util/color_util.dart';
+import 'package:mementohr/theme/theme.dart';
+import 'package:mementohr/util/color_util.dart';
 
 class CustomProgressIndicator extends StatelessWidget {
   final double progress; // Progress value between 0 and 1
@@ -69,7 +69,7 @@ class _OrbProgressPainter extends CustomPainter {
       var angle = 2 * pi * (i / 12);
       var orbCenter = size.center(Offset.zero) + Offset(cos(angle + 90), sin(angle)) * (50);
       Color orbColor = i + 3 > orbCount ? darkEmerald.withOpacity(.5) : progressColor;
-      canvas.drawCircle(orbCenter, i % 3 == 0 ? 10 : 5, progressPaint(style: PaintingStyle.fill, color:  orbColor)); // Orb radius is 10
+      canvas.drawCircle(orbCenter, i % 3 == 0 ? 10 : 5, progressPaint(style: PaintingStyle.fill, color: orbColor)); // Orb radius is 10
     }
 
     canvas.drawArc(Rect.fromCircle(center: size.center(Offset.zero), radius: 50), -pi / 2, 2 * pi * progress, false,

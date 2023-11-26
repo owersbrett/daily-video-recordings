@@ -1,7 +1,7 @@
-import 'package:mementoh/bloc/experience/experience.dart';
-import 'package:mementoh/data/habit_entity.dart';
-import 'package:mementoh/data/repositories/habit_entry_repository.dart';
-import 'package:mementoh/data/repositories/habit_repository.dart';
+import 'package:mementohr/bloc/experience/experience.dart';
+import 'package:mementohr/data/habit_entity.dart';
+import 'package:mementohr/data/repositories/habit_entry_repository.dart';
+import 'package:mementohr/data/repositories/habit_repository.dart';
 import 'package:logging/logging.dart';
 
 import '../../data/experience.dart';
@@ -21,6 +21,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   Future _onEvent(HabitsEvent event, Emitter<HabitsState> emit) async {
     if (event is FetchHabits) await _fetchHabits(event, emit);
     if (event is AddHabit) await _addHabit(event, emit);
+    if (event is AddHabits) await _addHabits(event, emit);
     if (event is UpdateHabit) await _updateHabit(event, emit);
     if (event is DeleteHabit) await _deleteHabit(event, emit);
     if (event is UpdateHabitEntry) await _updateHabitEntry(event, emit);
@@ -89,6 +90,21 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
     }
   }
 
+  Future _addHabits(AddHabits event, Emitter<HabitsState> emit) async {
+    for (var element in event.habits) {
+      Habit habit = element.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
+      habit = await habitRepository.create(habit);
+      HabitEntry habitEntry = HabitEntry.fromHabit(habit, habit.createDate);
+      habitEntry = habitEntry.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
+      habitEntry = await habitEntryRepository.create(habitEntry);
+    }
+
+    Map<int, HabitEntity> habitEntities = await habitRepository.getHabitEntities(event.userId);
+
+    emit(HabitsLoaded(habitEntities, state.currentDate));
+    event.onClose?.call();
+  }
+
   Future _addHabit(AddHabit event, Emitter<HabitsState> emit) async {
     if (state is HabitsLoaded) {
       Habit habit = event.habit.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
@@ -142,7 +158,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       Map<int, HabitEntity> habitEntities = Map<int, HabitEntity>.from(state.habitMap);
       HabitEntity entity = habitEntities[event.habit.id!]!.copyWith();
       List<HabitEntry> habitEntries = List<HabitEntry>.from(entity.habitEntries);
-      
+
       habitEntries.removeWhere((element) => element.id == event.habitEntry.id);
       habitEntries.add(event.habitEntry);
       habitEntities[event.habit.id!] = entity.copyWith(habitEntries: habitEntries);

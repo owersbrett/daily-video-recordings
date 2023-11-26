@@ -1,4 +1,4 @@
-import 'package:mementoh/theme/theme.dart';
+import 'package:mementohr/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class StylizedCheckbox extends StatelessWidget {

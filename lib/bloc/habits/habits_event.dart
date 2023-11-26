@@ -1,4 +1,4 @@
-import 'package:mementoh/bloc/experience/experience.dart';
+import 'package:mementohr/bloc/experience/experience.dart';
 
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';
@@ -9,6 +9,14 @@ class FetchHabits extends HabitsEvent {
   FetchHabits(this.userId, this.currentDate);
   final int userId;
   final DateTime currentDate;
+}
+
+class AddHabits extends HabitsEvent {
+  final List<Habit> habits;
+  final DateTime dateToAddHabit;
+  final int userId;
+  final Function? onClose;
+  AddHabits(this.habits, this.dateToAddHabit, this.userId, this.onClose);
 }
 
 class AddHabit extends HabitsEvent {

@@ -1,14 +1,16 @@
-import 'package:mementoh/data/experience.dart';
-import 'package:mementoh/data/repositories/experience_repository.dart';
-import 'package:mementoh/data/repositories/user_repository.dart';
-import 'package:mementoh/main.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:mementohr/data/experience.dart';
+import 'package:mementohr/data/repositories/experience_repository.dart';
+import 'package:mementohr/data/repositories/user_repository.dart';
+import 'package:mementohr/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/habit_entry_repository.dart';
 import '../../data/repositories/habit_repository.dart';
 import '../../data/user.dart';
 import 'user.dart';
 
-class UserBloc extends Bloc<UserEvent, UserState> {
+class UserBloc extends HydratedBloc<UserEvent, UserState> {
   final IUserRepository userRepository;
   final IHabitRepository habitRepository;
   final IHabitEntryRepository habitEntryRepository;
@@ -24,15 +26,29 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   Future _onEvent(UserEvent event, Emitter<UserState> emit) async {
     if (event is FetchUser) await _fetchUser(event, emit);
+    if (event is SplashPageClosed) await _splashPageClosed(event, emit);
+  }
+
+  Future _splashPageClosed(SplashPageClosed event, Emitter<UserState> emit) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool("hasSeenSplashPage", true);
+    List<Experience> experienceList = await experienceRepository.getAll();
+
+    emit(UserLoaded(state.user, experienceList, true));
   }
 
   Future _fetchUser(FetchUser event, Emitter<UserState> emit) async {
     try {
-
       User user = await userRepository.get();
       List<Experience> experienceList = await experienceRepository.getAll();
-      emit(UserLoaded(user, experienceList));
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+      sharedPreferences.setBool("hasSeenSplashPage", false);
+      bool hasSeenSharedPreferences = sharedPreferences.getBool("hasSeenSplashPage") ?? false;
+      emit(UserLoaded(user, experienceList, hasSeenSharedPreferences));
     } catch (e) {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      bool hasSeenSharedPreferences = sharedPreferences.getBool("hasSeenSplashPage") ?? false;
       log(e.toString());
       log("404 User Not Found.");
       log("Creating user.");
@@ -40,7 +56,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       user = await userRepository.create(user);
       log("200 User Created.");
       List<Experience> experienceList = await experienceRepository.getAll();
-      emit(UserLoaded(user, experienceList));
+      emit(UserLoaded(user, experienceList, hasSeenSharedPreferences));
     }
+  }
+
+  @override
+  UserState? fromJson(Map<String, dynamic> json) {
+    return UserLoaded(User.fromMap(json), [], json["hasSeenSplashPage"]);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(UserState state) {
+    Map<String, dynamic> map = state.user.toMap();
+    map["hasSeenSplashPage"] = state.hasSeenSplashPage;
   }
 }

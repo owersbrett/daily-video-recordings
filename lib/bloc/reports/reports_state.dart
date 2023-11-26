@@ -1,10 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:mementoh/data/habit_entity.dart';
+import 'package:mementohr/data/habit_entity.dart';
 
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';
+import '../../util/date_util.dart';
 
 abstract class ReportsState implements Equatable {
+  Map<int, List<HabitEntry>> get weekOfHabitEntries => {};
+
   DateTime get startInterval;
   DateTime get endInterval;
   List<Habit> get habits => [];
@@ -82,5 +85,77 @@ class ReportsLoaded extends ReportsState {
       entries[habit.habit.id!] = habit.habitEntries;
     }
     return entries;
+  }
+
+  @override
+  Map<int, List<HabitEntry>> get weekOfHabitEntries {
+    DateTime monday = startInterval;
+    DateTime sunday = endInterval;
+    Map<int, List<HabitEntry>> entries = Map<int, List<HabitEntry>>.from(currentHabitEntries);
+    for (var element in entries.values) {
+      element.removeWhere((element) => element.createDate.isBefore(monday) || element.createDate.isAfter(sunday));
+    }
+    return entries;
+  }
+
+  @override
+  int get totalHabitEntries {
+    int total = 0;
+    for (var habit in fullWeekOfHabits.values) {
+      total += habit.habitEntries.length;
+    }
+    return total;
+  }
+
+  @override
+  int get totalHabitEntriesCompleted {
+    int total = 0;
+    for (var habit in fullWeekOfHabits.values) {
+      for (var entry in habit.habitEntries) {
+        if (entry.booleanValue) {
+          total++;
+        }
+      }
+    }
+    return total;
+  }
+
+  @override
+  List<Map<String, String>> get currentWeekData {
+    List<Map<String, String>> data = [];
+    for (var habit in fullWeekOfHabits.values) {
+      data.add({
+        "name": habit.habit.stringValue,
+        "value": habit.habitEntries.length.toString(),
+        "color": "#000000",
+      });
+    }
+    return data;
+  }
+
+  @override
+  List<Map<String, String>> get currentMonthData {
+    List<Map<String, String>> data = [];
+    for (var habit in fullWeekOfHabits.values) {
+      data.add({
+        "name": habit.habit.stringValue,
+        "value": habit.habitEntries.length.toString(),
+        "color": "#000000",
+      });
+    }
+    return data;
+  }
+
+  @override
+  List<Map<String, String>> get currentYearData {
+    List<Map<String, String>> data = [];
+    for (var habit in fullWeekOfHabits.values) {
+      data.add({
+        "name": habit.habit.stringValue,
+        "value": habit.habitEntries.length.toString(),
+        "color": "#000000",
+      });
+    }
+    return data;
   }
 }

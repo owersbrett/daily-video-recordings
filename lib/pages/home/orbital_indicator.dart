@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mementoh/theme/theme.dart';
-import 'package:mementoh/util/color_util.dart';
+import 'package:mementohr/theme/theme.dart';
+import 'package:mementohr/util/color_util.dart';
 
 class OrbitalIndicator extends StatefulWidget {
   final double progress; // Progress value between 0 and 1
@@ -60,6 +60,12 @@ class _OrbProgressPainter extends CustomPainter {
   Color unfilledColor = lightEmerald.withOpacity(.5);
   Color filledColor = emerald;
   Color getOrbColor(int i) {
+    if (i == 0 && orbCount != tickCount) {
+      return unfilledColor;
+    }
+    if (orbCount >= i) {
+      return filledColor;
+    }
     return unfilledColor;
   }
 
@@ -107,9 +113,26 @@ class _OrbProgressPainter extends CustomPainter {
     canvas.drawCircle(size.center(Offset.zero), progressDiameter, progressPaint(color: unfilledColor));
   }
 
+  void drawCenterText(Canvas canvas, Size size) {
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: centerText,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(size.width / 2 - textPainter.width / 2, size.height / 2 - textPainter.height / 2));
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     drawUnfilled(canvas, size);
+    drawCenterText(canvas, size);
     drawOrbs(canvas, size);
     // drawOrbit(canvas, size);
     drawProgress(canvas, size);

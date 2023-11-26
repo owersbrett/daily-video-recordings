@@ -1,11 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:mementoh/pages/create_habit/display_habit_card.dart';
+import 'package:mementohr/pages/create_habit/display_habit_card.dart';
 import 'package:flutter/material.dart';
 
-import 'package:mementoh/data/frequency_type.dart';
-import 'package:mementoh/data/unit_type.dart';
+import 'package:mementohr/data/frequency_type.dart';
+import 'package:mementohr/data/unit_type.dart';
+import 'package:mementohr/util/color_util.dart';
 
 import 'user.dart';
 
@@ -129,6 +130,23 @@ class Habit {
       frequencyType: FrequencyType.daily,
       userId: 1,
     );
+  }
+
+  factory Habit.fromString(int userId, String str, String emoji, String streakEmoji, [FrequencyType type = FrequencyType.daily]) {
+    return Habit(
+        unitIncrement: 1,
+        stringValue: str,
+        value: 0,
+        valueGoal: 1,
+        suffix: "",
+        unitType: UnitType.count,
+        emoji: emoji,
+        streakEmoji: streakEmoji,
+        hexColor: ColorUtil.randomColor().toHex(),
+        createDate: DateTime.now(),
+        updateDate: DateTime.now(),
+        frequencyType: type,
+        userId: userId);
   }
 
   factory Habit.fromMap(Map<String, dynamic> map) {

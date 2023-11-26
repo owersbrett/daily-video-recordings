@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:mementoh/bloc/experience/experience.dart';
-import 'package:mementoh/bloc/habits/habits.dart';
+import 'package:mementohr/bloc/experience/experience.dart';
+import 'package:mementohr/bloc/habits/habits.dart';
 import 'package:flutter/material.dart';
 
 import '../data/habit.dart';
@@ -50,12 +50,8 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
         audioPlayer.setVolume(0.3);
         audioPlayer.play(AssetSource("audio/shimmer.wav"));
       }
-      BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(
-        habit,
-        widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue),
-        BlocProvider.of<ExperienceBloc>(context),
-        widget.currentListDate
-      ));
+      BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue),
+          BlocProvider.of<ExperienceBloc>(context), widget.currentListDate));
     }
   }
 

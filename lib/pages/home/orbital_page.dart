@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mementoh/pages/home/orbital_indicator.dart';
+import 'package:mementohr/pages/home/orbit_animation.dart';
+import 'package:mementohr/pages/home/orbital_indicator.dart';
 
 class OrbitalPage extends StatelessWidget {
   const OrbitalPage({super.key, required this.tag, required this.progress, required this.hero});
@@ -16,7 +17,12 @@ class OrbitalPage extends StatelessWidget {
       child: Scaffold(
         body: Container(
           color: Colors.black,
-          child: Center(child: hero),
+          child: Stack(
+            children: [
+              // OrbitAnimation(),
+              Center(child: hero),
+            ],
+          ),
         ),
       ),
     );

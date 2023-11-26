@@ -16,9 +16,13 @@ const Color darkEmerald = Color(0xFF32965D); // A darker shade of emerald
 const Color gold = Color(0xFFD4AF37); // A shade of gold
 const Color lightGold = Color(0xFFE8C55F); // A lighter shade of gold
 const Color darkGold = Color(0xFFA78B2C); // A darker shade of gold
+
+const Color lightBackgroundColor = Color(0xff232A35);
+const Color backgroundColor = Color(0xff232A35);
+const Color darkBackgroundColor = Color(0xff232A35);
 // Define the color scheme
 const ColorScheme myColorScheme = ColorScheme(
-  brightness: Brightness.light,
+  brightness: Brightness.dark,
   primary: Colors.white, // Use ruby as the primary color
   outlineVariant: darkRuby, // Use a darker shade of ruby for the outline variant
   surfaceVariant: lightRuby,
@@ -28,9 +32,9 @@ const ColorScheme myColorScheme = ColorScheme(
   surface: Colors.white,
   background: Colors.white,
   error: darkRuby,
-  onPrimary: gold, // Text color on top of the primary color
-  onSecondary: lightGold, // Text color on top of the secondary color
-  onSurface: darkGold, // Typically the text color for inputs, cards, etc.
+  onPrimary: emerald, // Text color on top of the primary color
+  onSecondary: darkEmerald, // Text color on top of the secondary color
+  onSurface: lightEmerald, // Typically the text color for inputs, cards, etc.
   onBackground: Colors.black, // Typically the background color for pages or cards
   onError: Colors.white, // Text color on top of the error color
 );

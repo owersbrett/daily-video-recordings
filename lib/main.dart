@@ -1,14 +1,14 @@
-import 'package:mementoh/data/repositories/domain_repository.dart';
-import 'package:mementoh/data/repositories/experience_repository.dart';
-import 'package:mementoh/data/repositories/habit_entry_note_repository.dart';
-import 'package:mementoh/data/repositories/user_repository.dart';
-import 'package:mementoh/pages/home/app_wrapper.dart';
+import 'package:mementohr/data/repositories/domain_repository.dart';
+import 'package:mementohr/data/repositories/experience_repository.dart';
+import 'package:mementohr/data/repositories/habit_entry_note_repository.dart';
+import 'package:mementohr/data/repositories/user_repository.dart';
+import 'package:mementohr/pages/home/app_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:camera/camera.dart';
-import 'package:mementoh/service/file_directories_service.dart';
+import 'package:mementohr/service/file_directories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -28,7 +28,7 @@ void main() async {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
   Database database = await DatabaseService.initialize();
-  
+
   await DatabaseService.logTableColumns(database);
 
   HydratedBloc.storage = await HydratedStorage.build(
@@ -58,14 +58,13 @@ class MyApp extends StatelessWidget {
 
     IMultimediaRepository multimediaRepository = MultimediaRepository(db: db);
     return AppWrapper(
-      userRepository: userRepository,
-      multimediaRepository: multimediaRepository,
-      domainRepository: domainRepository,
-      experienceRepository: experienceRepository,
-      habitRepository: habitRepository,
-      habitEntryRepository: habitEntryRepository,
-      habitEntryNoteRepository: habitEntryNoteRepository,
-      db: db
-    );
+        userRepository: userRepository,
+        multimediaRepository: multimediaRepository,
+        domainRepository: domainRepository,
+        experienceRepository: experienceRepository,
+        habitRepository: habitRepository,
+        habitEntryRepository: habitEntryRepository,
+        habitEntryNoteRepository: habitEntryNoteRepository,
+        db: db);
   }
 }

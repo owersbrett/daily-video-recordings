@@ -1,4 +1,4 @@
-package com.owersllc.mementoh
+package com.owersllc.mementohr
 
 import io.flutter.embedding.android.FlutterActivity
 

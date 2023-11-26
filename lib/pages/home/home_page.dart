@@ -2,18 +2,18 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
-import 'package:mementoh/pages/report/report_page.dart';
+import 'package:mementohr/pages/report/report_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:mementoh/widgets/daily_app_bar.dart';
-import 'package:mementoh/data/bottom_sheet_state.dart';
-import 'package:mementoh/data/db.dart';
-import 'package:mementoh/navigation/navigation.dart';
-import 'package:mementoh/pages/create_habit/create_a_habit.dart';
-import 'package:mementoh/pages/home/home_page_bottom.dart';
-import 'package:mementoh/pages/home/now_data.dart';
-import 'package:mementoh/pages/home/week_and_habits_scroll_view.dart';
-import 'package:mementoh/pages/video/record_video_page.dart';
+import 'package:mementohr/widgets/daily_app_bar.dart';
+import 'package:mementohr/data/bottom_sheet_state.dart';
+import 'package:mementohr/data/db.dart';
+import 'package:mementohr/navigation/navigation.dart';
+import 'package:mementohr/pages/create_habit/create_a_habit.dart';
+import 'package:mementohr/pages/home/home_page_bottom.dart';
+import 'package:mementohr/pages/home/now_data.dart';
+import 'package:mementohr/pages/home/week_and_habits_scroll_view.dart';
+import 'package:mementohr/pages/video/record_video_page.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.black,
                           onPressed: () {
                             setState(() {
-                              showCreateDropdown = true;
+                              showCreateDropdown = !showCreateDropdown;
                             });
                           },
                         ),
@@ -147,13 +147,13 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.add_circle),
+                              const Icon(Icons.add_circle, color: Colors.black,),
                               const SizedBox(
                                 width: 4,
                               ),
                               Text(
                                 "Habit",
-                                style: Theme.of(context).textTheme.bodyMedium,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -179,11 +179,11 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.video_call_rounded),
+                              const Icon(Icons.video_call_rounded, color: Colors.black),
                               const SizedBox(
                                 width: 4,
                               ),
-                              Text("Video", style: Theme.of(context).textTheme.bodyMedium),
+                              Text("Video", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black)),
                             ],
                           ),
                         ),
@@ -198,19 +198,16 @@ class _HomePageState extends State<HomePage> {
                           setState(() {
                             showCreateDropdown = false;
                           });
-                          Navigation.createRoute(
-                              const ReportPage(),
-                              context,
-                              AnimationEnum.pageAscend);
+                          Navigation.createRoute(const ReportPage(), context, AnimationEnum.pageAscend);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(24.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.download_rounded),
+                              const Icon(Icons.download_rounded, color: Colors.black),
                               const SizedBox(width: 4),
-                              Text("Report", style: Theme.of(context).textTheme.bodyMedium),
+                              Text("Report", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black)),
                             ],
                           ),
                         ),

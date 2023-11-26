@@ -1,5 +1,5 @@
-import 'package:mementoh/data/repositories/_repository.dart';
-import 'package:mementoh/main.dart';
+import 'package:mementohr/data/repositories/_repository.dart';
+import 'package:mementohr/main.dart';
 import 'package:sqflite/sqflite.dart';
 import '../habit.dart';
 import '../habit_entity.dart';

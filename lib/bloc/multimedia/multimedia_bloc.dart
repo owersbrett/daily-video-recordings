@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mementoh/data/multimedia_file.dart';
-import 'package:mementoh/data/repositories/multimedia_repository.dart';
-import 'package:mementoh/main.dart';
-import 'package:mementoh/service/media_service.dart';
+import 'package:mementohr/data/multimedia_file.dart';
+import 'package:mementohr/data/repositories/multimedia_repository.dart';
+import 'package:mementohr/main.dart';
+import 'package:mementohr/service/media_service.dart';
 import 'package:uuid/uuid.dart';
 
 import 'multimedia.dart';

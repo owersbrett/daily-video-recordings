@@ -1,9 +1,9 @@
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:mementoh/bloc/multimedia/multimedia.dart';
+import 'package:mementohr/bloc/multimedia/multimedia.dart';
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mementoh/pages/video/delete_dialog.dart';
+import 'package:mementohr/pages/video/delete_dialog.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../bloc/habits/habits.dart';
@@ -86,9 +86,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
         const SizedBox(
           height: 100,
         ),
-        Expanded(
-          child: Container()
-        ),
+        Expanded(child: Container()),
         Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -127,8 +125,6 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     );
   }
 
-  
-
   Widget _videoSlider() {
     return Expanded(
       child: Slider(
@@ -159,11 +155,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Row(
-            children: [
-          Text(formattedTimer, style: const TextStyle(color: Colors.white)),
-             
-              _videoSlider()
-            ],
+            children: [Text(formattedTimer, style: const TextStyle(color: Colors.white)), _videoSlider()],
           )
         ],
       ),
@@ -216,7 +208,9 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                           downloadVideo();
                         },
                       ),
-                      SizedBox(height: 16,),
+                      SizedBox(
+                        height: 16,
+                      ),
                       deleteIcon()
                     ],
                   )),

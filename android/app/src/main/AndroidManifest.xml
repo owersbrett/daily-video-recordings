@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:requestLegacyExternalStorage="true"
-        android:label="mementoh"
+        android:label="mementohr"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

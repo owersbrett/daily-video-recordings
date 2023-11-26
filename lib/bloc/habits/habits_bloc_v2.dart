@@ -1,7 +1,7 @@
-// import 'package:mementoh/bloc/experience/experience.dart';
-// import 'package:mementoh/data/habit_entity.dart';
-// import 'package:mementoh/data/repositories/habit_entry_repository.dart';
-// import 'package:mementoh/data/repositories/habit_repository.dart';
+// import 'package:mementohr/bloc/experience/experience.dart';
+// import 'package:mementohr/data/habit_entity.dart';
+// import 'package:mementohr/data/repositories/habit_entry_repository.dart';
+// import 'package:mementohr/data/repositories/habit_repository.dart';
 // import 'package:logging/logging.dart';
 
 // import '../../data/experience.dart';

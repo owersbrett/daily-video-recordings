@@ -1,5 +1,5 @@
-import 'package:mementoh/data/habit_entity.dart';
-import 'package:mementoh/main.dart';
+import 'package:mementohr/data/habit_entity.dart';
+import 'package:mementohr/main.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/habit.dart';
@@ -72,7 +72,7 @@ class HabitsLoaded extends HabitsState {
       var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
       return [...previousValue, ...filteredEntries];
     });
-  
+
     return todaysHabitEntries;
   }
 

@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:mementoh/data/multimedia_file.dart';
-import 'package:mementoh/pages/video/video_player_item.dart';
-import 'package:mementoh/service/media_service.dart';
+import 'package:mementohr/data/multimedia_file.dart';
+import 'package:mementohr/pages/video/video_player_item.dart';
+import 'package:mementohr/service/media_service.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 

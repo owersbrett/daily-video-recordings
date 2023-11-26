@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:mementoh/data/multimedia_file.dart';
+import 'package:mementohr/data/multimedia_file.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 // Add this line for date formatting
 import 'package:camera/camera.dart';
-import 'package:mementoh/main.dart';
-import 'package:mementoh/service/file_directories_service.dart';
+import 'package:mementohr/main.dart';
+import 'package:mementohr/service/file_directories_service.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MediaService {

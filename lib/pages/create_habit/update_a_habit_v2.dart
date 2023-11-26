@@ -1,13 +1,13 @@
-import 'package:mementoh/pages/create_habit/display_habit_card.dart';
-import 'package:mementoh/util/color_util.dart';
+import 'package:mementohr/pages/create_habit/display_habit_card.dart';
+import 'package:mementohr/util/color_util.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:mementoh/data/frequency_type.dart';
-import 'package:mementoh/pages/create_habit/color_picker_dialog.dart';
-import 'package:mementoh/pages/video/dvr_close_button.dart';
-import 'package:mementoh/theme/theme.dart';
-import 'package:mementoh/widgets/custom_form_field.dart';
-import 'package:mementoh/widgets/stylized_checkbox.dart';
+import 'package:mementohr/data/frequency_type.dart';
+import 'package:mementohr/pages/create_habit/color_picker_dialog.dart';
+import 'package:mementohr/pages/video/dvr_close_button.dart';
+import 'package:mementohr/theme/theme.dart';
+import 'package:mementohr/widgets/custom_form_field.dart';
+import 'package:mementohr/widgets/stylized_checkbox.dart';
 import '../../bloc/habits/habits.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entity.dart';
@@ -260,21 +260,25 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                                   BlocProvider.of<HabitsBloc>(context).add(UpdateHabit(habit));
                                   Navigator.of(context).pop();
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: Colors.black, width: 2),
-                                      color: lightEmerald),
-                                  height: MediaQuery.of(context).size.height * .2,
-                                  child: Center(
-                                      child: Text(
-                                    "Update",
-                                    style: TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        shadows: StringUtil.outlinedText(strokeWidth: 1)),
-                                  )),
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(16),
+                                  elevation: 5,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(color: Colors.black, width: 2),
+                                        color: Colors.white),
+                                    height: MediaQuery.of(context).size.height * .2,
+                                    child: Center(
+                                        child: Text(
+                                      "Update",
+                                      style: TextStyle(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          shadows: StringUtil.outlinedText(strokeWidth: 1)),
+                                    )),
+                                  ),
                                 ),
                               ),
                             ),

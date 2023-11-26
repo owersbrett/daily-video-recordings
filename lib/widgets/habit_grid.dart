@@ -1,5 +1,5 @@
-import 'package:mementoh/bloc/reports/reports.dart';
-import 'package:mementoh/widgets/custom_progress_indicator.dart';
+import 'package:mementohr/bloc/reports/reports.dart';
+import 'package:mementohr/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/experience/experience.dart';
@@ -7,6 +7,7 @@ import '../bloc/user/user.dart';
 import '../data/habit.dart';
 import '../data/habit_entry.dart';
 import '../pages/video/dvr_close_button.dart';
+import '../util/date_util.dart';
 
 class HabitGrid extends StatefulWidget {
   final Map<int, List<HabitEntry>> habitEntries;
@@ -110,20 +111,22 @@ class _HabitGridState extends State<HabitGrid> {
   );
 
   List<Widget> _grid() {
-        int i = 1;
+    int i = 1;
 
     return [
       const SizedBox(height: kToolbarHeight / 2),
-      Row(
-        children: daysOfWeek.map((day) => cell(day, i++ == 1)).toList(),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: daysOfWeek.map((day) => cell(day, i++ == 1)).toList(),
+        ),
       ),
       for (List<Widget> row in habitRows())
-        Row(
-          children: row,
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: row),
         ),
-      const SizedBox(
-        height: 16,
-      ),
+      const SizedBox(height: 16),
     ];
   }
 
@@ -142,7 +145,7 @@ class _HabitGridState extends State<HabitGrid> {
                       const SizedBox(
                         height: kToolbarHeight / 3,
                       ),
-                      const Center(child: Text("Mementoh", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24))),
+                      const Center(child: Text("Mementohr", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24))),
                       const SizedBox(height: kToolbarHeight / 2),
                       Row(
                         children: [
@@ -171,7 +174,10 @@ class _HabitGridState extends State<HabitGrid> {
                 ),
               ],
             ),
-            DVRCloseButton(onPressed: () => Navigator.of(context).pop(), color: Colors.black,),
+            DVRCloseButton(
+              onPressed: () => Navigator.of(context).pop(),
+              color: Colors.black,
+            ),
           ],
         ),
       ),

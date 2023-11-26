@@ -1,6 +1,7 @@
-import 'package:mementoh/pages/home/home_page.dart';
+import 'package:mementohr/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:mementoh/pages/video/loading_page.dart';
+import 'package:mementohr/pages/home/splash_page.dart';
+import 'package:mementohr/pages/video/loading_page.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/user/user.dart';
@@ -29,9 +30,15 @@ class _UserPageState extends State<UserPage> {
       },
       builder: (context, state) {
         if (state is UserLoaded) {
-          return HomePage(user: state.user);
+          if (state.hasSeenSplashPage) {
+            return HomePage(user: state.user);
+          } else {
+            return SplashPage(user: state.user);
+          }
         } else {
-          return const LoadingPage(resourceName: "Home page",);
+          return const LoadingPage(
+            resourceName: "Home page",
+          );
         }
       },
     );

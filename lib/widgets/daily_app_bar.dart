@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:mementoh/bloc/habits/habits.dart';
-import 'package:mementoh/service/admin_service.dart';
+import 'package:mementohr/bloc/habits/habits.dart';
+import 'package:mementohr/service/admin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mementoh/widgets/today_is_widget.dart';
+import 'package:mementohr/widgets/today_is_widget.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../bloc/user/user.dart';
@@ -42,7 +42,7 @@ class _DailyAppBarState extends State<DailyAppBar> {
                   builder: (ctx) {
                     return Container(
                       height: 400,
-                      color: Colors.white,
+                      color: Colors.black,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -74,7 +74,7 @@ class _DailyAppBarState extends State<DailyAppBar> {
                                   },
                                   child: const Text(
                                     "TODAY",
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -90,7 +90,7 @@ class _DailyAppBarState extends State<DailyAppBar> {
                                   },
                                   child: const Text(
                                     "SELECT",
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -123,32 +123,17 @@ class _DailyAppBarState extends State<DailyAppBar> {
             // ),
             IconButton(
               onPressed: () {
-                Navigation.createRoute(SQLEditor(db: RepositoryProvider.of<Database>(context),), context, AnimationEnum.fadeIn);
-                // showDialog(
-                //   context: context,
-                //   builder: (ctx) => AlertDialog(
-                //     title: const Text(
-                //       "Admin Service",
-                //       style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                //     ),
-                //     content: Column(
-                //       mainAxisSize: MainAxisSize.min,
-                //       children: AdminService.adminCommands
-                //           .map(
-                //             (e) => TextButton(
-                //               onPressed: () => AdminService.handleAdminCommand(context, e).then((value) => Navigator.of(ctx).pop()),
-                //               child: Text(
-                //                 e,
-                //                 style: const TextStyle(color: Colors.black),
-                //               ),
-                //             ),
-                //           )
-                //           .toList(),
-                //     ),
-                //   ),
-                // );
+                Navigation.createRoute(
+                    SQLEditor(
+                      db: RepositoryProvider.of<Database>(context),
+                    ),
+                    context,
+                    AnimationEnum.fadeIn);
               },
-              icon: const Icon(Icons.admin_panel_settings),
+              icon: const Icon(
+                Icons.admin_panel_settings,
+                color: Colors.black,
+              ),
             ),
             Expanded(
               child: Container(),

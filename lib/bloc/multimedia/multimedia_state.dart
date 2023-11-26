@@ -1,6 +1,5 @@
-import 'package:mementoh/data/multimedia_file.dart';
+import 'package:mementohr/data/multimedia_file.dart';
 import 'package:equatable/equatable.dart';
-
 
 abstract class MultimediaState implements Equatable {
   List<MultimediaFile> get multimediaList;

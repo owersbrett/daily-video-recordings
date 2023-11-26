@@ -1,7 +1,8 @@
-import 'package:mementoh/data/bottom_sheet_state.dart';
-import 'package:mementoh/pages/home/mementoh.dart';
-import 'package:mementoh/pages/home/now_data.dart';
-import 'package:mementoh/theme/theme.dart';
+import 'package:mementohr/data/bottom_sheet_state.dart';
+import 'package:mementohr/pages/home/mementohr.dart';
+
+import 'package:mementohr/pages/home/now_data.dart';
+import 'package:mementohr/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../video/video_preview_page.dart';
@@ -75,7 +76,7 @@ class HomePageBottom extends StatelessWidget {
   Widget _list(BuildContext context) {
     if (large) return const VideoPreviewPage();
     if (mid) {
-      return Mementoh(
+      return Mementohr(
         nowData: nowData,
         onStart: () {
           onStartTimer();

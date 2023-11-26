@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:mementoh/data/multimedia_file.dart';
-import 'package:mementoh/main.dart';
-import 'package:mementoh/navigation/navigation.dart';
-import 'package:mementoh/pages/video/loading_page.dart';
-import 'package:mementoh/pages/video/record_video_page.dart';
-import 'package:mementoh/pages/video/video_swipe_page.dart';
+import 'package:mementohr/data/multimedia_file.dart';
+import 'package:mementohr/main.dart';
+import 'package:mementohr/navigation/navigation.dart';
+import 'package:mementohr/pages/video/loading_page.dart';
+import 'package:mementohr/pages/video/record_video_page.dart';
+import 'package:mementohr/pages/video/video_swipe_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
@@ -21,7 +21,6 @@ class VideoPreviewPage extends StatefulWidget {
 }
 
 class _VideoPreviewPageState extends State<VideoPreviewPage> {
-
   VideoPlayerController? _controller;
 
   @override
@@ -35,8 +34,6 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
     super.initState();
     BlocProvider.of<MultimediaBloc>(context).add(FetchMultimedia());
   }
-
-  
 
   Widget gridItem(MultimediaFile file, int i, bool hasThumbnail) {
     return GridTile(

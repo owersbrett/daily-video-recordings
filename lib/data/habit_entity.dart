@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mementoh/main.dart';
+import 'package:mementohr/main.dart';
 
 import '../util/date_util.dart';
 import 'habit.dart';

@@ -8,10 +8,10 @@ class LoadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body:  Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const CircularProgressIndicator(),
           const SizedBox(height: 20),
-          Text(resourceName == null ? "Loading..." : resourceName! +  " loading..."),
         ],
       ),
     );

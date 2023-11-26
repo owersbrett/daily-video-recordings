@@ -1,5 +1,5 @@
-import 'package:mementoh/data/habit_entity.dart';
-import 'package:mementoh/data/multimedia.dart';
+import 'package:mementohr/data/habit_entity.dart';
+import 'package:mementohr/data/multimedia.dart';
 
 import 'user.dart';
 

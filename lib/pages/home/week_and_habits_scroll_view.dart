@@ -1,9 +1,11 @@
-import 'package:mementoh/data/habit_entity.dart';
-import 'package:mementoh/data/habit_entry.dart';
-import 'package:mementoh/widgets/habit_entry_card.dart';
+import 'package:mementohr/data/habit_entity.dart';
+import 'package:mementohr/data/habit_entry.dart';
+import 'package:mementohr/pages/home/custom_circular_indicator_v2.dart';
+import 'package:mementohr/pages/video/loading_page.dart';
+import 'package:mementohr/widgets/habit_entry_card.dart';
 import 'package:flutter/material.dart';
-import 'package:mementoh/pages/create_habit/create_a_habit.dart';
-import 'package:mementoh/pages/create_habit/update_a_habit.dart';
+import 'package:mementohr/pages/create_habit/create_a_habit.dart';
+import 'package:mementohr/pages/create_habit/update_a_habit.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
@@ -69,6 +71,9 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   List<Widget> dayWidgets(BuildContext context) => days(context);
   List<Widget> habitWidgets(BuildContext context) {
     if (todaysHabitEntries.isEmpty) {
+      if (habitsState is! HabitsLoaded) {
+        return [CustomProgressIndicator(progress: 50)];
+      }
       return [
         const SizedBox(height: kToolbarHeight),
         Padding(
@@ -95,7 +100,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
     }
     return todaysHabitEntries
         .map((e) => GestureDetector(
-          key: Key(e.habitId.toString() + ":" + e.id.toString()),
+              key: Key(e.habitId.toString() + ":" + e.id.toString()),
               onTap: () {
                 if (habitsState.getHabit(e.habitId) != null) {
                   Navigation.createRoute(UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);
@@ -129,4 +134,3 @@ class WeekAndHabitsScrollView extends StatelessWidget {
     ));
   }
 }
-

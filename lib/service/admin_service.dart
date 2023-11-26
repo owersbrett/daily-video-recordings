@@ -1,11 +1,13 @@
 import 'dart:math';
 
-import 'package:mementoh/data/level.dart';
-import 'package:mementoh/data/repositories/habit_repository.dart';
-import 'package:mementoh/main.dart';
+import 'package:mementohr/data/level.dart';
+import 'package:mementohr/data/repositories/habit_repository.dart';
+import 'package:mementohr/main.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/experience/experience.dart';
+import '../data/frequency_type.dart';
+import '../data/habit.dart';
 import '../data/repositories/experience_repository.dart';
 
 class AdminService {
@@ -55,5 +57,80 @@ class AdminService {
       pointsToUnlockNextLevel = (basePoints * pow(growthRate, i)).round();
     }
     return levels;
+  }
+
+  static List<Habit> get50Habits(int userId, bool emojiGender) {
+    List<Habit> habits = [];
+
+    // Highly Effective Habits
+    habits.add(Habit.fromString(userId, "Be Proactive", "🧠", "🏋️"));
+    habits.add(Habit.fromString(userId, "Begin With The End In Mind", "🏁", "🏁"));
+    habits.add(Habit.fromString(userId, "Put First Things First", "🙏", "🙏"));
+    habits.add(Habit.fromString(userId, "Think Win-Win", "🥇", "🥇"));
+    habits.add(Habit.fromString(userId, "Seek First To Understand", "👫", "👂"));
+    habits.add(Habit.fromString(userId, "Synergize", "🧬", "🧬"));
+    habits.add(Habit.fromString(userId, "Get Better At What You're Good At", "🎯", "📈"));
+    // Personal Development Habits
+    habits.add(Habit.fromString(userId, "Lift Weights", "💪", "🏋️"));
+    habits.add(Habit.fromString(userId, "Read 30 Minutes", "📚", "🤓"));
+    habits.add(Habit.fromString(userId, "Meditate", "🧘", "🕉️"));
+    habits.add(Habit.fromString(userId, "Learn Something New", "🎓", "📖"));
+    habits.add(Habit.fromString(userId, "Journaling Before Bed", "✍️", "📔"));
+    habits.add(Habit.fromString(userId, "Goal Setting", "🎯", "📈"));
+    habits.add(Habit.fromString(userId, "Goal Review", "🎯", "📈"));
+    habits.add(Habit.fromString(userId, "In Bed By 9", "🛌", "🌙"));
+    habits.add(Habit.fromString(userId, "Give Thanks To God", "🙏", "💖"));
+    habits.add(Habit.fromString(userId, "Reflect On Time", "⏳", "🕰️"));
+    habits.add(Habit.fromString(userId, "Self Talk Evaluation", "💬", "🗨️"));
+
+    // Health and Wellness Habits
+    habits.add(Habit.fromString(userId, "Eat Fruits And Vegetables", "🥦", "🍏"));
+    habits.add(Habit.fromString(userId, "Drink 64oz Of Water", "💧", "🚰"));
+    habits.add(Habit.fromString(userId, "Deliver Chocolate To Hospital", "🩺", "🏥"));
+    habits.add(Habit.fromString(userId, "Limit Processed Foods", "🚫🍕", "🥗"));
+    habits.add(Habit.fromString(userId, "Take Breaks", "☕", "🛀"));
+    habits.add(Habit.fromString(userId, "Shampoo And Condition", "🧼", "🚿"));
+    habits.add(Habit.fromString(userId, "Avoid Smoking", "❌🚬", "🍵"));
+    habits.add(Habit.fromString(userId, "Cardio Exercise", "🏃", "🚴"));
+    habits.add(Habit.fromString(userId, "Safe Sun Exposure", "🌞", "🧴"));
+    habits.add(Habit.fromString(userId, "Listen to Your Body", "👂", "🫀"));
+
+    // Professional Habits
+    habits.add(Habit.fromString(userId, "Fix Business Plan", "🛠️", "💼"));
+    habits.add(Habit.fromString(userId, "Networking", "🤝", "💼"));
+    habits.add(Habit.fromString(userId, "Effective Communication", "💬", "📞"));
+    habits.add(Habit.fromString(userId, "Seek Feedback", "🙋", "📝"));
+    habits.add(Habit.fromString(userId, "Complete Tasks Timely", "⌛", "✅"));
+    habits.add(Habit.fromString(userId, "Embrace Change", "🔄", "🦋"));
+    habits.add(Habit.fromString(userId, "Organizational Skills", "🗂️", "📊"));
+    habits.add(Habit.fromString(userId, "Problem-Solving", "🧠", "🔍"));
+    habits.add(Habit.fromString(userId, "Proactivity", "👊", "🚀"));
+    habits.add(Habit.fromString(userId, "Work-Life Balance", "⚖️", "🏖️"));
+
+    // Social and Relationship Habits
+    habits.add(Habit.fromString(userId, "Active Listening", "👂", "🗣️"));
+    habits.add(Habit.fromString(userId, "Express Empathy", "💞", "🤗"));
+    habits.add(Habit.fromString(userId, "Regular Socializing", "👥", "🎉"));
+    habits.add(Habit.fromString(userId, "Respectfulness", "🙇", "🤝"));
+    habits.add(Habit.fromString(userId, "Keep in Touch", "📱", "✉️"));
+    habits.add(Habit.fromString(userId, "Stop Watching Corn", "🌽", "👀"));
+
+    // Financial Habits
+    habits.add(Habit.fromString(userId, "Budgeting", "💰", "📝"));
+    habits.add(Habit.fromString(userId, "Saving 10\$", "🐷", "💸"));
+    habits.add(Habit.fromString(userId, "Investing 100\$", "💹", "📊"));
+    habits.add(Habit.fromString(userId, "Avoid Unnecessary Debt", "❌💳", "🚫"));
+    habits.add(Habit.fromString(userId, "Review Finances", "🔍💵", "📑"));
+
+    // Environmental Habits
+    habits.add(Habit.fromString(userId, "Recycling", "♻️", "🌱"));
+    habits.add(Habit.fromString(userId, "Conserve Water", "💧", "🔌"));
+    habits.add(Habit.fromString(userId, "Carpool", "🚌", "🚗"));
+    habits.add(Habit.fromString(userId, "Sustainable Products", "🌍", "🌿"));
+    habits.add(Habit.fromString(userId, "Learn Environmental Issues", "📚🌍", "🔬"));
+
+    // Process the habits list as needed
+
+    return habits;
   }
 }
