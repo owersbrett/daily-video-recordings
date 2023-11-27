@@ -32,8 +32,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Timer? _timer;
-  NowData nowData = NowData();
+  
 
   bool showCreateDropdown = false;
   BottomSheetState bottomSheetState = BottomSheetState.hidden;
@@ -41,30 +40,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _timer = Timer.periodic(const Duration(seconds: 1), minuteFunction);
     BlocProvider.of<HabitsBloc>(context).add(FetchHabits(widget.user.id!, DateTime.now()));
   }
 
-  void minuteFunction(Timer t) {
-    setState(() {
-      if (nowData.currentTime.difference(nowData.startTime).inHours > 1) {
-        nowData.timeLimitReached();
-      }
-      nowData.elapsedTime = nowData.currentTime.difference(nowData.startTime);
-      nowData.currentTime = DateTime.now();
-    });
-  }
 
-  DateTime get now => nowData.currentTime;
-
-  double get monthlyValue => nowData.currentTime.day / DateTime(now.year, now.month + 1, 0).subtract(const Duration(days: 1)).day;
-  double get annualValue => nowData.dayOfYearFraction;
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
 
   Map<int, List<HabitEntry>> habitGridData() {
     Map<int, List<HabitEntry>> habitEntries = <int, List<HabitEntry>>{};
@@ -273,17 +252,8 @@ class _HomePageState extends State<HomePage> {
           value1: percentageForToday,
           value2: percentageForTheWeek,
           value3: percentageToNextLevel,
-          value4: nowData.currentTime.second / 60,
-          value5: monthlyValue,
-          value6: annualValue,
-          nowData: nowData,
           bottomSheetState: bottomSheetState,
           setBottomSheetState: setBottomSheetState,
-          onStartTimer: () {
-            setState(() {
-              nowData.startTimerTimer = DateTime.now();
-            });
-          },
         );
       },
     );
