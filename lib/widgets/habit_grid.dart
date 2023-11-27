@@ -150,6 +150,18 @@ class _HabitGridState extends State<HabitGrid> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+          List<List<String>> rows = habitRowsCSV();
+          rows.insert(0, headers);
+          toCsv.myCSV(
+            headers,
+            rows,
+          );
+        },
+        child: Icon(Icons.download),
+      ),
       body: Container(
         color: Colors.white,
         child: Stack(
@@ -186,28 +198,7 @@ class _HabitGridState extends State<HabitGrid> {
                         ],
                       ),
                       ..._grid(),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: MaterialButton(
-                          onPressed: () {
-                            List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-                            List<List<String>> rows = habitRowsCSV();
-                            rows.insert(0, headers);
-                            toCsv.myCSV(
-                              headers,
-                              rows,
-                            );
-                          },
-                          color: Colors.black,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Download",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      )
+                      
                     ],
                   ),
                 ),

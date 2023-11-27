@@ -11,6 +11,24 @@
             "deviceId": "00008120-0018096A14D8C01E"
         },
         {
+            "name": "6.7",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "3657E686-3037-4DCD-B0F9-D20D03AECB8E"
+        },
+        {
+            "name": "6.5",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "3657E686-3037-4DCD-B0F9-D20D03AECB8E"
+        },
+        {
+            "name": "5.5",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "3657E686-3037-4DCD-B0F9-D20D03AECB8E"
+        },
+        {
             "name": "old_iphone",
             "request": "launch",
             "type": "dart",

@@ -14,7 +14,7 @@
 //       // Add logic to navigate through your app
 
 //       // Take a screenshot
-//       await screenshot(driver, config, 'home_screen');
+//       // await Screensho(driver, config, 'home_screen');
 //     });
 
 //     // Add more tests for other screens
