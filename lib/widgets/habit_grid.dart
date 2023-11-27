@@ -53,11 +53,19 @@ class _HabitGridState extends State<HabitGrid> {
   }
 
   List<List<String>> habitRowsCSV() {
-    List<List<String>> widgets = [];
+    List<List<String>> rows = [];
     for (var habit in widget.habits) {
-      widgets.add(habitCells(habit).map((e) => e.toString()).toList());
+      List<String> row = [];
+      row.add(habit.stringValue);
+      List<HabitEntry> entries = widget.habitEntries[habit.id]!;
+      entries.sort((a, b) => a.createDate.compareTo(b.createDate));
+      for (var entry in entries) {
+        row.add((entry.booleanValue) ? "✅" : "❌");
+      }
+      rows.add(row);
     }
-    return widgets;
+
+    return rows;
   }
 
   Widget analytics = Row(
@@ -182,9 +190,12 @@ class _HabitGridState extends State<HabitGrid> {
                         padding: EdgeInsets.all(8.0),
                         child: MaterialButton(
                           onPressed: () {
+                            List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                            List<List<String>> rows = habitRowsCSV();
+                            rows.insert(0, headers);
                             toCsv.myCSV(
-                              ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-                              habitRowsCSV(),
+                              headers,
+                              rows,
                             );
                           },
                           color: Colors.black,
