@@ -13,6 +13,7 @@ import 'package:mementohr/widgets/stylized_checkbox.dart';
 import '../../bloc/habits/habits.dart';
 import '../../data/habit.dart';
 import '../../data/habit_entity.dart';
+import '../../tooltip_text.dart';
 import '../../validators/form_validator.dart';
 import '../video/delete_dialog.dart'; // Include this package for color picker
 
@@ -165,7 +166,17 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton:
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: darkEmerald,
+        onPressed: () {
+          Logger.root.info("Habit: $habit");
+          if (_formKey.currentState?.validate() ?? false) {
+            BlocProvider.of<HabitsBloc>(context).add(UpdateHabit(habit.copyWith(emoji: emojiController.text.trim())));
+            Navigator.of(context).pop();
+          }
+        },
+        child: const Icon(Icons.save, color: Colors.white,),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -233,12 +244,15 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                           pickColor();
                         }
                       },
-                      child: DisplayHabitCard(
-                        emoji: emojiController.text,
-                        streakEmoji: streakEmojiController.text,
-                        habitEntity: HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []),
-                        progress: progress,
-                        checkable: false,
+                      child: Tooltip(
+                        message: TooltipText.getHabitCardTooltip(habit.stringValue),
+                        child: DisplayHabitCard(
+                          habitEntity: HabitEntity(habit: habit, habitEntries: const [], habitEntryNotes: const []),
+                          progress: progress,
+                          checkable: false,
+                          streakEmoji: habit.streakEmoji,
+                          emoji: habit.emoji,
+                        ),
                       ),
                     ),
                     _habitField(context),
@@ -269,7 +283,9 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                       child: CustomFormField(
                         focusNode: emojiFocusNode,
                         label: "Emoji",
-                        onChanged: (val) {},
+                        onChanged: (val) {
+                          setHabit(habit.copyWith(emoji: val));
+                        },
                         validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Emoji"),
                         onEditingComplete: () => FocusScope.of(context).unfocus(),
                         value: emojiController,
@@ -286,47 +302,6 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                         validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Streak Emoji"),
                         onEditingComplete: () => FocusScope.of(context).unfocus(),
                         value: streakEmojiController,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Visibility(
-                              visible: progress >= 70,
-                              child: InkWell(
-                                onTap: () {
-                                  Logger.root.info("Habit: $habit");
-                                  if (_formKey.currentState?.validate() ?? false) {
-                                    BlocProvider.of<HabitsBloc>(context).add(UpdateHabit(habit.copyWith(emoji: emojiController.text.trim())));
-                                    Navigator.of(context).pop();
-                                  }
-                                },
-                                  child: Material(
-                                  borderRadius: BorderRadius.circular(16),
-                                  elevation: 7,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: Colors.black, width: 2),
-                                        color: Colors.white),
-                                    height: MediaQuery.of(context).size.height * .2,
-                                    child: Center(
-                                        child: Text(
-                                      "Update",
-                                      style: TextStyle(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,)
-
-                                    )),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
                       ),
                     ),
                     Row(

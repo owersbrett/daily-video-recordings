@@ -63,7 +63,7 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
                 padding: EdgeInsets.all(24.0),
                 child: Text(
                   "No video entries.\nTap to create one!",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
               ),

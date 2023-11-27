@@ -72,7 +72,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   List<Widget> habitWidgets(BuildContext context) {
     if (todaysHabitEntries.isEmpty) {
       if (habitsState is! HabitsLoaded) {
-        return [CustomProgressIndicator(progress: 50)];
+        return [CircularProgressIndicator()];
       }
       return [
         const SizedBox(height: kToolbarHeight),
