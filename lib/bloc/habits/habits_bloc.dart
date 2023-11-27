@@ -55,8 +55,8 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   }
 
   List<DateTime> getInterval(DateTime now) {
-    DateTime startInterval = now.subtract(const Duration(days: 3));
-    DateTime endInterval = now.add(const Duration(days: 7));
+    DateTime startInterval = now.subtract(const Duration(days: 45));
+    DateTime endInterval = now.add(const Duration(days: 45));
     return [startInterval, endInterval];
   }
 
@@ -91,18 +91,24 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
   }
 
   Future _addHabits(AddHabits event, Emitter<HabitsState> emit) async {
+    try {
+
     for (var element in event.habits) {
       Habit habit = element.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
       habit = await habitRepository.create(habit);
       HabitEntry habitEntry = HabitEntry.fromHabit(habit, habit.createDate);
       habitEntry = habitEntry.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
-      habitEntry = await habitEntryRepository.create(habitEntry);
+      await habitEntryRepository.createIfDoesntExistForDate(habitEntry);
+
     }
 
     Map<int, HabitEntity> habitEntities = await habitRepository.getHabitEntities(event.userId);
 
     emit(HabitsLoaded(habitEntities, state.currentDate));
     event.onClose?.call();
+    } catch (e) {
+      Logger.root.severe("Error adding habits: " + e.toString());
+    }
   }
 
   Future _addHabit(AddHabit event, Emitter<HabitsState> emit) async {
@@ -111,7 +117,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       habit = await habitRepository.create(habit);
       HabitEntry habitEntry = HabitEntry.fromHabit(habit, habit.createDate);
       habitEntry = habitEntry.copyWith(updateDate: event.dateToAddHabit, createDate: event.dateToAddHabit);
-      habitEntry = await habitEntryRepository.create(habitEntry);
+      await habitEntryRepository.createIfDoesntExistForDate(habitEntry);
       Map<int, HabitEntity> habitEntities = await habitRepository.getHabitEntities(event.habit.userId);
 
       emit(HabitsLoaded(habitEntities, state.currentDate));

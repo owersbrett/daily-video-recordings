@@ -18,6 +18,9 @@ class DateUtil {
   static DateTime closestComingSunday(DateTime? now){
     return closestPastMonday(now).add(const Duration(days: 7));
   }
+  static bool isConsecutiveDays(DateTime dateOne, DateTime dateTwo) {
+    return dateOne.difference(dateTwo).inDays == 1 && dateOne.year == dateTwo.year;
+  }
 
   static List<HabitEntry> extractWeekFrom(List<HabitEntry> entries, monday) {
     List<HabitEntry> weekEntries = [];

@@ -3,10 +3,12 @@ import 'package:is_audio_playing/is_audio_playing.dart';
 import 'package:mementohr/bloc/experience/experience.dart';
 import 'package:mementohr/bloc/habits/habits.dart';
 import 'package:flutter/material.dart';
+import 'package:mementohr/data/repositories/habit_entry_repository.dart';
 
 import '../data/habit.dart';
 import '../data/habit_entity.dart';
 import '../data/habit_entry.dart';
+import '../main.dart';
 import '../util/date_util.dart';
 import 'stylized_checkbox.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -24,7 +26,6 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
   String get habitString => habit.stringValue;
   AudioPlayer audioPlayer = AudioPlayer();
   IsAudioPlaying isAudioPlaying = IsAudioPlaying();
-
 
   Habit get habit => widget.habit;
   bool buttonsExpanded = false;
@@ -51,7 +52,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
       if (!widget.habitEntry.booleanValue) {
         audioPlayer.setPlayerMode(PlayerMode.lowLatency);
         audioPlayer.setVolume(0.3);
-        if (!(await isAudioPlaying.isAudioPlaying() ?? true)){
+        if (!(await isAudioPlaying.isAudioPlaying() ?? true)) {
           audioPlayer.play(AssetSource("audio/shimmer.wav"));
         }
       }
@@ -165,7 +166,19 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(streakEmoji(habitEntity), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
-            Padding(padding: const EdgeInsets.only(top: 6), child: streakCount(habitEntity)),
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: FutureBuilder(
+                future: RepositoryProvider.of<IHabitEntryRepository>(context).getStreakFromHabitAndDate(habit.id, widget.currentListDate),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data.toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
+                  } else {
+                    return const Text("0", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
+                  }
+                },
+              ),
+            ),
             Expanded(
               child: Container(),
             ),

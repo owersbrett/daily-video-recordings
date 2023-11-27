@@ -4,10 +4,11 @@ import '../habit_entry.dart';
 import '_repository.dart';
 
 abstract class IHabitEntryRepository implements Repository<HabitEntry> {
-  Future createIfDoesntExistForDate(HabitEntry t);
+  Future<HabitEntry?> createIfDoesntExistForDate(HabitEntry t);
   Future deleteWhere(String where, List<dynamic> whereArgs);
   Future createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(HabitEntry t);
   Future createForTodayIfDoesntExistBetweenStartDateAndEndDate(HabitEntry t, DateTime startDate, DateTime endDate);
+  Future<int> getStreakFromHabitAndDate(int? id, DateTime currentListDate);
 }
 
 class HabitEntryRepository implements IHabitEntryRepository {
@@ -47,38 +48,62 @@ class HabitEntryRepository implements IHabitEntryRepository {
     int i = await db.update(tableName, t.toMap(), where: 'id = ?', whereArgs: [t.id]);
     return Future.value(i > 0);
   }
-  
+
   @override
-  Future createIfDoesntExistForDate(HabitEntry t)async {
-    DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day).subtract(Duration(seconds: 1));
-    DateTime end = DateTime(t.createDate.year, t.createDate.month, t.createDate.day, 23, 59, 59);
-    var q = await db.query(tableName, where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
-    if(q.isEmpty){
-      await create(t);
+  Future<HabitEntry?> createIfDoesntExistForDate(HabitEntry t) async {
+    DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day);
+    DateTime end = DateTime(t.createDate.year, t.createDate.month, t.createDate.day + 1);
+    var q = await db.query(tableName,
+        where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
+    if (q.isEmpty) {
+      return await create(t);
+    } else {
+      return null;
     }
   }
-  
+
   @override
   Future createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(HabitEntry t) async {
-    DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day).subtract( const Duration(days: 1));
-    DateTime end = DateTime(t.createDate.year, t.createDate.month, t.createDate.day, 23, 59, 59).add( const Duration(days: 1));
-    var q = await db.query(tableName, where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
-    if(q.isEmpty){
+    DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day).subtract(const Duration(days: 1));
+    DateTime end = DateTime(t.createDate.year, t.createDate.month, t.createDate.day, 23, 59, 59).add(const Duration(days: 1));
+    var q = await db.query(tableName,
+        where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
+    if (q.isEmpty) {
       await create(t);
     }
   }
-  
+
   @override
   Future createForTodayIfDoesntExistBetweenStartDateAndEndDate(HabitEntry t, DateTime startDate, DateTime endDate) async {
-
-    var q = await db.query(tableName, where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, startDate.millisecondsSinceEpoch, endDate.millisecondsSinceEpoch]);
-    if(q.isEmpty){
+    var q = await db.query(tableName,
+        where: 'habitId = ? AND createDate BETWEEN ? and ?',
+        whereArgs: [t.habitId, startDate.millisecondsSinceEpoch, endDate.millisecondsSinceEpoch]);
+    if (q.isEmpty) {
       await create(t);
     }
   }
-  
+
   @override
   Future deleteWhere(String where, List whereArgs) async {
     await db.delete(tableName, where: where, whereArgs: whereArgs);
+  }
+
+  @override
+  Future<int> getStreakFromHabitAndDate(int? id, DateTime currentListDate) async {
+    var res = db.rawQuery("""
+SELECT COUNT(*) as streak_count
+FROM HabitEntry
+WHERE habitId = ? -- Your habitId parameter
+AND createDate > (
+    SELECT MAX(createDate)
+    FROM HabitEntry
+    WHERE habitId = ? -- Your habitId parameter again
+    AND booleanValue = 0
+    AND createDate < ? -- Your createDate parameter
+)
+AND createDate <= ? -- Your createDate parameter again
+AND booleanValue = 1;
+""", [id, id, currentListDate.millisecondsSinceEpoch, currentListDate.millisecondsSinceEpoch]);
+    return res.then((value) => value.first['streak_count'] as int? ?? 0);
   }
 }

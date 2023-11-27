@@ -121,17 +121,26 @@ class _DailyAppBarState extends State<DailyAppBar> {
             //     textColor: Colors.white,
             //   ),
             // ),
+
+            // ----------------------------
+            // TODO for testing
+            // IconButton(
+            //   onPressed: () {
+            //     Navigation.createRoute(SQLEditor(db: RepositoryProvider.of<Database>(context)), context, AnimationEnum.fadeIn);
+            //   },
+            //   icon: const Icon(
+            //     Icons.admin_panel_settings,
+            //     color: Colors.black,
+            //   ),
+            // ),
+            // ----------------------------
+
             IconButton(
               onPressed: () {
-                Navigation.createRoute(
-                    SQLEditor(
-                      db: RepositoryProvider.of<Database>(context),
-                    ),
-                    context,
-                    AnimationEnum.fadeIn);
+                BlocProvider.of<UserBloc>(context).add(SplashPageRequested());
               },
               icon: const Icon(
-                Icons.admin_panel_settings,
+                Icons.help,
                 color: Colors.black,
               ),
             ),
