@@ -5,6 +5,7 @@ import 'package:mementohr/pages/home/now_data.dart';
 import 'package:mementohr/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../tooltip_text.dart';
 import '../video/video_preview_page.dart';
 
 class HomePageBottom extends StatelessWidget {
@@ -88,57 +89,60 @@ class HomePageBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(color: Colors.black),
-      height: sheetHeight(context),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: _list(context),
-                ),
-                Row(
-                  children: [
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setBottomSheetState();
-                        },
-                        child: Container(
-                          color: Colors.black,
-                          child: _buildHorizontalProgressBars(),
+    return Tooltip(
+      message: TooltipText.bottomBar,
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.black),
+        height: sheetHeight(context),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: _list(context),
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setBottomSheetState();
+                          },
+                          child: Container(
+                            color: Colors.black,
+                            child: _buildHorizontalProgressBars(),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).padding.bottom > 0 ? 0 : 24,
-                )
-              ],
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).padding.bottom > 0 ? 0 : 24,
+                  )
+                ],
+              ),
+              flex: mid || large ? 7 : 4,
             ),
-            flex: mid || large ? 7 : 4,
-          ),
-          Expanded(
-            flex: mid || large ? 3 : 2,
-            child: GestureDetector(
-              onTap: () {
-                setBottomSheetState();
-              },
-              child: Container(
-                color: Colors.black,
-                child: _buildVerticalProgressBars(),
+            Expanded(
+              flex: mid || large ? 3 : 2,
+              child: GestureDetector(
+                onTap: () {
+                  setBottomSheetState();
+                },
+                child: Container(
+                  color: Colors.black,
+                  child: _buildVerticalProgressBars(),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

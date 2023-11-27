@@ -12,6 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   to_csv: 
   image_picker: 
+  is_audio_playing:
   audioplayers:
   flutter_colorpicker:
   flutter_sound:

@@ -176,41 +176,40 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
           FloatingActionButton.small(
               backgroundColor: lightEmerald,
               onPressed: () {
-                 setState(() {
-                habitsIndex = habitsIndex - 1;
-                if (habitsIndex < 0) {
-                  habitsIndex = exampleHabits.length - 1;
-                }
-                setHabit(habit.copyWith(stringValue: exampleHabits[habitsIndex].stringValue));
-                _stringValueController.text = exampleHabits[habitsIndex].stringValue;
-              });
+                setState(() {
+                  habitsIndex = habitsIndex - 1;
+                  if (habitsIndex < 0) {
+                    habitsIndex = exampleHabits.length - 1;
+                  }
+                  setHabit(habit.copyWith(stringValue: exampleHabits[habitsIndex].stringValue));
+                  _stringValueController.text = exampleHabits[habitsIndex].stringValue;
+                });
               },
               child: Icon(
                 color: Colors.white,
                 Icons.arrow_left,
                 size: 35,
               )),
-          
           FloatingActionButton.small(
               backgroundColor: lightEmerald,
               onPressed: () {
-               
-                  setState(() {
-                    habitsIndex = habitsIndex + 1;
-                    if (habitsIndex > exampleHabits.length - 1) {
-                      habitsIndex = 0;
-                    }
-                    setHabit(habit.copyWith(stringValue: exampleHabits[habitsIndex].stringValue));
-                                    _stringValueController.text = exampleHabits[habitsIndex].stringValue;
-
-                  });
+                setState(() {
+                  habitsIndex = habitsIndex + 1;
+                  if (habitsIndex > exampleHabits.length - 1) {
+                    habitsIndex = 0;
+                  }
+                  setHabit(habit.copyWith(stringValue: exampleHabits[habitsIndex].stringValue));
+                  _stringValueController.text = exampleHabits[habitsIndex].stringValue;
+                });
               },
               child: Icon(
                 color: Colors.white,
                 Icons.arrow_right,
                 size: 35,
               )),
-              SizedBox(width: 8,),
+          SizedBox(
+            width: 8,
+          ),
           Visibility(
             visible: progress >= 70,
             child: Padding(
@@ -427,9 +426,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
               },
               size: const Size(50, 50),
             ),
-            SizedBox(
-              width: 8,
-            ),
+            const SizedBox(width: 8),
             Text(type.toUiString()),
           ],
         ),

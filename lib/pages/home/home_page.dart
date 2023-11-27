@@ -21,6 +21,7 @@ import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';
 import '../../data/user.dart';
 import '../../main.dart';
+import '../../tooltip_text.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.user});
@@ -100,7 +101,10 @@ class _HomePageState extends State<HomePage> {
                       title: DailyAppBar(
                         currentDate: state.currentDate,
                         icon: IconButton(
-                          icon: const Icon(Icons.add_circle),
+                          icon: Tooltip(
+                            message: TooltipText.clickAdd,
+                            child: Icon(Icons.add_circle),
+                          ),
                           iconSize: 32,
                           color: Colors.black,
                           onPressed: () {
@@ -135,30 +139,33 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            showCreateDropdown = false;
-                          });
-                          Navigation.createRoute(CreateHabitPage(dateToAddHabit: state.currentDate), context, AnimationEnum.pageAscend);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.add_circle,
-                                color: Colors.black,
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                "Habit",
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                      Tooltip(
+                        message: TooltipText.clickReports,
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              showCreateDropdown = false;
+                            });
+                            Navigation.createRoute(CreateHabitPage(dateToAddHabit: state.currentDate), context, AnimationEnum.pageAscend);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.add_circle,
+                                  color: Colors.black,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  "Habit",
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -167,30 +174,33 @@ class _HomePageState extends State<HomePage> {
                         height: 2,
                         color: Colors.grey.withOpacity(.2),
                       ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            showCreateDropdown = false;
-                          });
-                          Navigation.createRoute(
-                              RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
-                              context,
-                              AnimationEnum.pageAscend);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.video_call_rounded, color: Colors.black),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                "Video",
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                      Tooltip(
+                        message: TooltipText.clickReports,
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              showCreateDropdown = false;
+                            });
+                            Navigation.createRoute(
+                                RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
+                                context,
+                                AnimationEnum.pageAscend);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.video_call_rounded, color: Colors.black),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  "Video",
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -199,23 +209,28 @@ class _HomePageState extends State<HomePage> {
                         height: 2,
                         color: Colors.grey.withOpacity(.2),
                       ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            showCreateDropdown = false;
-                          });
-                          Navigation.createRoute(const ReportPage(), context, AnimationEnum.pageAscend);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.download_rounded, color: Colors.black),
-                              const SizedBox(width: 4),
-                              Text("Report",                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                              )
-                            ],
+                      Tooltip(
+                        message: TooltipText.clickReports,
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              showCreateDropdown = false;
+                            });
+                            Navigation.createRoute(const ReportPage(), context, AnimationEnum.pageAscend);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.download_rounded, color: Colors.black),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "Report",
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),

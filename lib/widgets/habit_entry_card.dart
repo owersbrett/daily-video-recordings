@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:is_audio_playing/is_audio_playing.dart';
 import 'package:mementohr/bloc/experience/experience.dart';
 import 'package:mementohr/bloc/habits/habits.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +23,15 @@ class HabitEntryCard extends StatefulWidget {
 class _HabitEntryCardState extends State<HabitEntryCard> {
   String get habitString => habit.stringValue;
   AudioPlayer audioPlayer = AudioPlayer();
+  IsAudioPlaying isAudioPlaying = IsAudioPlaying();
+
 
   Habit get habit => widget.habit;
   bool buttonsExpanded = false;
   bool noteExpanded = false;
   bool get _completed => widget.habitEntry.booleanValue;
 
-  void _onCheck(bool? value) {
+  void _onCheck(bool? value) async {
     DateTime now = DateTime.now();
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
     DateTime startOfDay = DateTime(now.year, now.month, now.day, 0, 0, 0);
@@ -48,7 +51,9 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
       if (!widget.habitEntry.booleanValue) {
         audioPlayer.setPlayerMode(PlayerMode.lowLatency);
         audioPlayer.setVolume(0.3);
-        audioPlayer.play(AssetSource("audio/shimmer.wav"));
+        if (!(await isAudioPlaying.isAudioPlaying() ?? true)){
+          audioPlayer.play(AssetSource("audio/shimmer.wav"));
+        }
       }
       BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue),
           BlocProvider.of<ExperienceBloc>(context), widget.currentListDate));
@@ -121,6 +126,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                         Padding(
                           padding: const EdgeInsets.only(right: 16, top: 16, bottom: 16),
                           child: StylizedCheckbox(
+                            key: Key(habit.stringValue),
                             isChecked: _completed,
                             color: HexColor.fromHex(habit.hexColor),
                             onTap: () => _onCheck(_completed),
