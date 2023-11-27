@@ -1,7 +1,8 @@
+//TODO screenshots
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:mementohr/data/multimedia_file.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 // Add this line for date formatting
 import 'package:camera/camera.dart';
 import 'package:mementohr/main.dart';
@@ -32,6 +33,7 @@ class MediaService {
   }
 
   static Future<void> _captureThumbnail(String videoPath, String thumbnailPath) async {
+    //TODO screenshots
     final FlutterFFmpeg _flutterFFmpeg = FlutterFFmpeg();
 
     // FFmpeg command to capture the thumbnail
@@ -147,6 +149,7 @@ class MediaService {
   }
 
   static Future<String> mergeClipsAndGetPath(List<XFile> clips, String outputPath) async {
+    //TODO screenshots
     if (clips.isEmpty) {
       throw Exception('No clips to merge.');
     }

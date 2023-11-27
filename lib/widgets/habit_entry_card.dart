@@ -169,10 +169,11 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: FutureBuilder(
+
                 future: RepositoryProvider.of<IHabitEntryRepository>(context).getStreakFromHabitAndDate(habit.id, widget.currentListDate),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text(snapshot.data.toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
+                    return Text(((snapshot.data ?? 0) + (_completed ? 1 : 0)).toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
                   } else {
                     return const Text("0", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
                   }
