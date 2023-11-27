@@ -3,6 +3,7 @@ import 'package:mementohr/pages/home/custom_circular_indicator_v2.dart';
 import 'package:mementohr/pages/home/now_data.dart';
 import 'package:mementohr/pages/home/orbital_indicator.dart';
 import 'package:mementohr/pages/home/orbital_page.dart';
+import 'package:mementohr/pages/home/orbital_state.dart';
 import 'package:mementohr/widgets/custom_circular_indicator.dart';
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
@@ -37,25 +38,22 @@ class _MementohState extends State<Mementohr> {
   }
 
   Hero hero(double percentageToNextLevel, [Size size = const Size(300, 300), int level = 1]) => Hero(
-        tag: experienceTag,
-        child: orbitalIndicator(percentageToNextLevel, size, level),
-      );
+      tag: experienceTag,
+      
+      child: BlocBuilder<HabitsBloc, HabitsState>(
+        builder: (context, state) {
+          return OrbitalIndicator(
+              currentTicks: state.todaysHabitEntries.fold(0, (previousValue, element) => (previousValue + (element.booleanValue ? 1 : 0))),
+              progress: percentageToNextLevel,
+              key: const ValueKey("weekday-hero"),
+              centerText: level.toString(),
+              totalTicks: state.todaysHabitEntries.length, size: size,);
+        },
+      ));
   Widget orbitalIndicatorPage(double percentageToNextLevel, int level) => OrbitalPage(
         tag: experienceTag,
         progress: percentageToNextLevel,
-        hero: hero(percentageToNextLevel, Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.width), level),
-      );
-  Widget orbitalIndicator(double percentageToNextLevel, Size size, int level) => BlocBuilder<HabitsBloc, HabitsState>(
-        builder: (context, state) {
-          return OrbitalIndicator(
-            currentTicks: state.todaysHabitEntries.fold(0, (previousValue, element) => (previousValue +( element.booleanValue ? 1 : 0))),
-            progress: percentageToNextLevel,
-            key: const ValueKey("weekday-hero"),
-            size: size,
-            centerText: level.toString(),
-            totalTicks: state.todaysHabitEntries.length,
-          );
-        },
+        hero: hero(percentageToNextLevel, Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height), level),
       );
 
   @override
@@ -68,9 +66,6 @@ class _MementohState extends State<Mementohr> {
           padding: const EdgeInsets.all(10), // Add padding if needed
           child: Center(
             child: ListView(
-              // mainAxisSize: MainAxisSize.min, // To center the column content vertically
-              // crossAxisAlignment: CrossAxisAlignment.center, // To center the column content horizontally
-              // mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 const Center(
                   child: Text(
@@ -96,63 +91,28 @@ class _MementohState extends State<Mementohr> {
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(height: 16), // Space between subtitle and button
-                // CustomCircularIndicator(
-                //   expanded: true,
-                //   score: (percentageToNextLevel * 100).toInt(),
-                //   key: const ValueKey("weekday-hero"),
-                //   textColor: Colors.white,
-                //   centerValue: level.toString(),
-                //   title: "Level",
-                // ),
+                const SizedBox(height: 16),
                 GestureDetector(
-                    onTap: () {
-                      Navigation.createRoute(orbitalIndicatorPage(percentageToNextLevel, level), context, AnimationEnum.fadeIn);
-                    },
-                    child: hero(percentageToNextLevel, Size(300,300), level)),
-                // CustomProgressIndicator(progress: percentageToNextLevel * 100, ),
-                const SizedBox(height: 18), // Space between subtitle and button
-                // const SizedBox(height: 18), // Space between subtitle and button
-                // const Center(
-                //   child: Text(
-                //     "Welcome to Mementohr",
-                //     style: TextStyle(color: Colors.white, fontSize: 20),
-                //     textAlign: TextAlign.center,
-                //   ),
-                // ),
-                // const SizedBox(height: 12), // Space between subtitle and button
+                  onTap: () {
+                    Navigation.createRoute(orbitalIndicatorPage(percentageToNextLevel, level), context, AnimationEnum.fadeIn);
+                  },
+                  child: hero(percentageToNextLevel, Size(300, 300), level),
+                ),
+                const SizedBox(height: 8),
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Features:",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                    Row(children: [Text("Features:", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center)]),
                     SizedBox(height: 12), // Space between subtitle and button
-                    Text("- Add Habits To Track Consistency", style: TextStyle(color: Colors.white, fontSize: 12)),
+                    Text("- Add Habits To Track Consistency", style: TextStyle(color: Colors.white, fontSize: 14)),
                     SizedBox(height: 12), // Space between subtitle and button
-                    Text("- Upload Videos To Leave Mementos", style: TextStyle(color: Colors.white, fontSize: 12)),
+                    Text("- Upload Videos To Leave Mementos", style: TextStyle(color: Colors.white, fontSize: 14)),
                     SizedBox(height: 12), // Space between subtitle and button
-                    Text("- Gain Experience To Level Up", style: TextStyle(color: Colors.white, fontSize: 12)),
+                    Text("- Gain Experience To Level Up", style: TextStyle(color: Colors.white, fontSize: 14)),
                     SizedBox(height: 12), // Space between subtitle and button
-                    Text("- Access Weekly Reports", style: TextStyle(color: Colors.white, fontSize: 12)),
+                    Text("- Access Weekly Reports", style: TextStyle(color: Colors.white, fontSize: 14)),
                   ],
                 ),
-                // GestureDetector(
-                //   onHorizontalDragUpdate: _updateDuration,
-                //   child: TextButton(
-                //     onPressed: () => widget.onStart(),
-                //     child: Text(
-                //       widget.nowData.formatDuration(remainingTime),
-                //       style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                //     ),
-                //   ),
-                // )
               ],
             ),
           ),

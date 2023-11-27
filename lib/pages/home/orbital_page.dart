@@ -1,35 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:mementohr/pages/home/bottomSinWaves.dart';
-import 'package:mementohr/pages/home/orbit_animation.dart';
-import 'package:mementohr/pages/home/orbital_indicator.dart';
+import 'package:flutter/services.dart';
 
-class OrbitalPage extends StatelessWidget {
+class OrbitalPage extends StatefulWidget {
   const OrbitalPage({super.key, required this.tag, required this.progress, required this.hero});
   final String tag;
   final double progress;
   final Hero hero;
 
   @override
+  State<OrbitalPage> createState() => _OrbitalPageState();
+}
+
+class _OrbitalPageState extends State<OrbitalPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         Navigator.popUntil(context, (route) => "/" == route.settings.name);
       },
-      child: Scaffold(
-        body: Container(
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: Container(
           color: Colors.black,
-          child: Stack(
-            children: [
-              Center(child: hero),
-              Positioned(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: kToolbarHeight, left: kToolbarHeight * .4),
-                    child: Container()
-                    // child: bottomSinWaves()
-                  ),
-                  left: 0,
-                  bottom: 0),
-            ],
+          child: SafeArea(
+            child: Scaffold(
+              body: Container(
+                color: Colors.black,
+                child: Stack(
+                  children: [
+                    Center(child: widget.hero),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),

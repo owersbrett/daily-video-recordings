@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 import 'package:mementohr/pages/video/dvr_close_button.dart';
 import 'package:mementohr/service/media_service.dart';
 import 'package:mementohr/theme/theme.dart';
@@ -300,48 +301,51 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  color: Colors.black,
-                  child: Scaffold(
-                    // The CameraPreview widget displays the live camera feed to the user
-                    body: Stack(
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                              height: kToolbarHeight,
-                              color: Colors.black,
-                            ),
-                            _isPreviewingVideo ? Expanded(child: _videoPlayer()) : _videoRecorder()
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            LinearProgressIndicator(
-                              value: progress,
-                              color: emerald,
-                              minHeight: kToolbarHeight,
-                              backgroundColor: emerald.withOpacity(.3),
-                            ),
-                          ],
-                        ),
-                        _closeButton(),
-                        _controls()
-                      ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Container(
+        color: Colors.black,
+        child: SafeArea(
+          child: Scaffold(
+            body: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: Colors.black,
+                    child: Scaffold(
+                      // The CameraPreview widget displays the live camera feed to the user
+                      body: Stack(
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                height: kToolbarHeight,
+                                color: Colors.black,
+                              ),
+                              _isPreviewingVideo ? Expanded(child: _videoPlayer()) : _videoRecorder()
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              LinearProgressIndicator(
+                                value: progress,
+                                color: emerald,
+                                minHeight: kToolbarHeight,
+                                backgroundColor: emerald.withOpacity(.3),
+                              ),
+                            ],
+                          ),
+                          _closeButton(),
+                          _controls()
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              _isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
-            ],
+                _isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:to_csv/to_csv.dart' as toCsv;
 import 'package:mementohr/bloc/reports/reports.dart';
 import 'package:mementohr/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _HabitGridState extends State<HabitGrid> {
       height: 42,
       width: first ? 75 : 42,
       child: Center(
-        child: Text(value, style: const TextStyle(color: Colors.black, fontSize: 16)),
+        child: Text(value, style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -47,6 +48,14 @@ class _HabitGridState extends State<HabitGrid> {
     List<List<Widget>> widgets = [];
     for (var habit in widget.habits) {
       widgets.add(habitCells(habit));
+    }
+    return widgets;
+  }
+
+  List<List<String>> habitRowsCSV() {
+    List<List<String>> widgets = [];
+    for (var habit in widget.habits) {
+      widgets.add(habitCells(habit).map((e) => e.toString()).toList());
     }
     return widgets;
   }
@@ -168,7 +177,26 @@ class _HabitGridState extends State<HabitGrid> {
                               icon: const Icon(Icons.arrow_right, color: Colors.black)),
                         ],
                       ),
-                      ..._grid()
+                      ..._grid(),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: MaterialButton(
+                          onPressed: () {
+                            toCsv.myCSV(
+                              ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                              habitRowsCSV(),
+                            );
+                          },
+                          color: Colors.black,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Download",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),

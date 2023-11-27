@@ -22,7 +22,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
   final TextEditingController _queryController = TextEditingController();
   String _result = '';
 
-  List<Map<String, dynamic>> _queryResult = [{}];
+  List<Map<String, dynamic>> _queryResult = [];
 
   Future _executeQuery(BuildContext ctx) async {
     try {
@@ -34,7 +34,10 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
       }
       String query = _queryController.text;
       log(query);
-      List queryResult = await widget.db.query("Habit");
+      List<Map<String, dynamic>> queryResult = await widget.db.rawQuery(query);
+      setState(() {
+        _queryResult = queryResult;
+      });
       log(queryResult.toString());
     } catch (e) {
       ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
@@ -167,10 +170,41 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
   }
 
   List<Widget> _queryRows() {
-    if (_queryResult.isEmpty) {
-      return [Text("Queries appear here")];
-    }
-    return _queryResult.map((e) => Text(e.toString(), style: TextStyle(color: Colors.black))).toList();
+  if (_queryResult.isEmpty) {
+    return [Text("Queries appear here")];
+  }
+
+  // Create a list of widgets for each row in the query result
+  List<Widget> rowWidgets = _queryResult.map((Map<String, dynamic> row) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: row.entries.map((entry) {
+            return Text("${entry.key}: ${entry.value}");
+          }).toList(),
+        ),
+      ),
+    );
+  }).toList();
+
+  // Wrap the rowWidgets in a horizontally scrolling ListView
+  return [
+    SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(children: rowWidgets),
+    ),
+  ];
+}
+
+
+  Widget responseWidget(Map<String, dynamic> response){
+    return Container(
+      height: 250,
+      child: Text(response.toString())
+    );
   }
 
   @override
@@ -290,34 +324,21 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
                               ),
                             ),
                           ),
+                          ..._queryRows()
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 8.0, left: 8, bottom: 8),
+                          //   child: Container(
+                          //     height: 250,
+                          //     child: ListView(
+                          //       scrollDirection: Axis.horizontal,
+                          //       children: _queryRows(),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
                   ),
-              Container(
-                height: 200,
-                color: Colors.grey,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _queryResult.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 200,
-                        child: ListView(
-                          children: _queryResult[index].keys.map((e) {
-                            return ListTile(
-                              title: Text(e),
-                              subtitle: Text(_queryResult[index][e].toString(), style: TextStyle(color: Colors.black54),),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
                 ],
               ),
             ],
