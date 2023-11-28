@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 import 'package:is_audio_playing/is_audio_playing.dart';
 import 'package:mementohr/bloc/experience/experience.dart';
 import 'package:mementohr/bloc/habits/habits.dart';
@@ -33,6 +34,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
   bool get _completed => widget.habitEntry.booleanValue;
 
   void _onCheck(bool? value) async {
+    HapticFeedback.mediumImpact();
     DateTime now = DateTime.now();
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
     DateTime startOfDay = DateTime(now.year, now.month, now.day, 0, 0, 0);
@@ -66,8 +68,6 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     audioPlayer.dispose();
     super.dispose();
   }
-
-
 
   Widget streakCount(HabitEntity? habitEntity) {
     return Text(habitEntity!.streakValue(widget.currentListDate).toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
