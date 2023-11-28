@@ -186,15 +186,42 @@ class _HabitGridState extends State<HabitGrid> {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
-            floatingActionButton: FloatingActionButton(
-              heroTag: "Reports",
-              onPressed: () {
-                List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-                List<List<String>> rows = habitRowsCSV(snapshot.data);
-                rows.insert(0, headers);
-                toCsv.myCSV(headers, rows);
-              },
-              child: Icon(Icons.download),
+            floatingActionButton: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: "Reports",
+                  onPressed: () {
+                    List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                    List<List<String>> rows = habitRowsCSV(snapshot.data);
+                    rows.insert(0, headers);
+                    toCsv.myCSV(headers, rows);
+                  },
+                  child: Icon(Icons.download),
+                ),
+                SizedBox(width: 16,),
+                FloatingActionButton(
+                  heroTag: "Left",
+                  onPressed: () {
+          
+                                        BlocProvider.of<ReportsBloc>(context).add(FetchReports(
+                                            BlocProvider.of<UserBloc>(context).state.user.id!,
+                                            widget.startInterval.subtract(const Duration(days: 7)),
+                                            widget.endInterval.subtract(const Duration(days: 7))));
+                  },
+                  child: Icon(Icons.arrow_circle_left_rounded),
+                ),
+                SizedBox(width: 16,),
+                FloatingActionButton(
+                  heroTag: "Right",
+                  onPressed: () {
+            
+                                        BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
+                                            widget.startInterval.add(const Duration(days: 7)), widget.endInterval.add(const Duration(days: 7))));
+                  },
+                  child: Icon(Icons.arrow_circle_right_rounded),
+                ),
+              ],
             ),
             body: Container(
               color: Colors.white,
@@ -209,29 +236,21 @@ class _HabitGridState extends State<HabitGrid> {
 
                           child: ListView(
                             children: [
+
+
+                              SizedBox(height: 16,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  IconButton(
-                                      onPressed: () {
-                                        BlocProvider.of<ReportsBloc>(context).add(FetchReports(
-                                            BlocProvider.of<UserBloc>(context).state.user.id!,
-                                            widget.startInterval.subtract(const Duration(days: 7)),
-                                            widget.endInterval.subtract(const Duration(days: 7))));
-                                      },
-                                      icon: const Icon(Icons.arrow_left, size: 32, color: Colors.black)),
+
                                   Center(
                                       child: Text(
                                           "Week of ${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
-                                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16))),
-                                  IconButton(
-                                      onPressed: () {
-                                        BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
-                                            widget.startInterval.add(const Duration(days: 7)), widget.endInterval.add(const Duration(days: 7))));
-                                      },
-                                      icon: const Icon(Icons.arrow_right, color: Colors.black)),
+                                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20))),
+
                                 ],
                               ),
+                              SizedBox(height: 16,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -254,15 +273,23 @@ class _HabitGridState extends State<HabitGrid> {
                     ],
                   ),
                   SafeArea(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        DVRCloseButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          positioned: false,
-                          color: Colors.black,
-                        ),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:8.0, left: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                                            "Reports",
+                                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24)),
+                                            Expanded(child: Container(),),
+                          DVRCloseButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            positioned: false,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
