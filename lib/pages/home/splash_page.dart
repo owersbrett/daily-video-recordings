@@ -78,14 +78,38 @@ class _SplashPageState extends State<SplashPage> {
         child: Container(
           color: Colors.white,
           child: Scaffold(
-            floatingActionButton: Tooltip(
-              message: TooltipText.clickCheck,
-              child: FloatingActionButton(
-                onPressed: () {
-                  BlocProvider.of<HabitsBloc>(context).add(AddHabits(habitsToAdd, DateTime.now(), widget.user.id!, close));
-                },
-                child: Icon(Icons.check),
-              ),
+            floatingActionButton: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Tooltip(
+                  message: TooltipText.clickClose,
+                  child: FloatingActionButton(
+                    heroTag: "Close",
+                    onPressed: () {
+                      BlocProvider.of<UserBloc>(context).add(SplashPageClosed());
+                    },
+                    child: Icon(
+                      Icons.close,
+                      color: ruby,
+                    ),
+                  ),
+                ),
+                if (habitsToAdd.isNotEmpty)
+                  SizedBox(
+                    width: 16,
+                  ),
+                if (habitsToAdd.isNotEmpty)
+                  Tooltip(
+                    message: TooltipText.clickCheck,
+                    child: FloatingActionButton(
+                      heroTag: "Check",
+                      onPressed: () {
+                        BlocProvider.of<HabitsBloc>(context).add(AddHabits(habitsToAdd, DateTime.now(), widget.user.id!, close));
+                      },
+                      child: Icon(Icons.check),
+                    ),
+                  ),
+              ],
             ),
             body: Padding(
               padding: EdgeInsets.all(24.0),
@@ -94,27 +118,10 @@ class _SplashPageState extends State<SplashPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    
                     children: [
                       Text("Welcome!", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0, top:8, right:8),
-                        child: Material(
-                          elevation: 5,
-                          borderRadius: BorderRadius.circular(8),
-                          child: TextButton(
-                              onPressed: () {
-                                BlocProvider.of<UserBloc>(context).add(SplashPageClosed());
-                              },
-                              child: Text(
-                                "Cancel",
-                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                              )),
-                        ),
-                      )
                     ],
                   ),
-      
                   Text(
                     "Select habits you'd like to track.",
                     style: TextStyle(fontSize: 16),
@@ -132,6 +139,9 @@ class _SplashPageState extends State<SplashPage> {
                   Wrap(
                     children: items(),
                   ),
+                  SizedBox(
+                    height: kToolbarHeight,
+                  )
                 ],
               ),
             ),

@@ -151,6 +151,7 @@ class _HabitGridState extends State<HabitGrid> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        heroTag: "Reports",
         onPressed: () {
           List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
           List<List<String>> rows = habitRowsCSV();

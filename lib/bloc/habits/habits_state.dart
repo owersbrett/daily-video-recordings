@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';
+import '../../util/date_util.dart';
 
 abstract class HabitsState extends Equatable {
   DateTime get currentDate => DateTime.now();
@@ -66,8 +67,8 @@ class HabitsLoaded extends HabitsState {
 
   @override
   List<HabitEntry> get todaysHabitEntries {
-    var startInterval = DateTime(currentDate.year, currentDate.month, currentDate.day);
-    var endInterval = DateTime(currentDate.year, currentDate.month, currentDate.day + 1);
+    var startInterval = DateUtil.startOfDay(currentDate);
+    var endInterval = DateUtil.endOfDay(currentDate);
     var todaysHabitEntries = habitMap.values.fold<List<HabitEntry>>([], (previousValue, element) {
       var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
       return [...previousValue, ...filteredEntries];

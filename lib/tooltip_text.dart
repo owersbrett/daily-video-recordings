@@ -1,4 +1,6 @@
 class TooltipText {
+  static const String welcome = "welcome";
+
   static String getHabitCardTooltip(String habitName) {
     return "Click to view $habitName";
   }
@@ -14,6 +16,7 @@ class TooltipText {
   static const String thinkWinWin = 'Think Win-Win';
   static const String seekFirstToUnderstand = 'Seek First To Understand';
   static const String synergize = 'Synergize';
+  static const String clickClose = 'Close';
   static const String developExpertise = 'Develop Expertise';
   static const String clickCheck = 'Check';
   static const String clickAdd = 'Add';

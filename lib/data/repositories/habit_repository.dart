@@ -54,6 +54,8 @@ class HabitRepository implements IHabitRepository {
     return Future.value(i > 0);
   }
 
+
+
   @override
   Future<Map<int, HabitEntity>> getHabitEntities(int userId, [DateTime? startingRange, DateTime? endingRange]) async {
     Map<int, HabitEntity> habitEntityMap = {};

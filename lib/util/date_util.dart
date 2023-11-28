@@ -32,6 +32,32 @@ class DateUtil {
     }
     return weekEntries;
   }
+
+  static DateTime startOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day, 0, 0, 0, 0, 0);
+  }
+  static DateTime endOfDay(DateTime date){
+    return DateTime(date.year, date.month, date.day, 23, 59, 59, 999, 999);
+  
+  }
+  static DateTime startOfDayBefore(DateTime date){
+    return startOfDay(date.subtract(const Duration(days: 1)));
+  }
+  static DateTime endOfNextDay(DateTime date){
+    return endOfDay(date.add(const Duration(days: 1)));
+  }
+  static DateTime startOfXDaysAgo(DateTime date, int x){
+    return startOfDay(date.subtract(Duration(days: x)));
+  }
+  static DateTime endOfXDaysFromNow(DateTime date, int x){
+    return endOfDay(date.add( Duration(days: x)));
+  }
+  static DateTime startOfSevenDaysAgo(DateTime date){
+    return startOfDay(date.subtract(const Duration(days: 6)));
+  }
+  static DateTime endOfSevenDaysFromNow(DateTime date){
+    return endOfDay(date.add(const Duration(days: 6)));
+  }
 }
 
 enum DayEnum {

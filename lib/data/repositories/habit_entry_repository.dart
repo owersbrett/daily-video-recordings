@@ -1,5 +1,8 @@
+import 'package:mementohr/data/frequency_type.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../util/date_util.dart';
+import '../habit.dart';
 import '../habit_entry.dart';
 import '_repository.dart';
 
@@ -9,6 +12,12 @@ abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(HabitEntry t);
   Future createForTodayIfDoesntExistBetweenStartDateAndEndDate(HabitEntry t, DateTime startDate, DateTime endDate);
   Future<int> getStreakFromHabitAndDate(int? id, DateTime currentListDate);
+  Future<HabitEntry?> getByIdAndDate(int id, DateTime date);
+  Future<List<HabitEntry>?> getByDate(DateTime date);
+  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date);
+  Future createHabitEntriesForDate(DateTime date);
+  Future<List<HabitEntry>> createTodaysHabitEntries(DateTime date);
+  Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date);
 }
 
 class HabitEntryRepository implements IHabitEntryRepository {
@@ -51,8 +60,8 @@ class HabitEntryRepository implements IHabitEntryRepository {
 
   @override
   Future<HabitEntry?> createIfDoesntExistForDate(HabitEntry t) async {
-    DateTime start = DateTime(t.createDate.year, t.createDate.month, t.createDate.day);
-    DateTime end = DateTime(t.createDate.year, t.createDate.month, t.createDate.day + 1);
+    DateTime start = DateUtil.startOfDay(t.createDate);
+    DateTime end = DateUtil.endOfDay(t.createDate);
     var q = await db.query(tableName,
         where: 'habitId = ? AND createDate BETWEEN ? and ?', whereArgs: [t.habitId, start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
     if (q.isEmpty) {
@@ -89,21 +98,140 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
+  Future<List<HabitEntry>> createTodaysHabitEntries(DateTime date) async {
+    List<HabitEntry> entries = [];
+    db.transaction((txn) async {
+      List<Map<String, dynamic>> response = await db.query("habit");
+      List<Habit> habits = [];
+      for (var habitRow in response) {
+        habits.add(Habit.fromMap(habitRow));
+      }
+      for (var habit in habits) {
+        if (habit.frequencyType == FrequencyType.daily) {
+          HabitEntry entry = HabitEntry.fromHabit(habit, date);
+          entry = entry.copyWith(createDate: date, updateDate: date);
+          await create(entry);
+          entries.add(entry);
+        }
+      }
+    });
+    return entries;
+  }
+
+  @override
   Future<int> getStreakFromHabitAndDate(int? id, DateTime currentListDate) async {
-    var res = db.rawQuery("""
-SELECT COUNT(*) as streak_count
-FROM HabitEntry
-WHERE habitId = ? -- Your habitId parameter
-AND createDate > (
-    SELECT MAX(createDate)
-    FROM HabitEntry
-    WHERE habitId = ? -- Your habitId parameter again
-    AND booleanValue = 0
-    AND createDate < ? -- Your createDate parameter
-)
-AND createDate <= ? -- Your createDate parameter again
-AND booleanValue = 1;
-""", [id, id, currentListDate.millisecondsSinceEpoch, currentListDate.millisecondsSinceEpoch]);
-    return res.then((value) => value.first['streak_count'] as int? ?? 0);
+    DateTime previousDay = currentListDate.copyWith(day: currentListDate.day - 1);
+    HabitEntry? nearestFailure = await getNearestFailure(id!, previousDay);
+    if (nearestFailure == null) {
+      
+      var res = await db.rawQuery("""
+                                    SELECT count(*) as streak_count
+                                    FROM 
+                                    habitentry
+                                    where 
+                                    habitId = ?
+                                    and booleanvalue = 1 
+                                    AND createDate <= ?
+  """, [id, DateUtil.endOfDay(previousDay).millisecondsSinceEpoch]);
+
+      int streakCount = res.first['streak_count'] as int;
+
+      return streakCount;
+    } else {
+      var res = await db.rawQuery("""
+                                    SELECT count(*) as streak_count
+                                    FROM 
+                                    habitentry
+                                    where 
+                                    habitId = ?
+                                    and booleanvalue = 1 
+                                    AND createDate BETWEEN ? and ?
+  """, [id, nearestFailure.createDate.millisecondsSinceEpoch, DateUtil.endOfDay(previousDay).millisecondsSinceEpoch]);
+
+      int streakCount = res.first['streak_count'] as int;
+
+      return streakCount;
+
+    }
+  }
+
+  @override
+  Future<HabitEntry?> getByIdAndDate(int id, DateTime date) {
+    var q = db.query(tableName,
+        where: 'habitId = ? AND createDate BETWEEN ? AND ?',
+        whereArgs: [id, DateUtil.startOfDay(date).millisecondsSinceEpoch, DateUtil.endOfDay(date).millisecondsSinceEpoch]);
+    return q.then((value) => HabitEntry.fromMap(value.first));
+  }
+
+  @override
+  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date) async {
+    var q = await db.query(tableName,
+        where: 'habitId = ? AND createDate < ? AND booleanValue = 0 ORDER BY createDate DESC LIMIT 1',
+        whereArgs: [habitId, date.millisecondsSinceEpoch]);
+    if (q.isEmpty) {
+      return null;
+    } else {
+      return HabitEntry.fromMap(q.first);
+    }
+  }
+
+  @override
+  Future createHabitEntriesForDate(DateTime date) async {
+    List<HabitEntry> entries = [];
+    List<Map<String, dynamic>> response = await db.query("habit");
+    List<Habit> habits = [];
+    for (var habitRow in response) {
+      habits.add(Habit.fromMap(habitRow));
+    }
+    for (var habit in habits) {
+      switch (habit.frequencyType) {
+        case FrequencyType.daily:
+          HabitEntry entry = HabitEntry.fromHabit(habit, date);
+          entry = entry.copyWith(createDate: date, updateDate: date);
+          await createIfDoesntExistForDate(entry);
+          entries.add(entry);
+          break;
+        case FrequencyType.everyOtherDay:
+          HabitEntry entry = HabitEntry.fromHabit(habit, date);
+          entry = entry.copyWith(createDate: date, updateDate: date);
+          await createForTodayIfDoesntExistBetweenStartDateAndEndDate(entry, DateUtil.startOfDayBefore(date), DateUtil.endOfNextDay(date));
+          entries.add(entry);
+          break;
+        case FrequencyType.weekly:
+          HabitEntry entry = HabitEntry.fromHabit(habit, date);
+          entry = entry.copyWith(createDate: date, updateDate: date);
+          await createForTodayIfDoesntExistBetweenStartDateAndEndDate(
+              entry, DateUtil.startOfSevenDaysAgo(date), DateUtil.endOfSevenDaysFromNow(date));
+          entries.add(entry);
+          break;
+        default:
+      }
+    }
+
+    return entries;
+  }
+
+  @override
+  Future<List<HabitEntry>?> getByDate(DateTime date) async {
+    var q = db.query(tableName,
+        where: 'createDate BETWEEN ? AND ?',
+        whereArgs: [DateUtil.startOfDay(date).millisecondsSinceEpoch, DateUtil.endOfDay(date).millisecondsSinceEpoch]);
+    return q.then((value) => value.map((e) => HabitEntry.fromMap(e)).toList());
+  }
+
+  @override
+  Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date) async {
+    List<double> percentages = [];
+    DateTime start = DateUtil.startOfDay(date);
+    DateTime end = DateUtil.endOfDay(date);
+    var q = await db.query(tableName, where: 'createDate BETWEEN ? AND ?', whereArgs: [start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
+    int success = q.fold(0, (previousValue, element) => previousValue + (element['booleanValue'] as int));
+    if (q.isNotEmpty) {
+      percentages.add(success / q.length);
+    } else {
+      percentages.add(0);
+    }
+
+    return percentages.first;
   }
 }

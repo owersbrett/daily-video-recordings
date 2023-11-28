@@ -8,6 +8,7 @@ class RecordingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      heroTag: "record",
       backgroundColor: lightRuby.withOpacity(.5),
       child: Container(
         decoration: const BoxDecoration(

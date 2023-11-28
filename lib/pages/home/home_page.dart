@@ -79,13 +79,13 @@ class _HomePageState extends State<HomePage> {
                       backgroundColor: Colors.white,
                       title: DailyAppBar(
                         currentDate: state.currentDate,
-                        icon: IconButton(
-                          icon: Tooltip(
+                        icon:  FloatingActionButton.small(
+                          heroTag: "Add Circle",
+                          elevation: 3,
+                          child: Tooltip(
                             message: TooltipText.clickAdd,
                             child: Icon(Icons.add_circle),
                           ),
-                          iconSize: 32,
-                          color: Colors.black,
                           onPressed: () {
                             setState(() {
                               showCreateDropdown = !showCreateDropdown;
@@ -96,6 +96,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     body: WeekAndHabitsScrollView(habitsState: state),
                     bottomSheet: bottomBar(context, state),
+       
 
                     // bottomNavigationBar: bottomBar(context),
                   );

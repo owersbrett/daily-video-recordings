@@ -1,5 +1,6 @@
 import 'package:mementohr/data/habit_entity.dart';
 import 'package:mementohr/data/habit_entry.dart';
+import 'package:mementohr/data/repositories/habit_entry_repository.dart';
 import 'package:mementohr/pages/home/custom_circular_indicator_v2.dart';
 import 'package:mementohr/pages/video/loading_page.dart';
 import 'package:mementohr/widgets/habit_entry_card.dart';
@@ -12,49 +13,45 @@ import '../../bloc/habits/habits.dart';
 import '../../bloc/user/user.dart';
 import '../../data/habit.dart';
 import '../../navigation/navigation.dart';
+import '../../util/date_util.dart';
 import '../../widgets/weekday_hero.dart';
 
 class WeekAndHabitsScrollView extends StatelessWidget {
   const WeekAndHabitsScrollView({super.key, required this.habitsState});
-  DateTime get currentDay => habitsState.currentDate;
+  DateTime get currentDay => DateUtil.startOfDay(habitsState.currentDate);
   final HabitsState habitsState;
-  List<HabitEntry> get todaysHabitEntries => habitsState.todaysHabitEntries;
+  // List<HabitEntry> get todaysHabitEntries => habitsState.todaysHabitEntries;
   Map<int, Habit> get habitsMap => habitsState.habitsMap;
   Map<int, List<HabitEntity>> get weekOfHabitEntities => habitsState.segregatedHabits();
-  DateTime get now => DateTime.now();
-  DateTime get yesterday => currentDay.subtract(const Duration(days: 1));
-  DateTime get tomorrow => currentDay.add(const Duration(days: 1));
+  DateTime get now => DateUtil.startOfDay(DateTime.now());
+  DateTime get yesterday => currentDay.copyWith(day: currentDay.day - 1);
+  DateTime get tomorrow => currentDay.copyWith(day: currentDay.day + 1);
 
-  DateTime get twoDaysAgo => yesterday.subtract(const Duration(days: 1));
-  DateTime get twoDaysAhead => tomorrow.add(const Duration(days: 1));
+  DateTime get twoDaysAgo => yesterday.copyWith(day: yesterday.day - 1);
+  DateTime get twoDaysAhead => tomorrow.copyWith(day: tomorrow.day + 1);
 
-  DateTime get threeDaysAgo => twoDaysAgo.subtract(const Duration(days: 1));
-  DateTime get threeDaysAhead => twoDaysAhead.add(const Duration(days: 1));
-  List<Widget> days(BuildContext context) => [
-        wdh(threeDaysAgo, (habitsState.getRelativeHabitEntriesPercentage(-3) * 100).toInt(), context),
-        wdh(twoDaysAgo, (habitsState.getRelativeHabitEntriesPercentage(-2) * 100).toInt(), context),
-        wdh(yesterday, (habitsState.getRelativeHabitEntriesPercentage(-1) * 100).toInt(), context),
-        wdh(currentDay, (habitsState.getRelativeHabitEntriesPercentage(0) * 100).toInt(), context),
-        wdh(tomorrow, (habitsState.getRelativeHabitEntriesPercentage(1) * 100).toInt(), context),
-        wdh(twoDaysAhead, (habitsState.getRelativeHabitEntriesPercentage(2) * 100).toInt(), context),
-        wdh(threeDaysAhead, (habitsState.getRelativeHabitEntriesPercentage(3) * 100).toInt(), context)
-      ];
+  DateTime get threeDaysAgo => twoDaysAgo.copyWith(day: twoDaysAgo.day - 1);
+  DateTime get threeDaysAhead => twoDaysAhead.copyWith(day: twoDaysAhead.day + 1);
 
-  Widget wdh(DateTime weekdayDate, int score, BuildContext context) => GestureDetector(
-        onTap: () {
-          BlocProvider.of<HabitsBloc>(context).add(FetchHabits(BlocProvider.of<UserBloc>(context).state.user.id!, weekdayDate));
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8),
-          child: WeekdayHero(
-            date: weekdayDate,
-            score: score,
-            // expanded: weekdayDate == selectedDate,
-            expanded: weekdayDate == currentDay,
-            key: ValueKey(weekdayDate.day),
+  Widget wdh(DateTime weekdayDate, BuildContext context) => FutureBuilder(
+      future: RepositoryProvider.of<IHabitEntryRepository>(context).getHabitEntryPercentagesForWeekSurroundingDate(weekdayDate),
+      builder: (context, snapshot) {
+        return GestureDetector(
+          onTap: () {
+            BlocProvider.of<HabitsBloc>(context).add(FetchHabits(BlocProvider.of<UserBloc>(context).state.user.id!, weekdayDate));
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8),
+            child: WeekdayHero(
+              date: weekdayDate,
+              score: snapshot.hasData ? ((snapshot.data ?? 0) * 100).toInt() : 0,
+              // expanded: weekdayDate == selectedDate,
+              expanded: weekdayDate == currentDay,
+              key: ValueKey(weekdayDate.day),
+            ),
           ),
-        ),
-      );
+        );
+      });
 
   void uncheckHabit(HabitEntity e, BuildContext context) {
     var habitEntry = e.habitEntries.firstWhere((element) => element.habitId == e.habit.id);
@@ -68,8 +65,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
     BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(e.habit, habitEntry, BlocProvider.of<ExperienceBloc>(context), currentDay));
   }
 
-  List<Widget> dayWidgets(BuildContext context) => days(context);
-  List<Widget> habitWidgets(BuildContext context) {
+  List<Widget> habitWidgets(BuildContext context, List<HabitEntry> todaysHabitEntries) {
     if (todaysHabitEntries.isEmpty) {
       if (habitsState is! HabitsLoaded) {
         return [CircularProgressIndicator()];
@@ -118,19 +114,36 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Row(
-          children: dayWidgets(context),
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        ),
-        Expanded(
-          child: ListView(
-            children: [...habitWidgets(context), const SizedBox(height: kToolbarHeight * 1.5)],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              wdh(threeDaysAgo, context),
+              wdh(twoDaysAgo, context),
+              wdh(yesterday, context),
+              wdh(currentDay, context),
+              wdh(tomorrow, context),
+              wdh(twoDaysAhead, context),
+              wdh(threeDaysAhead, context)
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+          Expanded(
+          child: FutureBuilder(
+              future: RepositoryProvider.of<IHabitEntryRepository>(context).getByDate(habitsState.currentDate),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const LoadingPage();
+                }
+                return ListView(
+                  children: [...habitWidgets(context, snapshot.data ?? []), const SizedBox(height: kToolbarHeight * 1.5)],
+                );
+              },
           ),
         ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }

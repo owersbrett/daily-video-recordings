@@ -174,6 +174,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton.small(
+            heroTag: "to_the_left",
               backgroundColor: lightEmerald,
               onPressed: () {
                 setState(() {
@@ -192,6 +193,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
               )),
           FloatingActionButton.small(
               backgroundColor: lightEmerald,
+            heroTag: "to_the_right",
               onPressed: () {
                 setState(() {
                   habitsIndex = habitsIndex + 1;
@@ -215,6 +217,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: FloatingActionButton(
+                heroTag: "Create a habit",
                   backgroundColor: darkEmerald,
                   onPressed: () {
                     Logger.root.info("Habit: $habit");

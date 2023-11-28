@@ -25,9 +25,7 @@ class HabitEntity extends Equatable {
   }
 
   int streakValue(DateTime fromDate) {
-    int value = 0;
     List<HabitEntry> previousEntries = habitEntries.where((element) => element.createDate.isBefore(fromDate)).toList();
-    // previousEntries.removeWhere((element) => element.da)
     HabitEntry todaysEntry = habitEntries.firstWhere((element) => DateUtil.isSameDay(element.createDate, fromDate));
     Set<HabitEntry> entries = previousEntries.toSet();
     previousEntries = entries.toList();

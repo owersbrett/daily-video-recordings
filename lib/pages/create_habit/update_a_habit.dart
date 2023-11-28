@@ -159,6 +159,36 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
 
   bool get focused => _stringValueFocus.hasFocus || _quantityFocus.hasFocus || _suffixFocus.hasFocus;
 
+
+  List<Widget> frequencyRows() {
+    return FrequencyType.values.map((e) => frequencyRow(e)).toList();
+  }
+
+  Widget frequencyRow(FrequencyType type) {
+    return InkWell(
+      onTap: () {
+        setHabit(habit.copyWith(frequencyType: type));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            StylizedCheckbox(
+              isChecked: habit.frequencyType == type,
+              onTap: () {
+                setHabit(habit.copyWith(frequencyType: type));
+              },
+              size: const Size(50, 50),
+            ),
+            const SizedBox(width: 8),
+            Text(type.toUiString()),
+          ],
+        ),
+      ),
+    );
+  }
+
   final TextEditingController _stringValueController = TextEditingController(text: "");
   final TextEditingController _frequencyController = TextEditingController();
 
@@ -304,48 +334,8 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                         value: streakEmojiController,
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text("Daily: "),
-                        StylizedCheckbox(
-                          isChecked: habit.frequencyType == FrequencyType.daily,
-                          onTap: () {
-                            setHabit(habit.copyWith(frequencyType: FrequencyType.daily));
-                          },
-                          size: const Size(50, 50),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text("Every Other Day: "),
-                          StylizedCheckbox(
-                            isChecked: habit.frequencyType == FrequencyType.everyOtherDay,
-                            onTap: () {
-                              setHabit(habit.copyWith(frequencyType: FrequencyType.everyOtherDay));
-                            },
-                            size: const Size(50, 50),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text("Weekly: "),
-                        StylizedCheckbox(
-                          isChecked: habit.frequencyType == FrequencyType.weekly,
-                          onTap: () {
-                            setHabit(habit.copyWith(frequencyType: FrequencyType.weekly));
-                          },
-                          size: const Size(50, 50),
-                        ),
-                      ],
-                    ),
+                                        ...frequencyRows(),
+                    
                   ],
                 ),
               ),

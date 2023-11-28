@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mementohr/bloc/habits/habits.dart';
+import 'package:mementohr/pages/home/custom_circular_indicator_v2.dart';
+import 'package:mementohr/pages/home/orbital_indicator.dart';
 import 'package:mementohr/service/admin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,12 +11,13 @@ import 'package:sqflite/sqflite.dart';
 import '../bloc/user/user.dart';
 import '../navigation/navigation.dart';
 import '../service/database_service.dart';
+import '../tooltip_text.dart';
 import '../util/date_util.dart';
 import 'sql_editor.dart';
 
 class DailyAppBar extends StatefulWidget {
   const DailyAppBar({super.key, required this.icon, required this.currentDate});
-  final IconButton icon;
+  final Widget icon;
   final DateTime currentDate;
 
   @override
@@ -135,13 +138,16 @@ class _DailyAppBarState extends State<DailyAppBar> {
             // ),
             // ----------------------------
 
-            IconButton(
-              onPressed: () {
-                BlocProvider.of<UserBloc>(context).add(SplashPageRequested());
-              },
-              icon: const Icon(
-                Icons.help,
-                color: Colors.black,
+            Tooltip(
+              message: TooltipText.welcome,
+              child: FloatingActionButton.small(
+                elevation: 3,
+                heroTag: "Mood",
+                enableFeedback: true,
+                onPressed: () {
+                  BlocProvider.of<UserBloc>(context).add(SplashPageRequested());
+                },
+                child: Icon(Icons.mood_rounded),
               ),
             ),
             Expanded(
