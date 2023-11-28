@@ -264,6 +264,7 @@ class HabitEntryRepository implements IHabitEntryRepository {
           });
           entries.add(nullableEntry);
         }
+        entries.sort((a, b) => a.createDate.compareTo(b.createDate));
         habitEntries[key] = entries;
       }
     });

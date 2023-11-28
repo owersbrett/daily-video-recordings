@@ -137,7 +137,8 @@ class _HabitGridState extends State<HabitGrid> {
   }
 
   String getCellValue(HabitEntry entry, Habit habit) {
-    int differenceInDays = habit.createDate.difference(entry.createDate).inDays;
+    int differenceInDays = habit.createDate.difference(entry.createDate).inDays.abs() ;
+    bool sameDayOfWeek = habit.createDate.weekday == entry.createDate.weekday;
     switch (habit.frequencyType) {
       case FrequencyType.everyOtherDay:
         if (differenceInDays % 2 == 0) {
@@ -146,7 +147,7 @@ class _HabitGridState extends State<HabitGrid> {
           return "⏩";
         }
       case FrequencyType.weekly:
-        if (differenceInDays % 7 == 0) {
+        if (sameDayOfWeek) {
           return entry.booleanValue ? "✅" : "❌";
         } else {
           return "⏩";
