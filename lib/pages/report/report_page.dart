@@ -39,7 +39,6 @@ class _ReportPageState extends State<ReportPage> {
                   width: MediaQuery.of(context).size.width,
                   child: HabitGrid(
                     habits: state.habits,
-                    habitEntries: weekOfHabitEntries,
                     startInterval: state.startInterval,
                     endInterval: state.endInterval,
                   ),

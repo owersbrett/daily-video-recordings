@@ -1,4 +1,5 @@
 import 'package:mementohr/data/frequency_type.dart';
+import 'package:mementohr/data/unit_type.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../util/date_util.dart';
@@ -18,6 +19,8 @@ abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future createHabitEntriesForDate(DateTime date);
   Future<List<HabitEntry>> createTodaysHabitEntries(DateTime date);
   Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date);
+
+  Future<Map<int, List<HabitEntry>>> getHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
 }
 
 class HabitEntryRepository implements IHabitEntryRepository {
@@ -123,7 +126,6 @@ class HabitEntryRepository implements IHabitEntryRepository {
     DateTime previousDay = currentListDate.copyWith(day: currentListDate.day - 1);
     HabitEntry? nearestFailure = await getNearestFailure(id!, previousDay);
     if (nearestFailure == null) {
-      
       var res = await db.rawQuery("""
                                     SELECT count(*) as streak_count
                                     FROM 
@@ -151,7 +153,6 @@ class HabitEntryRepository implements IHabitEntryRepository {
       int streakCount = res.first['streak_count'] as int;
 
       return streakCount;
-
     }
   }
 
@@ -233,5 +234,39 @@ class HabitEntryRepository implements IHabitEntryRepository {
     }
 
     return percentages.first;
+  }
+
+  @override
+  Future<Map<int, List<HabitEntry>>> getHabitEntriesForDateInterval(DateTime startDate, DateTime endDate) async {
+    Map<int, List<HabitEntry>> habitEntries = {};
+    var habits = (await db.query(Habit.tableName)).map((e) => Habit.fromMap(e)).toList();
+    for (var element in habits) {
+      habitEntries[element.id!] = [];
+    }
+    var q =
+        await db.query(tableName, where: 'createDate BETWEEN ? AND ?', whereArgs: [startDate.millisecondsSinceEpoch, endDate.millisecondsSinceEpoch]);
+    for (var habitEntry in q) {
+      HabitEntry entry = HabitEntry.fromMap(habitEntry);
+      if (habitEntries.containsKey(entry.habitId)) {
+        habitEntries[entry.habitId]!.add(entry);
+      } else {
+        habitEntries[entry.habitId] = [entry];
+      }
+    }
+    habitEntries.forEach((key, value) {
+      if (value.length < 7) {
+        List<HabitEntry> entries = [];
+        for (int i = 0; i < 7; i++) {
+          DateTime newDate = startDate.add(Duration(days: i));
+          HabitEntry nullableEntry = value.firstWhere((element) => DateUtil.isSameDay(newDate, element.createDate), orElse: () {
+            var entry = HabitEntry(habitId: key, createDate: newDate, booleanValue: false, unitType: UnitType.boolean, updateDate: newDate);
+            return entry;
+          });
+          entries.add(nullableEntry);
+        }
+        habitEntries[key] = entries;
+      }
+    });
+    return habitEntries;
   }
 }
