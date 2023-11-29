@@ -68,7 +68,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   List<Widget> habitWidgets(BuildContext context, List<HabitEntry> todaysHabitEntries) {
     if (todaysHabitEntries.isEmpty) {
       if (habitsState is! HabitsLoaded) {
-        return [CircularProgressIndicator()];
+        return [const CircularProgressIndicator()];
       }
       return [
         const SizedBox(height: kToolbarHeight),
@@ -96,7 +96,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
     }
     return todaysHabitEntries
         .map((e) => GestureDetector(
-              key: Key(e.habitId.toString() + ":" + e.id.toString()),
+              key: Key("${e.habitId}:${e.id}"),
               onTap: () {
                 if (habitsState.getHabit(e.habitId) != null) {
                   Navigation.createRoute(UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);

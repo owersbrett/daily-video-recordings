@@ -128,11 +128,16 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<HabitEntry?> getByIdAndDate(int id, DateTime date) {
-    var q = db.query(tableName,
+  Future<HabitEntry?> getByIdAndDate(int id, DateTime date) async {
+    var q = await db.query(tableName,
         where: 'habitId = ? AND createDate BETWEEN ? AND ?',
         whereArgs: [id, DateUtil.startOfDay(date).millisecondsSinceEpoch, DateUtil.endOfDay(date).millisecondsSinceEpoch]);
-    return q.then((value) => HabitEntry.fromMap(value.first));
+    if (q.isEmpty) {
+      return null;
+    } else {
+      return HabitEntry.fromMap(q.first);
+    }
+
   }
 
   @override
@@ -143,7 +148,8 @@ class HabitEntryRepository implements IHabitEntryRepository {
     if (q.isEmpty) {
       var q = await db.query(tableName, where: 'habitId = ? AND booleanValue = 1 ORDER BY createDate ASC LIMIT 1', whereArgs: [habitId]);
       var lastSuccess = HabitEntry.fromMap(q.first);
-      return lastSuccess.copyWith(id: -1, booleanValue: false, createDate: date.subtract(Duration(days: 1)), updateDate: date.subtract(Duration(days: 1)));
+      return lastSuccess.copyWith(
+          id: -1, booleanValue: false, createDate: date.subtract(Duration(days: 1)), updateDate: date.subtract(Duration(days: 1)));
     } else {
       return HabitEntry.fromMap(q.first);
     }

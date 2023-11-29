@@ -58,6 +58,7 @@ class DateUtil {
   static DateTime endOfSevenDaysFromNow(DateTime date){
     return endOfDay(date.add(const Duration(days: 6)));
   }
+
 }
 
 enum DayEnum {
