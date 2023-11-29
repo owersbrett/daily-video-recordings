@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mementohr/pages/home/animated_indicator.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key, this.resourceName});
@@ -10,7 +11,9 @@ class LoadingPage extends StatelessWidget {
       body:  Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const CircularProgressIndicator(),
+          AnimatedIndicator(
+            infinite: true,
+          ),
           const SizedBox(height: 20),
         ],
       ),

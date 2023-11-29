@@ -1,6 +1,8 @@
+import 'package:flutter/services.dart';
 import 'package:mementohr/data/habit_entity.dart';
 import 'package:mementohr/data/habit_entry.dart';
 import 'package:mementohr/data/repositories/habit_entry_repository.dart';
+import 'package:mementohr/pages/home/animated_indicator.dart';
 import 'package:mementohr/pages/home/custom_circular_indicator_v2.dart';
 import 'package:mementohr/pages/video/loading_page.dart';
 import 'package:mementohr/widgets/habit_entry_card.dart';
@@ -68,7 +70,16 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   List<Widget> habitWidgets(BuildContext context, List<HabitEntry> todaysHabitEntries) {
     if (todaysHabitEntries.isEmpty) {
       if (habitsState is! HabitsLoaded) {
-        return [const CircularProgressIndicator()];
+        return [
+          GestureDetector(
+            onTap: () {
+              HapticFeedback.heavyImpact();
+
+              Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
+            },
+            child: AnimatedIndicator(),
+          )
+        ];
       }
       return [
         const SizedBox(height: kToolbarHeight),
@@ -91,10 +102,17 @@ class WeekAndHabitsScrollView extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: kToolbarHeight),
+        GestureDetector(
+          onTap: () {
+            HapticFeedback.heavyImpact();
+
+            Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
+          },
+          child: AnimatedIndicator(),
+        )
       ];
     }
-    return todaysHabitEntries
+    var entries = todaysHabitEntries
         .map((e) => GestureDetector(
               key: Key("${e.habitId}:${e.id}"),
               onTap: () {
@@ -109,6 +127,15 @@ class WeekAndHabitsScrollView extends StatelessWidget {
               ),
             ))
         .toList();
+    entries.add(GestureDetector(
+      onTap: () {
+        HapticFeedback.heavyImpact();
+
+        Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
+      },
+      child: AnimatedIndicator(),
+    ));
+    return entries;
   }
 
   @override
@@ -130,18 +157,21 @@ class WeekAndHabitsScrollView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
           Expanded(
-          child: FutureBuilder(
+            child: FutureBuilder(
               future: RepositoryProvider.of<IHabitEntryRepository>(context).getByDate(habitsState.currentDate),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const LoadingPage();
                 }
                 return ListView(
-                  children: [...habitWidgets(context, snapshot.data ?? []), const SizedBox(height: kToolbarHeight * 1.5)],
+                  children: [
+                    ...habitWidgets(context, snapshot.data ?? []),
+                    const SizedBox(height: kToolbarHeight * 1.5),
+                  ],
                 );
               },
+            ),
           ),
-        ),
         ],
       ),
     );

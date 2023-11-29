@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:mementohr/bloc/habits/habits.dart';
 import 'package:mementohr/pages/home/custom_circular_indicator_v2.dart';
 import 'package:mementohr/pages/home/orbital_indicator.dart';
@@ -143,8 +144,9 @@ class _DailyAppBarState extends State<DailyAppBar> {
               child: FloatingActionButton.small(
                 elevation: 3,
                 heroTag: "Mood",
-                enableFeedback: true,
+                enableFeedback: true,                
                 onPressed: () {
+                  HapticFeedback.mediumImpact();
                   BlocProvider.of<UserBloc>(context).add(SplashPageRequested());
                 },
                 child: Icon(Icons.mood_rounded),

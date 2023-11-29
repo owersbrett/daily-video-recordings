@@ -140,7 +140,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
       streakEmoji: _streakEmojiController.text,
     );
     _colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
-    _stringValueFocus.requestFocus();
+    // _stringValueFocus.requestFocus();
   }
 
   void setHabit(Habit habit) {
