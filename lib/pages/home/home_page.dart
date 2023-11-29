@@ -35,8 +35,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool hasShownLevelUp = false;
   bool showCreateDropdown = false;
   BottomSheetState bottomSheetState = BottomSheetState.hidden;
+  int recentLevel = 1;
   bool levelUp = false;
   @override
   void initState() {
@@ -60,15 +62,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocListener<ExperienceBloc, ExperienceState>(
       listener: (context, state) {
-        setState(() {
-          levelUp = true;
-        });
+        if (recentLevel < state.currentLevel()) {
+          setState(() {
+            levelUp = true;
+            recentLevel = state.currentLevel();
+          });
+        }
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     duration: Duration(seconds: 1),
+        //     backgroundColor: darkEmerald.withOpacity(.7),
+        //     content: Center(
+        //       child: Text(
+        //         "🎉  Gratz on level ${state.currentLevel()}! 🎉",
+        //         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+        //       ),
+        //     ),
+        //   ),
+        // );
       },
-      listenWhen: (previous, current) {
-        return current.currentLevel() > previous.currentLevel();
-      },
+   
       child: LevelUpOverlay(
-        levelUp: levelUp,
+        levelUp: false,
+        // levelUp: levelUp,
         child: Stack(
           children: [
             GestureDetector(

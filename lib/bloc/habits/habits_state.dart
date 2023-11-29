@@ -67,8 +67,8 @@ class HabitsLoaded extends HabitsState {
 
   @override
   List<HabitEntry> get todaysHabitEntries {
-    var startInterval = DateUtil.startOfDay(currentDate);
-    var endInterval = DateUtil.endOfDay(currentDate);
+    var startInterval = DateUtil.startOfDay(DateTime.now());
+    var endInterval = DateUtil.endOfDay(DateTime.now());
     var todaysHabitEntries = habitMap.values.fold<List<HabitEntry>>([], (previousValue, element) {
       var filteredEntries = element.habitEntries.where((p0) => p0.createDate.isAfter(startInterval) && p0.createDate.isBefore(endInterval)).toList();
       return [...previousValue, ...filteredEntries];
