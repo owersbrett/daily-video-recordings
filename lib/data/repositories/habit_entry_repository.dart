@@ -1,5 +1,6 @@
 import 'package:mementohr/data/frequency_type.dart';
 import 'package:mementohr/data/unit_type.dart';
+import 'package:mementohr/util/streak_util.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../util/date_util.dart';
@@ -12,10 +13,10 @@ abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future deleteWhere(String where, List<dynamic> whereArgs);
   Future createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(HabitEntry t);
   Future createForTodayIfDoesntExistBetweenStartDateAndEndDate(HabitEntry t, DateTime startDate, DateTime endDate);
-  Future<int> getStreakFromHabitAndDate(int? id, DateTime currentListDate);
+  Future<int> getStreakFromHabitAndDate(Habit id, DateTime currentListDate);
   Future<HabitEntry?> getByIdAndDate(int id, DateTime date);
   Future<List<HabitEntry>?> getByDate(DateTime date);
-  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date);
+  Future<HabitEntry> getNearestFailure(int habitId, DateTime date);
   Future createHabitEntriesForDate(DateTime date);
   Future<List<HabitEntry>> createTodaysHabitEntries(DateTime date);
   Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date);
@@ -122,38 +123,8 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<int> getStreakFromHabitAndDate(int? id, DateTime currentListDate) async {
-    DateTime previousDay = currentListDate.copyWith(day: currentListDate.day - 1);
-    HabitEntry? nearestFailure = await getNearestFailure(id!, previousDay);
-    if (nearestFailure == null) {
-      var res = await db.rawQuery("""
-                                    SELECT count(*) as streak_count
-                                    FROM 
-                                    habitentry
-                                    where 
-                                    habitId = ?
-                                    and booleanvalue = 1 
-                                    AND createDate <= ?
-  """, [id, DateUtil.endOfDay(previousDay).millisecondsSinceEpoch]);
-
-      int streakCount = res.first['streak_count'] as int;
-
-      return streakCount;
-    } else {
-      var res = await db.rawQuery("""
-                                    SELECT count(*) as streak_count
-                                    FROM 
-                                    habitentry
-                                    where 
-                                    habitId = ?
-                                    and booleanvalue = 1 
-                                    AND createDate BETWEEN ? and ?
-  """, [id, nearestFailure.createDate.millisecondsSinceEpoch, DateUtil.endOfDay(previousDay).millisecondsSinceEpoch]);
-
-      int streakCount = res.first['streak_count'] as int;
-
-      return streakCount;
-    }
+  Future<int> getStreakFromHabitAndDate(Habit habit, DateTime currentListDate) async {
+    return StreakUtil.getStreakFromHabit(this, habit, currentListDate);
   }
 
   @override
@@ -165,12 +136,14 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date) async {
+  Future<HabitEntry> getNearestFailure(int habitId, DateTime date) async {
     var q = await db.query(tableName,
         where: 'habitId = ? AND createDate < ? AND booleanValue = 0 ORDER BY createDate DESC LIMIT 1',
-        whereArgs: [habitId, date.millisecondsSinceEpoch]);
+        whereArgs: [habitId, DateUtil.endOfDay(date).millisecondsSinceEpoch]);
     if (q.isEmpty) {
-      return null;
+      var q = await db.query(tableName, where: 'habitId = ? AND booleanValue = 1 ORDER BY createDate ASC LIMIT 1', whereArgs: [habitId]);
+      var lastSuccess = HabitEntry.fromMap(q.first);
+      return lastSuccess.copyWith(id: -1, booleanValue: false, createDate: date.subtract(Duration(days: 1)), updateDate: date.subtract(Duration(days: 1)));
     } else {
       return HabitEntry.fromMap(q.first);
     }

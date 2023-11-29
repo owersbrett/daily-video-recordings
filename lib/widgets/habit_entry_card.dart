@@ -69,9 +69,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     super.dispose();
   }
 
-  Widget streakCount(HabitEntity? habitEntity) {
-    return Text(habitEntity!.streakValue(widget.currentListDate).toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
-  }
+
 
   double get gradientStop => _completed ? 1.0 : habit.value / 100.0;
 
@@ -173,10 +171,10 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: FutureBuilder(
-                future: RepositoryProvider.of<IHabitEntryRepository>(context).getStreakFromHabitAndDate(habit.id, widget.currentListDate),
+                future: RepositoryProvider.of<IHabitEntryRepository>(context).getStreakFromHabitAndDate(habit, widget.currentListDate),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text(((snapshot.data ?? 0) + (_completed ? 1 : 0)).toString(),
+                    return Text(((snapshot.data ?? 0)).toString(),
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
                   } else {
                     return Text(_completed ? "1" : "0", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));

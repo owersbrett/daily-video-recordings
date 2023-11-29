@@ -126,8 +126,8 @@ class AdminService {
     habits.add(Habit.fromString(userId, "Recycling", "♻️", "🌱"));
     habits.add(Habit.fromString(userId, "Conserve Water", "💧", "🔌"));
     habits.add(Habit.fromString(userId, "Carpool", "🚌", "🚗"));
-    habits.add(Habit.fromString(userId, "Sustainable Products", "🌍", "🌿"));
-    habits.add(Habit.fromString(userId, "Learn Environmental Issues", "📚🌍", "🔬"));
+    habits.add(Habit.fromString(userId, "Observe Life", "📚🌍", "🔬"));
+    habits.add(Habit.fromString(userId, "Touch Grass", "🌍", "🌿"));
 
     // Process the habits list as needed
 
