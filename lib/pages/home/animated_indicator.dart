@@ -20,7 +20,9 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
   late AnimationController inclinationController;
   late AnimationController eccentricityController;
   late AnimationController wobbleController;
+  // late AnimationController countController;
 
+  // late Animation<int> countAnimation;
   late Animation<double> progressAnimation;
   late Animation<double> orbitalAnimation;
   late Animation<double> spinAnimation;
@@ -60,6 +62,14 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
       vsync: this,
       duration: const Duration(seconds: 2),
     );
+    // countController = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(seconds: 60),
+    // );
+    // countAnimation = IntTween(begin: 8, end: 16).animate(countController)
+    //   ..addListener(() {
+    //     setState(() {});
+    //   });
 
     progressAnimation = Tween<double>(begin: 0, end: 1).animate(progressController)
       ..addListener(() {
@@ -74,7 +84,7 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
         setState(() {});
       });
 
-    spinAnimation = Tween<double>(begin: 0, end: 1).animate(scalarController)
+    spinAnimation = Tween<double>(begin: 1, end: 0).animate(scalarController)
       ..addListener(() {
         setState(() {});
       });
@@ -98,6 +108,7 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
     if (widget.infinite) {
       progressController.repeat();
       orbitalController.repeat();
+      // countController.repeat(reverse: true);
       spinController.repeat(
         reverse: true
       );
@@ -118,6 +129,7 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
         progress: progressAnimation.value,
         orbitalAngle: orbitalAnimation.value,
         spin: spinAnimation.value,
+        count: 12,
         ascending: scalarAnimation.value,
         inclination: inclinationAnimation.value,
         eccentricity: eccentricityAnimation.value,
@@ -132,6 +144,7 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
     progressController.dispose();
     orbitalController.dispose();
     spinController.dispose();
+    // countController.dispose();
     scalarController.dispose();
     inclinationController.dispose();
     eccentricityController.dispose();
