@@ -60,200 +60,201 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            if (showCreateDropdown) {
-              setState(() {
-                showCreateDropdown = false;
-              });
-            }
-            FocusScope.of(context).unfocus();
-          },
-          child: Stack(
-            children: [
-              BlocBuilder<HabitsBloc, HabitsState>(
-                builder: (context, state) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      backgroundColor: Colors.white,
-                      title: DailyAppBar(
-                        currentDate: state.currentDate,
-                        icon: Container(
-                          decoration: !showCreateDropdown
-                              ? null
-                              : BoxDecoration(
-                                  color: Colors.grey[300], // Adjust the button color as needed
-                                  borderRadius: BorderRadius.circular(16), // Adjust the border radius as needed
+    return  Stack(
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              if (showCreateDropdown) {
+                setState(() {
+                  showCreateDropdown = false;
+                });
+              }
+              FocusScope.of(context).unfocus();
+            },
+            child: Stack(
+              children: [
+                BlocBuilder<HabitsBloc, HabitsState>(
+                  builder: (context, state) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        backgroundColor: Colors.white,
+                        title: DailyAppBar(
+                          currentDate: state.currentDate,
+                          icon: Container(
+                            decoration: !showCreateDropdown
+                                ? null
+                                : BoxDecoration(
+                                    color: Colors.grey[300], // Adjust the button color as needed
+                                    borderRadius: BorderRadius.circular(16), // Adjust the border radius as needed
 
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.white.withOpacity(1), // Shadow color
-                                      offset: Offset(-2, 2),
-                                      blurRadius: 6, // Shadow blur radius
-                                      spreadRadius: -3, // Negative spread radius to create inset effect
-                                    ),
-                                    BoxShadow(
-                                      offset: Offset(1, 1),
-                                      color: Colors.black.withOpacity(0.2), // Shadow color
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.white.withOpacity(1), // Shadow color
+                                        offset: Offset(-2, 2),
+                                        blurRadius: 6, // Shadow blur radius
+                                        spreadRadius: -3, // Negative spread radius to create inset effect
+                                      ),
+                                      BoxShadow(
+                                        offset: Offset(1, 1),
+                                        color: Colors.black.withOpacity(0.2), // Shadow color
 
-                                      blurRadius: 6, // Shadow blur radius
-                                      spreadRadius: -3, // Negative spread radius to create inset effect
-                                    ),
-                                  ],
-                                ),
-                          child: FloatingActionButton.small(
-                            backgroundColor: showCreateDropdown ? Colors.transparent : Colors.white,
-                            foregroundColor: emerald,
-                            heroTag: "Add Circle",
-                            elevation: showCreateDropdown ? 0 : 3,
-                            onPressed: () {
-                              if (!showCreateDropdown) HapticFeedback.mediumImpact();
-                              setState(() {
-                                showCreateDropdown = !showCreateDropdown;
-                              });
-                            },
-                            child: Tooltip(
-                              message: TooltipText.clickAdd,
-                              child: Icon(Icons.add_circle),
+                                        blurRadius: 6, // Shadow blur radius
+                                        spreadRadius: -3, // Negative spread radius to create inset effect
+                                      ),
+                                    ],
+                                  ),
+                            child: FloatingActionButton.small(
+                              backgroundColor: showCreateDropdown ? Colors.transparent : Colors.white,
+                              foregroundColor: emerald,
+                              heroTag: "Add Circle",
+                              elevation: showCreateDropdown ? 0 : 3,
+                              onPressed: () {
+                                if (!showCreateDropdown) HapticFeedback.mediumImpact();
+                                setState(() {
+                                  showCreateDropdown = !showCreateDropdown;
+                                });
+                              },
+                              child: Tooltip(
+                                message: TooltipText.clickAdd,
+                                child: Icon(Icons.add_circle),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    body: WeekAndHabitsScrollView(habitsState: state),
-                    bottomSheet: bottomBar(context, state),
+                      body: WeekAndHabitsScrollView(habitsState: state),
+                      bottomSheet: bottomBar(context, state),
 
-                    // bottomNavigationBar: bottomBar(context),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-        Visibility(
-          visible: showCreateDropdown,
-          child: Positioned(
-            right: 48,
-            top: kToolbarHeight * 1.75,
-            child: Material(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              elevation: 10,
-              child: BlocBuilder<HabitsBloc, HabitsState>(
-                builder: (context, state) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Tooltip(
-                        message: TooltipText.clickReports,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              showCreateDropdown = false;
-                            });
-                            HapticFeedback.selectionClick();
-                            Navigation.createRoute(CreateHabitPage(dateToAddHabit: state.currentDate), context, AnimationEnum.pageAscend);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.add_circle,
-                                  color: emerald,
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  "Habit",
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 2,
-                        color: Colors.grey.withOpacity(.2),
-                      ),
-                      Tooltip(
-                        message: TooltipText.clickReports,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              showCreateDropdown = false;
-                            });
-                            HapticFeedback.selectionClick();
-                            Navigation.createRoute(
-                                RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
-                                context,
-                                AnimationEnum.pageAscend);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.video_call_rounded, color: emerald),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  "Video",
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 2,
-                        color: Colors.grey.withOpacity(.2),
-                      ),
-                      Tooltip(
-                        message: TooltipText.clickReports,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              showCreateDropdown = false;
-                            });
-                            HapticFeedback.selectionClick();
-                            Navigation.createRoute(const ReportPage(), context, AnimationEnum.pageAscend);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.download_rounded, color: emerald),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "Report",
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                      // bottomNavigationBar: bottomBar(context),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
-        )
-      ],
-    );
+          Visibility(
+            visible: showCreateDropdown,
+            child: Positioned(
+              right: 48,
+              top: kToolbarHeight * 1.75,
+              child: Material(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                elevation: 10,
+                child: BlocBuilder<HabitsBloc, HabitsState>(
+                  builder: (context, state) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Tooltip(
+                          message: TooltipText.clickReports,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                showCreateDropdown = false;
+                              });
+                              HapticFeedback.selectionClick();
+                              Navigation.createRoute(CreateHabitPage(dateToAddHabit: state.currentDate), context, AnimationEnum.pageAscend);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.add_circle,
+                                    color: emerald,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    "Habit",
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 100,
+                          height: 2,
+                          color: Colors.grey.withOpacity(.2),
+                        ),
+                        Tooltip(
+                          message: TooltipText.clickReports,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                showCreateDropdown = false;
+                              });
+                              HapticFeedback.selectionClick();
+                              Navigation.createRoute(
+                                  RecordVideoPage(camera: cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front)),
+                                  context,
+                                  AnimationEnum.pageAscend);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.video_call_rounded, color: emerald),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    "Video",
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 100,
+                          height: 2,
+                          color: Colors.grey.withOpacity(.2),
+                        ),
+                        Tooltip(
+                          message: TooltipText.clickReports,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                showCreateDropdown = false;
+                              });
+                              HapticFeedback.selectionClick();
+                              Navigation.createRoute(const ReportPage(), context, AnimationEnum.pageAscend);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.download_rounded, color: emerald),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "Report",
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          )
+        ],
+      );
+
   }
 
   void setBottomSheetState() {

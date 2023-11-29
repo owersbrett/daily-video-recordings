@@ -166,7 +166,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
                 return ListView(
                   children: [
                     ...habitWidgets(context, snapshot.data ?? []),
-                    const SizedBox(height: kToolbarHeight * 1.5),
+                    const SizedBox(height: kToolbarHeight * 1),
                   ],
                 );
               },
