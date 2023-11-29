@@ -1,6 +1,16 @@
 // Define your custom colors
 import 'package:flutter/material.dart';
 
+const Color amethyst = Color(0xFF9966CC); // A shade of amethyst
+const Color lightAmethyst = Color(0xFFCC99FF); // A lighter shade of amethyst
+const Color darkAmethyst = Color(0xFF663399); // A darker shade of amethyst
+
+const Color opal = Color(0xFFA8C3BC); // A shade of opal
+const Color lightOpal = Color(0xFFD3E0DB); // A lighter shade of opal
+const Color darkOpal = Color(0xFF7A8C89); // A darker shade of opal
+
+
+
 const Color sapphire = Color(0xFF0F52BA); // A shade of ruby
 const Color lightSapphire = Color(0xFF4D7EBB); // A lighter shade of ruby
 const Color darkSapphire = Color(0xFF0A3A6B); // A darker shade of ruby
