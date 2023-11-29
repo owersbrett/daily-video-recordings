@@ -27,15 +27,15 @@ class CreateHabitPage extends StatefulWidget {
 class _CreateHabitPageState extends State<CreateHabitPage> {
   final _formKey = GlobalKey<FormState>();
   int habitsIndex = 0;
-  TextEditingController emojiController = TextEditingController(text: StringUtil.getRandomEmoji());
-  TextEditingController streakEmojiController = TextEditingController(text: "🔥");
+  final TextEditingController _emojiController = TextEditingController(text: StringUtil.getRandomEmoji());
+  final TextEditingController _streakEmojiController = TextEditingController(text: "🔥");
   FocusNode emojiFocusNode = FocusNode();
   FocusNode streakEmojiFocusNode = FocusNode();
   bool emojiShowing = false;
 
   bool hasCompletedHabit = false;
   bool hasFocusedOnFrequency = false;
-  TextEditingController colorTextEdittingController = TextEditingController();
+  TextEditingController _colorTextEdittingController = TextEditingController();
   bool hasFocusedOnColor = false;
   Habit habit = Habit.empty(ColorUtil.randomColor());
   bool get complete => progress == 100;
@@ -121,7 +121,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   void onPickColor(Color color) {
     setState(() {
       habit = habit.copyWith(hexColor: '#${color.value.toRadixString(16).padLeft(8, '0')}');
-      colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
+      _colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
     });
     Navigator.of(context).pop();
   }
@@ -136,10 +136,10 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
       suffix: "",
       frequencyType: FrequencyType.daily,
       hexColor: ColorUtil.randomColor().toHex(),
-      emoji: emojiController.text,
-      streakEmoji: streakEmojiController.text,
+      emoji: _emojiController.text,
+      streakEmoji: _streakEmojiController.text,
     );
-    colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
+    _colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
     _stringValueFocus.requestFocus();
   }
 
@@ -173,56 +173,17 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton.small(
-            heroTag: "to_the_left",
-              backgroundColor: lightEmerald,
-              onPressed: () {
-                setState(() {
-                  habitsIndex = habitsIndex - 1;
-                  if (habitsIndex < 0) {
-                    habitsIndex = exampleHabits.length - 1;
-                  }
-                  setHabit(habit.copyWith(stringValue: exampleHabits[habitsIndex].stringValue));
-                  _stringValueController.text = exampleHabits[habitsIndex].stringValue;
-                });
-              },
-              child: Icon(
-                color: Colors.white,
-                Icons.arrow_left,
-                size: 35,
-              )),
-          FloatingActionButton.small(
-              backgroundColor: lightEmerald,
-            heroTag: "to_the_right",
-              onPressed: () {
-                setState(() {
-                  habitsIndex = habitsIndex + 1;
-                  if (habitsIndex > exampleHabits.length - 1) {
-                    habitsIndex = 0;
-                  }
-                  setHabit(habit.copyWith(stringValue: exampleHabits[habitsIndex].stringValue));
-                  _stringValueController.text = exampleHabits[habitsIndex].stringValue;
-                });
-              },
-              child: Icon(
-                color: Colors.white,
-                Icons.arrow_right,
-                size: 35,
-              )),
-          SizedBox(
-            width: 8,
-          ),
           Visibility(
             visible: progress >= 70,
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: FloatingActionButton(
-                heroTag: "Create a habit",
+                  heroTag: "Create a habit",
                   backgroundColor: darkEmerald,
                   onPressed: () {
                     Logger.root.info("Habit: $habit");
                     if (_formKey.currentState?.validate() ?? false) {
-                      BlocProvider.of<HabitsBloc>(context).add(AddHabit(habit.copyWith(emoji: emojiController.text), widget.dateToAddHabit));
+                      BlocProvider.of<HabitsBloc>(context).add(AddHabit(habit.copyWith(emoji: _emojiController.text), widget.dateToAddHabit));
                       Navigator.of(context).pop();
                     }
                   },
@@ -268,9 +229,14 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           FocusScope.of(context).unfocus();
                         } else {
                           setState(() {
-                            hasFocusedOnColor = true;
+                            habit = AdminService.getRandomHabit(BlocProvider.of<UserBloc>(context).state.user.id!);
+                            _stringValueController.text = habit.stringValue;
+                            
+                            _colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
+                            _frequencyController.text = habit.frequencyType.toUiString();
+                            _emojiController.text = habit.emoji;
+                            _streakEmojiController.text = habit.streakEmoji;
                           });
-                          pickColor();
                         }
                       },
                       child: Tooltip(
@@ -303,7 +269,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           },
                           validator: (str) => FormValidator.nonEmpty(str, "Color"),
                           onEditingComplete: () => FocusScope.of(context).unfocus(),
-                          value: colorTextEdittingController,
+                          value: _colorTextEdittingController,
                         ),
                       ),
                     ),
@@ -317,7 +283,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                         },
                         validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Emoji"),
                         onEditingComplete: () => FocusScope.of(context).unfocus(),
-                        value: emojiController,
+                        value: _emojiController,
                       ),
                     ),
                     Padding(
@@ -330,7 +296,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                         },
                         validator: (str) => FormValidator.mustBeEmojiOrSingleCharacter(str, "Streak Emoji"),
                         onEditingComplete: () => FocusScope.of(context).unfocus(),
-                        value: streakEmojiController,
+                        value: _streakEmojiController,
                       ),
                     ),
                     // Padding(

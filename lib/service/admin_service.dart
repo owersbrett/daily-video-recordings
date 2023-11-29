@@ -133,4 +133,10 @@ class AdminService {
 
     return habits;
   }
+
+  static Habit getRandomHabit(int userId){
+    var rng =  Random();
+    var habits = get50Habits(userId, true);
+    return habits[rng.nextInt(habits.length)];
+  }
 }
