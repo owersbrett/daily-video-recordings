@@ -60,19 +60,19 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: HexColor.fromHex(habit.hexColor).withOpacity(.5), width: 2),
-            gradient: LinearGradient(
-              colors: [
-                HexColor.fromHex(habit.hexColor).withOpacity(.5),
-                HexColor.fromHex(habit.hexColor).withOpacity(.3),
-              ],
-              stops: [_completed ? .5 : 0.5, gradientStop],
-              begin: Alignment.topLeft,
-              end: Alignment.centerRight,
-            ),
-          ),
+         decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.black.withOpacity(1), width: 2),
+                  gradient: LinearGradient(
+                    colors: [
+                      HexColor.fromHex(habit.hexColor).withOpacity(.5),
+                      HexColor.fromHex(habit.hexColor).withOpacity(.3),
+                    ],
+                    stops: [_completed ? .5 : 0.5, gradientStop],
+                    begin: Alignment.topLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
           child: Stack(
             children: [
               Column(
