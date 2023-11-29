@@ -17,8 +17,8 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ReportsBloc>(context)
-        .add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!, DateUtil.closestPastMonday(DateTime.now()), DateUtil.closestComingSunday(DateTime.now())));
+    BlocProvider.of<ReportsBloc>(context).add(FetchReports(
+        BlocProvider.of<UserBloc>(context).state.user.id!, DateUtil.closestPastMonday(DateTime.now()), DateUtil.closestComingSunday(DateTime.now())));
   }
 
   @override
@@ -26,7 +26,7 @@ class _ReportPageState extends State<ReportPage> {
     return Scaffold(
       body: BlocBuilder<ReportsBloc, ReportsState>(
         builder: (context, state) {
-  Map<int, List<HabitEntry>>  weekOfHabitEntries = {};
+          Map<int, List<HabitEntry>> weekOfHabitEntries = {};
 
           if (state is ReportsLoaded) {
             weekOfHabitEntries = state.weekOfHabitEntries;

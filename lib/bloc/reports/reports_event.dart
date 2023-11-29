@@ -7,3 +7,9 @@ class FetchReports extends ReportsEvent {
   
   FetchReports(this.userId, this.startInterval, this.endInterval);
 }
+
+enum ReportType {
+  weekly,
+  monthly,
+  yearly,
+}
