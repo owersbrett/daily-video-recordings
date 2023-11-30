@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 
 import 'custom_circular_indicator_v2.dart'; // Make sure this is correctly imported
 
-class AnimatedIndicator extends StatefulWidget {
-  const AnimatedIndicator({super.key, this.infinite = true});
+class AnimatedVortex extends StatefulWidget {
+  const AnimatedVortex({super.key, this.infinite = true, required this.onTap, this.matrix});
+  final Matrix4? matrix;
   final bool infinite;
+  final void Function() onTap;
 
   @override
-  State<AnimatedIndicator> createState() => _AnimatedIndicatorState();
+  State<AnimatedVortex> createState() => _AnimatedVortexState();
 }
 
-class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProviderStateMixin {
+class _AnimatedVortexState extends State<AnimatedVortex> with TickerProviderStateMixin {
   late AnimationController progressController;
   late AnimationController orbitalController;
   late AnimationController spinController;
@@ -34,6 +36,7 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
   @override
   void initState() {
     super.initState();
+
     progressController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -104,18 +107,15 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
         setState(() {});
       });
 
-
     if (widget.infinite) {
       progressController.repeat();
       orbitalController.repeat();
       // countController.repeat(reverse: true);
-      spinController.repeat(
-        reverse: true
-      );
+      spinController.repeat(reverse: true);
       scalarController.repeat();
       inclinationController.repeat();
       eccentricityController.repeat(reverse: true);
-      wobbleController.repeat( reverse: true);
+      wobbleController.repeat(reverse: true);
     } else {
       progressController.forward();
     }
@@ -123,18 +123,23 @@ class _AnimatedIndicatorState extends State<AnimatedIndicator> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    return RotationTransition(
-      turns: spinAnimation,
-      child: CustomProgressIndicator(
-        progress: progressAnimation.value,
-        orbitalAngle: orbitalAnimation.value,
-        spin: spinAnimation.value,
-        count: 12,
-        ascending: scalarAnimation.value,
-        inclination: inclinationAnimation.value,
-        eccentricity: eccentricityAnimation.value,
-        wobble: wobbleAnimation.value,
-        key: ValueKey("custom_circular_indicator"),
+    return GestureDetector(
+      onTap: () {
+        widget.onTap();
+      },
+      child: RotationTransition(
+        turns: spinAnimation,
+        child: CustomProgressIndicator(
+          progress: progressAnimation.value,
+          orbitalAngle: orbitalAnimation.value,
+          spin: spinAnimation.value,
+          count: 12,
+          ascending: scalarAnimation.value,
+          inclination: inclinationAnimation.value,
+          eccentricity: eccentricityAnimation.value,
+          wobble: wobbleAnimation.value,
+          key: ValueKey("custom_circular_indicator"),
+        ),
       ),
     );
   }

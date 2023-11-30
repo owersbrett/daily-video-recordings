@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:mementohr/pages/create_habit/display_habit_card.dart';
 import 'package:mementohr/service/admin_service.dart';
 import 'package:mementohr/theme/theme.dart';
@@ -211,7 +212,13 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                 Expanded(
                   child: Container(),
                 ),
-                DVRCloseButton(onPressed: () => Navigator.of(context).pop(), positioned: false, color: Colors.black),
+                DVRCloseButton(
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).pop();
+                    },
+                    positioned: false,
+                    color: Colors.black),
                 const SizedBox(
                   width: 4,
                 ),
@@ -231,7 +238,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                           setState(() {
                             habit = AdminService.getRandomHabit(BlocProvider.of<UserBloc>(context).state.user.id!);
                             _stringValueController.text = habit.stringValue;
-                            
+
                             _colorTextEdittingController.text = ColorUtil.getStringFromHex(ColorUtil.getColorFromHex(habit.hexColor));
                             _frequencyController.text = habit.frequencyType.toUiString();
                             _emojiController.text = habit.emoji;
@@ -381,6 +388,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
   Widget frequencyRow(FrequencyType type) {
     return InkWell(
       onTap: () {
+        HapticFeedback.lightImpact();
         setHabit(habit.copyWith(frequencyType: type));
       },
       child: Padding(
@@ -391,6 +399,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
             StylizedCheckbox(
               isChecked: habit.frequencyType == type,
               onTap: () {
+                HapticFeedback.lightImpact();
                 setHabit(habit.copyWith(frequencyType: type));
               },
               size: const Size(50, 50),

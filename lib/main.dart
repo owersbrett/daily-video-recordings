@@ -16,6 +16,7 @@ import 'package:logging/logging.dart';
 import 'data/repositories/habit_entry_repository.dart';
 import 'data/repositories/habit_repository.dart';
 import 'data/repositories/multimedia_repository.dart';
+import 'service/analytics_service.dart';
 import 'service/database_service.dart';
 
 List<CameraDescription> cameras = <CameraDescription>[];
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
     IHabitRepository habitRepository = HabitRepository(db: db);
     IExperienceRepository experienceRepository = ExperienceRepository(db: db);
     IDomainRepository domainRepository = DomainRepository(db: db);
+    IAnalyticsService analyticsService = AnalyticsService(db: db);
 
     IMultimediaRepository multimediaRepository = MultimediaRepository(db: db);
     return AppWrapper(
@@ -71,6 +73,7 @@ class MyApp extends StatelessWidget {
         habitRepository: habitRepository,
         habitEntryRepository: habitEntryRepository,
         habitEntryNoteRepository: habitEntryNoteRepository,
+        analyticsService: analyticsService,
         db: db);
   }
 }

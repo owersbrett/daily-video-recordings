@@ -1,4 +1,6 @@
 import 'package:mementohr/data/repositories/habit_entry_repository.dart';
+import 'package:mementohr/service/analytics_service.dart';
+import 'package:mementohr/widgets/custom_circular_indicator.dart';
 import 'package:to_csv/to_csv.dart' as toCsv;
 import 'package:mementohr/bloc/reports/reports.dart';
 import 'package:mementohr/widgets/custom_progress_indicator.dart';
@@ -9,6 +11,7 @@ import '../bloc/user/user.dart';
 import '../data/frequency_type.dart';
 import '../data/habit.dart';
 import '../data/habit_entry.dart';
+import '../pages/home/animated_indicator.dart';
 import '../pages/video/dvr_close_button.dart';
 import '../util/date_util.dart';
 
@@ -179,8 +182,8 @@ class _HabitGridState extends State<HabitGrid> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: RepositoryProvider.of<IHabitEntryRepository>(context)
-            .getHabitEntriesForDateInterval(DateUtil.startOfDay(widget.startInterval), DateUtil.startOfDay(widget.endInterval).subtract(Duration(microseconds: 1))),
+        future: RepositoryProvider.of<IHabitEntryRepository>(context).getHabitEntriesForDateInterval(
+            DateUtil.startOfDay(widget.startInterval), DateUtil.startOfDay(widget.endInterval).subtract(Duration(microseconds: 1))),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -228,76 +231,76 @@ class _HabitGridState extends State<HabitGrid> {
         });
   }
 
+  Widget progressIndicators(List<WeeklyReportRow> reports) {
+    List<Widget> indicators = reports
+        .map((e) => Row(
+              children: [
+                CustomCircularIndicator(expanded: false, score: (e.percentage * 100).toInt()),
+              ],
+            ))
+        .toList();
+
+    return Column(
+      children: indicators,
+      mainAxisSize: MainAxisSize.min,
+    );
+  }
+
   Container gridBody(AsyncSnapshot<Map<int, List<HabitEntry>>> snapshot, BuildContext context) {
     return Container(
-            color: Colors.white,
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    const SizedBox(height: kToolbarHeight),
-                    Expanded(
-                      child: Container(
-                        child: ListView(
-                          children: [
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                    child: Text(
-                                        "Week of ${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
-                                        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20))),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      ..._grid(snapshot.data),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+      color: Colors.white,
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              Expanded(
+                child: Container(
+                  child: ListView(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              "Week of ${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
+                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 16),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Reports", style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24)),
-                        Expanded(
-                          child: Container(),
-                        ),
-                        DVRCloseButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          positioned: false,
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                            ),
+                            child: Column(
+                              children: [
+                                ..._grid(snapshot.data),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      FutureBuilder(
+                          future: RepositoryProvider.of<IAnalyticsService>(context).getWeeklyReport(DateTime.now()),
+                          builder: (context, data) {
+                            if (!data.hasData) {
+                              return AnimatedVortex(
+                                onTap: () {},
+                              );
+                            }
+                            return progressIndicators(data.data ?? []);
+                          })
+                    ],
                   ),
                 ),
-              ],
-            ),
-          );
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:mementohr/data/bottom_sheet_state.dart';
 import 'package:mementohr/pages/home/mementohr.dart';
 
@@ -24,9 +25,9 @@ class HomePageBottom extends StatefulWidget {
     required this.value1,
     required this.value2,
     required this.value3,
-     this.value4,
-     this.value5,
-     this.value6,
+    this.value4,
+    this.value5,
+    this.value6,
     required this.bottomSheetState,
     required this.setBottomSheetState,
   });
@@ -36,15 +37,13 @@ class HomePageBottom extends StatefulWidget {
 }
 
 class _HomePageBottomState extends State<HomePageBottom> {
-
   double get value4 => widget.value4 ?? nowData.currentTime.second / 60;
   double get value5 => widget.value5 ?? monthlyValue;
   double get value6 => widget.value6 ?? annualValue;
   Timer? _timer;
   NowData nowData = NowData();
-    double get monthlyValue => nowData.currentTime.day / DateTime(now.year, now.month + 1, 0).subtract(const Duration(days: 1)).day;
+  double get monthlyValue => nowData.currentTime.day / DateTime(now.year, now.month + 1, 0).subtract(const Duration(days: 1)).day;
   double get annualValue => nowData.dayOfYearFraction;
-
 
   @override
   void initState() {
@@ -64,7 +63,6 @@ class _HomePageBottomState extends State<HomePageBottom> {
 
   DateTime get now => nowData.currentTime;
 
-
   @override
   void dispose() {
     _timer?.cancel();
@@ -81,8 +79,7 @@ class _HomePageBottomState extends State<HomePageBottom> {
   }
 
   TextStyle get midTextStyle {
-    return const TextStyle(
-        color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold);
+    return const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold);
   }
 
   bool get small => widget.bottomSheetState == BottomSheetState.hidden;
@@ -157,6 +154,7 @@ class _HomePageBottomState extends State<HomePageBottom> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
+                            HapticFeedback.lightImpact();
                             widget.setBottomSheetState();
                           },
                           child: Container(
@@ -178,6 +176,7 @@ class _HomePageBottomState extends State<HomePageBottom> {
               flex: mid || large ? 3 : 2,
               child: GestureDetector(
                 onTap: () {
+                  HapticFeedback.lightImpact();
                   widget.setBottomSheetState();
                 },
                 child: Container(
@@ -220,18 +219,14 @@ class _HomePageBottomState extends State<HomePageBottom> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildVerticalProgressBar(value4, darkRuby,
-              (nowData.currentTime.second).toString()),
+          _buildVerticalProgressBar(value4, darkRuby, (nowData.currentTime.second).toString()),
           _buildVerticalProgressBar(
               value5,
               darkGold,
               nowData.formattedMonth(DateTime.now()) +
                   " - " +
-                  nowData.formattedMonth(
-                      DateTime(DateTime.now().year, DateTime.now().month + 1, 1)
-                          .subtract(const Duration(days: 1)))),
-          _buildVerticalProgressBar(value6, darkEmerald,
-              nowData.formattedDate + " / 365 Days"),
+                  nowData.formattedMonth(DateTime(DateTime.now().year, DateTime.now().month + 1, 1).subtract(const Duration(days: 1)))),
+          _buildVerticalProgressBar(value6, darkEmerald, nowData.formattedDate + " / 365 Days"),
         ],
       ),
     );
@@ -251,10 +246,7 @@ class _HomePageBottomState extends State<HomePageBottom> {
                     ),
                     Text(
                       label,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   ],
                 )

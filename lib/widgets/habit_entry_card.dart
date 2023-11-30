@@ -53,9 +53,9 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     else {
       if (!widget.habitEntry.booleanValue) {
         audioPlayer.setPlayerMode(PlayerMode.lowLatency);
-        audioPlayer.setVolume(0.3);
+        audioPlayer.setVolume(0.2);
         if (!(await isAudioPlaying.isAudioPlaying() ?? true)) {
-          audioPlayer.play(AssetSource("audio/shimmer.wav"));
+          audioPlayer.play(AssetSource("audio/shimmer.wav"), volume: .02);
         }
       }
       BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue),
@@ -68,8 +68,6 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
     audioPlayer.dispose();
     super.dispose();
   }
-
-
 
   double get gradientStop => _completed ? 1.0 : habit.value / 100.0;
 
@@ -174,8 +172,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                 future: RepositoryProvider.of<IHabitEntryRepository>(context).getStreakFromHabitAndDate(habit, widget.currentListDate),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text(((snapshot.data ?? 0)).toString(),
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
+                    return Text(((snapshot.data ?? 0)).toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
                   } else {
                     return Text(_completed ? "1" : "0", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
                   }

@@ -22,6 +22,7 @@ abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date);
 
   Future<Map<int, List<HabitEntry>>> getHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
+  Future<List<HabitEntry>> getOrderedHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
 }
 
 class HabitEntryRepository implements IHabitEntryRepository {
@@ -137,7 +138,6 @@ class HabitEntryRepository implements IHabitEntryRepository {
     } else {
       return HabitEntry.fromMap(q.first);
     }
-
   }
 
   @override
@@ -248,5 +248,18 @@ class HabitEntryRepository implements IHabitEntryRepository {
       }
     });
     return habitEntries;
+  }
+
+  @override
+  Future<List<HabitEntry>> getOrderedHabitEntriesForDateInterval(DateTime startDate, DateTime endDate) async {
+    var q =
+        await db.query(tableName, where: 'createDate BETWEEN ? AND ? ORDER BY createDate ASC', whereArgs: [startDate.millisecondsSinceEpoch, endDate.millisecondsSinceEpoch]);
+    List<HabitEntry> entries = [];
+    for (var habitEntry in q) {
+      HabitEntry entry = HabitEntry.fromMap(habitEntry);
+      entries.add(entry);
+    }
+
+    return entries;
   }
 }

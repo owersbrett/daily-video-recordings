@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mementohr/bloc/user/user_event.dart';
 import 'package:mementohr/service/admin_service.dart';
 import 'package:mementohr/theme/theme.dart';
@@ -86,6 +87,7 @@ class _SplashPageState extends State<SplashPage> {
                   child: FloatingActionButton(
                     heroTag: "Close",
                     onPressed: () {
+                      HapticFeedback.lightImpact();
                       BlocProvider.of<UserBloc>(context).add(SplashPageClosed());
                     },
                     child: Icon(

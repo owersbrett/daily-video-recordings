@@ -8,11 +8,12 @@ class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  Column(
+      body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AnimatedIndicator(
+          AnimatedVortex(
             infinite: true,
+            onTap: () {},
           ),
           const SizedBox(height: 20),
         ],

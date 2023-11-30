@@ -15,6 +15,7 @@ import 'package:sqflite_common/sqlite_api.dart';
 import '../../bloc/multimedia/multimedia.dart';
 import '../../bloc/user/user_bloc.dart';
 import '../../data/repositories/multimedia_repository.dart';
+import '../../service/analytics_service.dart';
 import '../../theme/theme.dart';
 
 class AppWrapper extends StatelessWidget {
@@ -27,7 +28,7 @@ class AppWrapper extends StatelessWidget {
       required this.habitRepository,
       required this.habitEntryRepository,
       required this.habitEntryNoteRepository,
-      required this.db});
+      required this.db, required this.analyticsService});
 
   final Database db;
   final IUserRepository userRepository;
@@ -36,6 +37,7 @@ class AppWrapper extends StatelessWidget {
   final IExperienceRepository experienceRepository;
   final IHabitRepository habitRepository;
   final IHabitEntryRepository habitEntryRepository;
+  final IAnalyticsService analyticsService;
   final IHabitEntryNoteRepository habitEntryNoteRepository;
 
   @override
@@ -49,6 +51,7 @@ class AppWrapper extends StatelessWidget {
         RepositoryProvider(create: (context) => db),
         RepositoryProvider(create: (context) => habitRepository),
         RepositoryProvider(create: (context) => habitEntryRepository),
+        RepositoryProvider(create: (context) => analyticsService),
         RepositoryProvider(create: (context) => habitEntryNoteRepository),
       ],
       child: DailyVideoReminders(

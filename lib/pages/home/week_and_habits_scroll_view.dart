@@ -71,14 +71,10 @@ class WeekAndHabitsScrollView extends StatelessWidget {
     if (todaysHabitEntries.isEmpty) {
       if (habitsState is! HabitsLoaded) {
         return [
-          GestureDetector(
-            onTap: () {
-              HapticFeedback.heavyImpact();
-
-              Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
-            },
-            child: AnimatedIndicator(),
-          )
+          AnimatedVortex(onTap: () {
+            HapticFeedback.heavyImpact();
+            Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
+          })
         ];
       }
       return [
@@ -102,38 +98,42 @@ class WeekAndHabitsScrollView extends StatelessWidget {
             ),
           ),
         ),
-        GestureDetector(
+        AnimatedVortex(
           onTap: () {
             HapticFeedback.heavyImpact();
 
             Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
           },
-          child: AnimatedIndicator(),
         )
       ];
     }
-    var entries = todaysHabitEntries
-        .map((e) => GestureDetector(
-              key: Key("${e.habitId}:${e.id}"),
-              onTap: () {
-                if (habitsState.getHabit(e.habitId) != null) {
-                  Navigation.createRoute(UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);
-                }
-              },
-              child: HabitEntryCard(
-                habit: habitsMap[e.habitId] ?? Habit.empty(),
-                habitEntry: e,
-                currentListDate: currentDay,
+    List<Widget> entries = todaysHabitEntries
+        .map((e) => Container(
+              child: GestureDetector(
+                key: Key("${e.habitId}:${e.id}"),
+                onTap: () {
+                  if (habitsState.getHabit(e.habitId) != null) {
+                    HapticFeedback.lightImpact();
+                    Navigation.createRoute(
+                        UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);
+                  }
+                },
+                child: HabitEntryCard(
+                  habit: habitsMap[e.habitId] ?? Habit.empty(),
+                  habitEntry: e,
+                  currentListDate: currentDay,
+                ),
               ),
             ))
         .toList();
-    entries.add(GestureDetector(
-      onTap: () {
-        HapticFeedback.heavyImpact();
+    entries.add(Container(
+      child: AnimatedVortex(
+        onTap: () {
+          HapticFeedback.heavyImpact();
 
-        Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
-      },
-      child: AnimatedIndicator(),
+          Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
+        },
+      ),
     ));
     return entries;
   }
