@@ -1,4 +1,4 @@
-import 'package:mementohr/data/experience.dart';
+import 'package:habitbit/data/experience.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/user.dart';

@@ -1,6 +1,6 @@
 // import 'package:camera/camera.dart';
-// import 'package:mementohr/bloc/playlist/playlist_event.dart';
-// import 'package:mementohr/bloc/playlist/playlist_state.dart';
+// import 'package:habitbit/bloc/playlist/playlist_event.dart';
+// import 'package:habitbit/bloc/playlist/playlist_state.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:video_player/video_player.dart';
 // import 'package:path/path.dart';

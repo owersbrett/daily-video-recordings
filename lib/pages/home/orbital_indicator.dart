@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mementohr/theme/theme.dart';
-import 'package:mementohr/util/color_util.dart';
+import 'package:habitbit/theme/theme.dart';
+import 'package:habitbit/util/color_util.dart';
 
 import 'orbital_state.dart';
 
@@ -245,9 +245,9 @@ class _OrbProgressPainter extends CustomPainter {
   }
 
   void drawRings(Canvas canvas, Size size, double coefficient) {
-    if (expanded ) {
+    if (expanded) {
       int numberOfRings = totalTicks;
-      final double maxDiameter = min(size.width , size.width );
+      final double maxDiameter = min(size.width, size.width);
 
       final Paint paint = Paint()..style = PaintingStyle.stroke;
       for (int i = 0; i < numberOfRings; i++) {

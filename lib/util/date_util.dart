@@ -1,4 +1,4 @@
-import 'package:mementohr/data/habit_entry.dart';
+import 'package:habitbit/data/habit_entry.dart';
 
 class DateUtil {
   static bool isSameDay(DateTime date1, DateTime date2) {
@@ -46,8 +46,8 @@ class DateUtil {
     return DateTime(date.year, date.month, date.day, 23, 59, 59, 999, 999);
   }
 
-  static DateTime startOfDayBefore(DateTime date) {
-    return startOfDay(date.subtract(const Duration(days: 1)));
+  static DateTime startOfDayBefore(DateTime date, [int days = 1]) {
+    return startOfDay(date.subtract( Duration(days: days)));
   }
 
   static DateTime endOfNextDay(DateTime date) {
@@ -115,6 +115,7 @@ class DateUtil {
     }
     return false;
   }
+
   static bool thirdWeekOfMonth(DateTime createDate) {
     DateTime firstMonday = DateUtil.previousMonday(createDate);
     DateTime secondMonday = firstMonday.add(Duration(days: 7));
@@ -127,7 +128,7 @@ class DateUtil {
     }
     return false;
   }
-  
+
   static bool fourthWeekOfMonth(DateTime createDate) {
     DateTime firstMonday = DateUtil.previousMonday(createDate);
     DateTime secondMonday = firstMonday.add(Duration(days: 7));
@@ -139,7 +140,7 @@ class DateUtil {
     }
     return false;
   }
-  
+
   static bool fifthWeekOfMonth(DateTime createDate) {
     DateTime firstMonday = DateUtil.previousMonday(createDate);
     DateTime secondMonday = firstMonday.add(Duration(days: 7));
@@ -152,12 +153,10 @@ class DateUtil {
     }
     return false;
   }
-  
+
   static DateTime firstMondayOfMonth(DateTime createDate) {
     return DateTime(createDate.year, createDate.month, 1).subtract(Duration(days: createDate.weekday - 1));
-
   }
-  
 }
 
 enum DayEnum { monday, tuesday }

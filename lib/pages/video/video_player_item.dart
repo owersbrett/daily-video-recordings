@@ -1,9 +1,9 @@
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:mementohr/bloc/multimedia/multimedia.dart';
+import 'package:habitbit/bloc/multimedia/multimedia.dart';
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mementohr/pages/video/delete_dialog.dart';
+import 'package:habitbit/pages/video/delete_dialog.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../bloc/habits/habits.dart';

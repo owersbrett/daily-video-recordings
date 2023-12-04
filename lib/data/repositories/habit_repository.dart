@@ -1,5 +1,5 @@
-import 'package:mementohr/data/repositories/_repository.dart';
-import 'package:mementohr/main.dart';
+import 'package:habitbit/data/repositories/_repository.dart';
+import 'package:habitbit/main.dart';
 import 'package:sqflite/sqflite.dart';
 import '../habit.dart';
 import '../habit_entity.dart';
@@ -53,8 +53,6 @@ class HabitRepository implements IHabitRepository {
     int i = await db.update(tableName, t.toMap(), where: 'id = ?', whereArgs: [t.id]);
     return Future.value(i > 0);
   }
-
-
 
   @override
   Future<Map<int, HabitEntity>> getHabitEntities(int userId, [DateTime? startingRange, DateTime? endingRange]) async {

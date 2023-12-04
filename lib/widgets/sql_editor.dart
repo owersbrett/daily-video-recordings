@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mementohr/bloc/user/user_bloc.dart';
-import 'package:mementohr/data/habit_entry.dart';
-import 'package:mementohr/main.dart';
+import 'package:habitbit/bloc/user/user_bloc.dart';
+import 'package:habitbit/data/habit_entry.dart';
+import 'package:habitbit/main.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../bloc/habits/habits.dart';
@@ -170,41 +170,37 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
   }
 
   List<Widget> _queryRows() {
-  if (_queryResult.isEmpty) {
-    return [Text("Queries appear here")];
+    if (_queryResult.isEmpty) {
+      return [Text("Queries appear here")];
+    }
+
+    // Create a list of widgets for each row in the query result
+    List<Widget> rowWidgets = _queryResult.map((Map<String, dynamic> row) {
+      return Card(
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: row.entries.map((entry) {
+              return Text("${entry.key}: ${entry.value}");
+            }).toList(),
+          ),
+        ),
+      );
+    }).toList();
+
+    // Wrap the rowWidgets in a horizontally scrolling ListView
+    return [
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(children: rowWidgets),
+      ),
+    ];
   }
 
-  // Create a list of widgets for each row in the query result
-  List<Widget> rowWidgets = _queryResult.map((Map<String, dynamic> row) {
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: row.entries.map((entry) {
-            return Text("${entry.key}: ${entry.value}");
-          }).toList(),
-        ),
-      ),
-    );
-  }).toList();
-
-  // Wrap the rowWidgets in a horizontally scrolling ListView
-  return [
-    SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(children: rowWidgets),
-    ),
-  ];
-}
-
-
-  Widget responseWidget(Map<String, dynamic> response){
-    return Container(
-      height: 250,
-      child: Text(response.toString())
-    );
+  Widget responseWidget(Map<String, dynamic> response) {
+    return Container(height: 250, child: Text(response.toString()));
   }
 
   @override

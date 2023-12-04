@@ -1,14 +1,14 @@
-import 'package:mementohr/bloc/experience/experience.dart';
-import 'package:mementohr/bloc/habits/habits.dart';
-import 'package:mementohr/bloc/reports/reports.dart';
-import 'package:mementohr/data/repositories/domain_repository.dart';
-import 'package:mementohr/data/repositories/experience_repository.dart';
-import 'package:mementohr/data/repositories/habit_entry_note_repository.dart';
-import 'package:mementohr/data/repositories/habit_entry_repository.dart';
-import 'package:mementohr/data/repositories/habit_repository.dart';
-import 'package:mementohr/data/repositories/user_repository.dart';
+import 'package:habitbit/bloc/experience/experience.dart';
+import 'package:habitbit/bloc/habits/habits.dart';
+import 'package:habitbit/bloc/reports/reports.dart';
+import 'package:habitbit/data/repositories/domain_repository.dart';
+import 'package:habitbit/data/repositories/experience_repository.dart';
+import 'package:habitbit/data/repositories/habit_entry_note_repository.dart';
+import 'package:habitbit/data/repositories/habit_entry_repository.dart';
+import 'package:habitbit/data/repositories/habit_repository.dart';
+import 'package:habitbit/data/repositories/user_repository.dart';
 
-import 'package:mementohr/pages/home/user_page.dart';
+import 'package:habitbit/pages/home/user_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite_common/sqlite_api.dart';
@@ -28,7 +28,8 @@ class AppWrapper extends StatelessWidget {
       required this.habitRepository,
       required this.habitEntryRepository,
       required this.habitEntryNoteRepository,
-      required this.db, required this.analyticsService});
+      required this.db,
+      required this.analyticsService});
 
   final Database db;
   final IUserRepository userRepository;
@@ -128,7 +129,7 @@ class _DailyVideoRemindersState extends State<DailyVideoReminders> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Mementohr',
+        title: 'Habitbit',
         theme: theme,
         home: const UserPage(),
       ),

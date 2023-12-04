@@ -1,15 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
-import 'package:mementohr/main.dart';
+import 'package:habitbit/main.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:mementohr/data/habit.dart';
-import 'package:mementohr/data/habit_entry.dart';
-import 'package:mementohr/data/habit_entry_note.dart';
-import 'package:mementohr/data/multimedia.dart';
-import 'package:mementohr/data/user.dart';
-import 'package:mementohr/data/user_level.dart';
+import 'package:habitbit/data/habit.dart';
+import 'package:habitbit/data/habit_entry.dart';
+import 'package:habitbit/data/habit_entry_note.dart';
+import 'package:habitbit/data/multimedia.dart';
+import 'package:habitbit/data/user.dart';
+import 'package:habitbit/data/user_level.dart';
 
 import '../data/domain.dart';
 import '../data/experience.dart';
@@ -26,8 +26,6 @@ class DatabaseService {
   factory DatabaseService() {
     return _singleton;
   }
-
-
 
   static String schemaQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'";
   static Future<void> logTableColumns(Database database) async {

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:mementohr/bloc/habits/habits.dart';
-import 'package:mementohr/pages/home/custom_circular_indicator_v2.dart';
-import 'package:mementohr/pages/home/orbital_indicator.dart';
-import 'package:mementohr/service/admin_service.dart';
+import 'package:habitbit/bloc/habits/habits.dart';
+import 'package:habitbit/pages/home/custom_circular_indicator_v2.dart';
+import 'package:habitbit/pages/home/orbital_indicator.dart';
+import 'package:habitbit/service/admin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mementohr/widgets/today_is_widget.dart';
+import 'package:habitbit/widgets/today_is_widget.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../bloc/user/user.dart';
@@ -144,7 +144,7 @@ class _DailyAppBarState extends State<DailyAppBar> {
               child: FloatingActionButton.small(
                 elevation: 3,
                 heroTag: "Mood",
-                enableFeedback: true,                
+                enableFeedback: true,
                 onPressed: () {
                   HapticFeedback.mediumImpact();
                   BlocProvider.of<UserBloc>(context).add(SplashPageRequested());

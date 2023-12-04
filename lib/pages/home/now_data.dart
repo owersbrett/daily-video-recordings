@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:mementohr/main.dart';
+import 'package:habitbit/main.dart';
 
 class NowData {
   DateTime startTime;

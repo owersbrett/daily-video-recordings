@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:mementohr/data/level.dart';
-import 'package:mementohr/data/repositories/habit_repository.dart';
-import 'package:mementohr/main.dart';
+import 'package:habitbit/data/level.dart';
+import 'package:habitbit/data/repositories/habit_repository.dart';
+import 'package:habitbit/main.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/experience/experience.dart';
@@ -134,8 +134,8 @@ class AdminService {
     return habits;
   }
 
-  static Habit getRandomHabit(int userId){
-    var rng =  Random();
+  static Habit getRandomHabit(int userId) {
+    var rng = Random();
     var habits = get50Habits(userId, true);
     return habits[rng.nextInt(habits.length)];
   }

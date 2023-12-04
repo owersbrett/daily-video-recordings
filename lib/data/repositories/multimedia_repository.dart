@@ -1,5 +1,5 @@
-import 'package:mementohr/data/multimedia.dart';
-import 'package:mementohr/data/repositories/_repository.dart';
+import 'package:habitbit/data/multimedia.dart';
+import 'package:habitbit/data/repositories/_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class IMultimediaRepository implements Repository<Multimedia> {}

@@ -1,5 +1,5 @@
-import 'package:mementohr/data/frequency_type.dart';
-import 'package:mementohr/data/habit_entry_note.dart';
+import 'package:habitbit/data/frequency_type.dart';
+import 'package:habitbit/data/habit_entry_note.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../data/habit.dart';
@@ -22,7 +22,7 @@ class AnalyticsService implements IAnalyticsService {
     DateTime nextSunday = DateUtil.previousMonday(currentDate);
     DateTime lastMonday = DateUtil.nextSunday(currentDate);
 
-      print("comeon now");
+    print("comeon now");
     try {
       var query = await db.rawQuery("""
 SELECT 

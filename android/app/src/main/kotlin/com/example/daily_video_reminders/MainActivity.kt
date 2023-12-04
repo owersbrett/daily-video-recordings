@@ -1,4 +1,4 @@
-package com.owersllc.mementohr
+package com.owersllc.habitbit
 
 import io.flutter.embedding.android.FlutterActivity
 

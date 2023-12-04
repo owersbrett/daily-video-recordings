@@ -1,6 +1,6 @@
-import 'package:mementohr/data/frequency_type.dart';
-import 'package:mementohr/data/unit_type.dart';
-import 'package:mementohr/util/streak_util.dart';
+import 'package:habitbit/data/frequency_type.dart';
+import 'package:habitbit/data/unit_type.dart';
+import 'package:habitbit/util/streak_util.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../util/date_util.dart';
@@ -16,13 +16,14 @@ abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future<int> getStreakFromHabitAndDate(Habit id, DateTime currentListDate);
   Future<HabitEntry?> getByIdAndDate(int id, DateTime date);
   Future<List<HabitEntry>?> getByDate(DateTime date);
-  Future<HabitEntry> getNearestFailure(int habitId, DateTime date);
+  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date);
   Future createHabitEntriesForDate(DateTime date);
   Future<List<HabitEntry>> createTodaysHabitEntries(DateTime date);
   Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date);
 
   Future<Map<int, List<HabitEntry>>> getHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
   Future<List<HabitEntry>> getOrderedHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
+  Future<List<HabitEntry>> getSuccessfulEntries(int habitId, DateTime date);
 }
 
 class HabitEntryRepository implements IHabitEntryRepository {
@@ -141,15 +142,20 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<HabitEntry> getNearestFailure(int habitId, DateTime date) async {
+  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date) async {
     var q = await db.query(tableName,
         where: 'habitId = ? AND createDate < ? AND booleanValue = 0 ORDER BY createDate DESC LIMIT 1',
         whereArgs: [habitId, DateUtil.endOfDay(date).millisecondsSinceEpoch]);
     if (q.isEmpty) {
       var q = await db.query(tableName, where: 'habitId = ? AND booleanValue = 1 ORDER BY createDate ASC LIMIT 1', whereArgs: [habitId]);
-      var lastSuccess = HabitEntry.fromMap(q.first);
-      return lastSuccess.copyWith(
-          id: -1, booleanValue: false, createDate: date.subtract(Duration(days: 1)), updateDate: date.subtract(Duration(days: 1)));
+      if (q.isNotEmpty) {
+        var lastSuccess = HabitEntry.fromMap(q.first);
+        var priorDay = DateUtil.startOfDayBefore(lastSuccess.createDate, 2);
+        return lastSuccess.copyWith(
+            id: -1, booleanValue: false, createDate: priorDay, updateDate: priorDay);
+      } else {
+        return null;
+      }
     } else {
       return HabitEntry.fromMap(q.first);
     }
@@ -252,8 +258,8 @@ class HabitEntryRepository implements IHabitEntryRepository {
 
   @override
   Future<List<HabitEntry>> getOrderedHabitEntriesForDateInterval(DateTime startDate, DateTime endDate) async {
-    var q =
-        await db.query(tableName, where: 'createDate BETWEEN ? AND ? ORDER BY createDate ASC', whereArgs: [startDate.millisecondsSinceEpoch, endDate.millisecondsSinceEpoch]);
+    var q = await db.query(tableName,
+        where: 'createDate BETWEEN ? AND ? ORDER BY createDate ASC', whereArgs: [startDate.millisecondsSinceEpoch, endDate.millisecondsSinceEpoch]);
     List<HabitEntry> entries = [];
     for (var habitEntry in q) {
       HabitEntry entry = HabitEntry.fromMap(habitEntry);
@@ -261,5 +267,18 @@ class HabitEntryRepository implements IHabitEntryRepository {
     }
 
     return entries;
+  }
+
+  @override
+  Future<List<HabitEntry>> getSuccessfulEntries(int habitId, DateTime date) async {
+    List<HabitEntry> entries = [];
+    var q = await db.query(tableName,
+        where: 'habitId = ? AND createDate < ? AND booleanValue = 1 ORDER BY createDate DESC',
+        whereArgs: [habitId, DateUtil.endOfDay(date).millisecondsSinceEpoch]);
+    if (q.isEmpty) {
+      return entries;
+    } else {
+      return q.map((e) => HabitEntry.fromMap(e)).toList();
+    }
   }
 }

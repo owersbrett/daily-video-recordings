@@ -1,5 +1,5 @@
-import 'package:mementohr/main.dart';
-import 'package:mementohr/service/admin_service.dart';
+import 'package:habitbit/main.dart';
+import 'package:habitbit/service/admin_service.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/experience.dart';

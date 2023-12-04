@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mementohr/pages/home/custom_circular_indicator_v2.dart';
-import 'package:mementohr/pages/home/now_data.dart';
-import 'package:mementohr/pages/home/orbital_indicator.dart';
-import 'package:mementohr/pages/home/orbital_page.dart';
-import 'package:mementohr/pages/home/orbital_state.dart';
-import 'package:mementohr/widgets/custom_circular_indicator.dart';
+import 'package:habitbit/pages/home/custom_circular_indicator_v2.dart';
+import 'package:habitbit/pages/home/now_data.dart';
+import 'package:habitbit/pages/home/orbital_indicator.dart';
+import 'package:habitbit/pages/home/orbital_page.dart';
+import 'package:habitbit/pages/home/orbital_state.dart';
+import 'package:habitbit/widgets/custom_circular_indicator.dart';
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
 import '../../navigation/navigation.dart';
 
-class Mementohr extends StatefulWidget {
-  const Mementohr({
+class Habitbit extends StatefulWidget {
+  const Habitbit({
     Key? key,
     required this.onStart,
     required this.nowData,
@@ -19,10 +19,10 @@ class Mementohr extends StatefulWidget {
   final NowData nowData;
 
   @override
-  State<Mementohr> createState() => _MementohState();
+  State<Habitbit> createState() => _HabitbitState();
 }
 
-class _MementohState extends State<Mementohr> {
+class _HabitbitState extends State<Habitbit> {
   static String experienceTag = "experience-hero";
   DateTime get currentTime => DateTime.now();
   Duration countdownDuration = const Duration(hours: 1);
@@ -39,15 +39,16 @@ class _MementohState extends State<Mementohr> {
 
   Hero hero(double percentageToNextLevel, [Size size = const Size(300, 300), int level = 1]) => Hero(
       tag: experienceTag,
-      
       child: BlocBuilder<HabitsBloc, HabitsState>(
         builder: (context, state) {
           return OrbitalIndicator(
-              currentTicks: state.todaysHabitEntries.fold(0, (previousValue, element) => (previousValue + (element.booleanValue ? 1 : 0))),
-              progress: percentageToNextLevel,
-              key: const ValueKey("weekday-hero"),
-              centerText: level.toString(),
-              totalTicks: state.todaysHabitEntries.length, size: size,);
+            currentTicks: state.todaysHabitEntries.fold(0, (previousValue, element) => (previousValue + (element.booleanValue ? 1 : 0))),
+            progress: percentageToNextLevel,
+            key: const ValueKey("weekday-hero"),
+            centerText: level.toString(),
+            totalTicks: state.todaysHabitEntries.length,
+            size: size,
+          );
         },
       ));
   Widget orbitalIndicatorPage(double percentageToNextLevel, int level) => OrbitalPage(
@@ -69,7 +70,7 @@ class _MementohState extends State<Mementohr> {
               children: <Widget>[
                 const Center(
                   child: Text(
-                    'Mementohr',
+                    'Habitbit',
                     style: TextStyle(
                         fontSize: 24, // Adjust the font size as needed
                         fontWeight: FontWeight.bold, // Make the title bold
@@ -102,7 +103,9 @@ class _MementohState extends State<Mementohr> {
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(children: [Text("Features:", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center)]),
+                    Row(children: [
+                      Text("Features:", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center)
+                    ]),
                     SizedBox(height: 12), // Space between subtitle and button
                     Text("- Add Habits To Track Consistency", style: TextStyle(color: Colors.white, fontSize: 14)),
                     SizedBox(height: 12), // Space between subtitle and button

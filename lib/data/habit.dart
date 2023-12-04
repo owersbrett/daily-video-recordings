@@ -1,13 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:mementohr/pages/create_habit/display_habit_card.dart';
+import 'package:habitbit/pages/create_habit/display_habit_card.dart';
 import 'package:flutter/material.dart';
 
-import 'package:mementohr/data/frequency_type.dart';
-import 'package:mementohr/data/unit_type.dart';
-import 'package:mementohr/theme/theme.dart';
-import 'package:mementohr/util/color_util.dart';
+import 'package:habitbit/data/frequency_type.dart';
+import 'package:habitbit/data/unit_type.dart';
+import 'package:habitbit/theme/theme.dart';
+import 'package:habitbit/util/color_util.dart';
 
 import 'user.dart';
 

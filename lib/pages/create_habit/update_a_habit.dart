@@ -1,14 +1,14 @@
-import 'package:mementohr/pages/create_habit/display_habit_card.dart';
-import 'package:mementohr/util/color_util.dart';
+import 'package:habitbit/pages/create_habit/display_habit_card.dart';
+import 'package:habitbit/util/color_util.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
-import 'package:mementohr/data/frequency_type.dart';
-import 'package:mementohr/pages/create_habit/color_picker_dialog.dart';
-import 'package:mementohr/pages/video/dvr_close_button.dart';
-import 'package:mementohr/theme/theme.dart';
-import 'package:mementohr/widgets/custom_form_field.dart';
-import 'package:mementohr/widgets/stylized_checkbox.dart';
+import 'package:habitbit/data/frequency_type.dart';
+import 'package:habitbit/pages/create_habit/color_picker_dialog.dart';
+import 'package:habitbit/pages/video/dvr_close_button.dart';
+import 'package:habitbit/theme/theme.dart';
+import 'package:habitbit/widgets/custom_form_field.dart';
+import 'package:habitbit/widgets/stylized_checkbox.dart';
 
 import '../../bloc/habits/habits.dart';
 import '../../data/habit.dart';
@@ -159,7 +159,6 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
 
   bool get focused => _stringValueFocus.hasFocus || _quantityFocus.hasFocus || _suffixFocus.hasFocus;
 
-
   List<Widget> frequencyRows() {
     return FrequencyType.values.map((e) => frequencyRow(e)).toList();
   }
@@ -205,7 +204,10 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
             Navigator.of(context).pop();
           }
         },
-        child: const Icon(Icons.save, color: Colors.white,),
+        child: const Icon(
+          Icons.save,
+          color: Colors.white,
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -334,8 +336,7 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
                         value: streakEmojiController,
                       ),
                     ),
-                                        ...frequencyRows(),
-                    
+                    ...frequencyRows(),
                   ],
                 ),
               ),

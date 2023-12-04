@@ -1,9 +1,9 @@
-import 'package:mementohr/bloc/experience/experience.dart';
-import 'package:mementohr/data/habit_entity.dart';
-import 'package:mementohr/data/repositories/habit_entry_repository.dart';
-import 'package:mementohr/data/repositories/habit_repository.dart';
+import 'package:habitbit/bloc/experience/experience.dart';
+import 'package:habitbit/data/habit_entity.dart';
+import 'package:habitbit/data/repositories/habit_entry_repository.dart';
+import 'package:habitbit/data/repositories/habit_repository.dart';
 import 'package:logging/logging.dart';
-import 'package:mementohr/util/date_util.dart';
+import 'package:habitbit/util/date_util.dart';
 
 import '../../data/experience.dart';
 import '../../data/frequency_type.dart';

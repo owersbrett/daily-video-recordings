@@ -84,7 +84,6 @@ class HabitEntry {
       'habitId': habitId,
       'integerValue': integerValue,
       'decimalValue': decimalValue,
-      // 'streakAtEntry': streakAtEntry,
       'stringValue': stringValue,
       'unitType': unitType.toPrettyString(),
       'createDate': createDate.millisecondsSinceEpoch,
@@ -107,7 +106,6 @@ class HabitEntry {
     return HabitEntry(
       id: map['id'] != null ? map['id'] as int : null,
       habitId: map['habitId'] as int,
-      // streakAtEntry: map['streakAtEntry'] as int?,
       booleanValue:( map['booleanValue'] as int) == 1,
       integerValue: map['integerValue'] != null ? map['integerValue'] as int : null,
       decimalValue: map['decimalValue'] != null ? map['decimalValue'] as double : null,

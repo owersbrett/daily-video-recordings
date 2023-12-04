@@ -1,4 +1,4 @@
-import 'package:mementohr/util/string_util.dart';
+import 'package:habitbit/util/string_util.dart';
 
 enum FrequencyType {
   // once,

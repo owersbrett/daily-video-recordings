@@ -1,15 +1,15 @@
 import 'package:flutter/services.dart';
-import 'package:mementohr/data/repositories/domain_repository.dart';
-import 'package:mementohr/data/repositories/experience_repository.dart';
-import 'package:mementohr/data/repositories/habit_entry_note_repository.dart';
-import 'package:mementohr/data/repositories/user_repository.dart';
-import 'package:mementohr/pages/home/app_wrapper.dart';
+import 'package:habitbit/data/repositories/domain_repository.dart';
+import 'package:habitbit/data/repositories/experience_repository.dart';
+import 'package:habitbit/data/repositories/habit_entry_note_repository.dart';
+import 'package:habitbit/data/repositories/user_repository.dart';
+import 'package:habitbit/pages/home/app_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:camera/camera.dart';
-import 'package:mementohr/service/file_directories_service.dart';
+import 'package:habitbit/service/file_directories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
@@ -25,11 +25,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FileDirectoriesService().init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarBrightness: Brightness.dark,
-    statusBarIconBrightness: Brightness.dark
-  ));
+  SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.dark));
 
   Logger.root.level = Level.ALL; // defaults to Level.INFO
   Logger.root.onRecord.listen((record) {

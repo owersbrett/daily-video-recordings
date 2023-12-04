@@ -1,7 +1,7 @@
-import 'package:mementohr/data/habit.dart';
-import 'package:mementohr/pages/create_habit/typewriter_widget.dart';
+import 'package:habitbit/data/habit.dart';
+import 'package:habitbit/pages/create_habit/typewriter_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:mementohr/service/admin_service.dart';
+import 'package:habitbit/service/admin_service.dart';
 import '../../widgets/custom_progress_indicator.dart';
 import '../../data/habit_entity.dart';
 import '../../widgets/stylized_checkbox.dart';
@@ -60,19 +60,19 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-         decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.black.withOpacity(1), width: 2),
-                  gradient: LinearGradient(
-                    colors: [
-                      HexColor.fromHex(habit.hexColor).withOpacity(.5),
-                      HexColor.fromHex(habit.hexColor).withOpacity(.3),
-                    ],
-                    stops: [_completed ? .5 : 0.5, gradientStop],
-                    begin: Alignment.topLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.black.withOpacity(1), width: 2),
+            gradient: LinearGradient(
+              colors: [
+                HexColor.fromHex(habit.hexColor).withOpacity(.5),
+                HexColor.fromHex(habit.hexColor).withOpacity(.3),
+              ],
+              stops: [_completed ? .5 : 0.5, gradientStop],
+              begin: Alignment.topLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
           child: Stack(
             children: [
               Column(
@@ -142,7 +142,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
         Flexible(
           flex: 2,
           child: habitString.isEmpty
-              ?  TypewriterWidget(
+              ? TypewriterWidget(
                   textList: AdminService.get50Habits(0, true).map((e) => e.stringValue).toList(),
                   typingSpeed: Duration(milliseconds: 100),
                 )

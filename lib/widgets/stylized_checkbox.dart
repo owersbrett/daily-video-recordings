@@ -1,6 +1,6 @@
-import 'package:mementohr/theme/theme.dart';
+import 'package:habitbit/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:mementohr/tooltip_text.dart';
+import 'package:habitbit/tooltip_text.dart';
 
 class StylizedCheckbox extends StatelessWidget {
   final bool isChecked;

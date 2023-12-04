@@ -1,9 +1,9 @@
-import 'package:mementohr/data/repositories/habit_entry_repository.dart';
-import 'package:mementohr/service/analytics_service.dart';
-import 'package:mementohr/widgets/custom_circular_indicator.dart';
+import 'package:habitbit/data/repositories/habit_entry_repository.dart';
+import 'package:habitbit/service/analytics_service.dart';
+import 'package:habitbit/widgets/custom_circular_indicator.dart';
 import 'package:to_csv/to_csv.dart' as toCsv;
-import 'package:mementohr/bloc/reports/reports.dart';
-import 'package:mementohr/widgets/custom_progress_indicator.dart';
+import 'package:habitbit/bloc/reports/reports.dart';
+import 'package:habitbit/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/experience/experience.dart';

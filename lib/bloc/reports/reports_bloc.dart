@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:mementohr/bloc/reports/reports.dart';
+import 'package:habitbit/bloc/reports/reports.dart';
 
 import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';
@@ -40,7 +40,7 @@ class ReportsBloc extends Bloc<ReportsEvent, ReportsState> {
       fullEntities[entity.habit.id!] = _fillMissingEntity(entity, startInterval, endInterval);
     }
     return fullEntities;
-  } 
+  }
 
   HabitEntity _fillMissingEntity(HabitEntity entity, DateTime startInterval, DateTime endInterval) {
     List<DateTime> weekDates = List.generate(

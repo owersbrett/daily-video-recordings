@@ -1,7 +1,7 @@
-import 'package:mementohr/bloc/reports/reports.dart';
-import 'package:mementohr/pages/home/annual_report.dart';
-import 'package:mementohr/pages/home/calendar_grid.dart';
-import 'package:mementohr/widgets/habit_grid.dart';
+import 'package:habitbit/bloc/reports/reports.dart';
+import 'package:habitbit/pages/home/annual_report.dart';
+import 'package:habitbit/pages/home/calendar_grid.dart';
+import 'package:habitbit/widgets/habit_grid.dart';
 import 'package:flutter/material.dart';
 import '../../bloc/habits/habits.dart';
 import '../../bloc/user/user.dart';
@@ -50,16 +50,15 @@ class _ReportPageState extends State<ReportPage> with SingleTickerProviderStateM
                     ),
                   ),
                 ),
-                
               ],
             );
           },
         ),
-        BlocBuilder<ReportsBloc, ReportsState>(
-          builder: (context, state) {
-            return CalendarGrid(startDate: state.startInterval,);
-          }
-        ),
+        BlocBuilder<ReportsBloc, ReportsState>(builder: (context, state) {
+          return CalendarGrid(
+            startDate: state.startInterval,
+          );
+        }),
         CenteredGridScreen(),
       ];
 

@@ -1,4 +1,4 @@
-import 'package:mementohr/grpc_generated/health.pbgrpc.dart';
+import 'package:habitbit/grpc_generated/health.pbgrpc.dart';
 import 'package:flutter/foundation.dart';
 
 import 'client.dart';

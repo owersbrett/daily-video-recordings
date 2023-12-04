@@ -1,5 +1,5 @@
-import 'package:mementohr/data/repositories/experience_repository.dart';
-import 'package:mementohr/main.dart';
+import 'package:habitbit/data/repositories/experience_repository.dart';
+import 'package:habitbit/main.dart';
 
 import 'experience.dart';
 

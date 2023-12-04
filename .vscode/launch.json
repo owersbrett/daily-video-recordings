@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "mementohr",
+            "name": "habitbit",
             "request": "launch",
             "type": "dart",
             "deviceId": "00008120-0018096A14D8C01E"
@@ -20,7 +20,7 @@
             "name": "6.5",
             "request": "launch",
             "type": "dart",
-            "deviceId": "3657E686-3037-4DCD-B0F9-D20D03AECB8E"
+            "deviceId": "FAEECA6A-CA77-493B-8675-0D954E7E6E8A"
         },
         {
             "name": "5.5",
@@ -35,13 +35,13 @@
             "deviceId": "00008030-001C35E02232402E"
         },
         {
-            "name": "mementohr (profile mode)",
+            "name": "habitbit (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "mementohr (release mode)",
+            "name": "habitbit (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

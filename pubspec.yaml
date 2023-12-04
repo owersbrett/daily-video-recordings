@@ -1,4 +1,4 @@
-name: mementohr
+name: habitbit
 description: A new Flutter project for daily video reminders.
 version: 1.0.0+4
 publish_to: 'none' # Prevent accidental publishing to pub.dev

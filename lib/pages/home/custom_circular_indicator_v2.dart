@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:mementohr/theme/theme.dart';
-import 'package:mementohr/util/color_util.dart';
+import 'package:habitbit/theme/theme.dart';
+import 'package:habitbit/util/color_util.dart';
 
 class CustomProgressIndicator extends StatelessWidget {
   final double progress; // Progress value between 0 and 1
@@ -56,7 +56,6 @@ class IndicatorValues {
   final int count;
   final double eccentricity;
 
-
   IndicatorValues(
       {required this.progress,
       required this.orbitalAngle,
@@ -92,34 +91,22 @@ class _OrbProgressPainter extends CustomPainter {
     return color;
   }
 
-  Paint progressPaint(
-          {PaintingStyle style = PaintingStyle.stroke,
-          Color color = ruby,
-          StrokeCap cap = StrokeCap.round}) =>
-      Paint()
-        ..color = color
-        ..strokeWidth = 10
-        ..style = style
-        ..strokeCap = cap;
+  Paint progressPaint({PaintingStyle style = PaintingStyle.stroke, Color color = ruby, StrokeCap cap = StrokeCap.round}) => Paint()
+    ..color = color
+    ..strokeWidth = 10
+    ..style = style
+    ..strokeCap = cap;
 
-  void drawOrbs(Canvas canvas, Size size, int offset,
-      [double radiusCoefficient = 1]) {
+  void drawOrbs(Canvas canvas, Size size, int offset, [double radiusCoefficient = 1]) {
     for (int i = 0; i < count; i++) {
       var baseAngle = 2 * pi * (i / count);
-      var adjustedAngle = baseAngle +
-          offset +
-          (values.inclination * (pi / 180)); // Converting degrees to radians
+      var adjustedAngle = baseAngle + offset + (values.inclination * (pi / 180)); // Converting degrees to radians
 
-      var orbCenter = size.center(Offset.zero) +
-          Offset(-cos(adjustedAngle + pi / 2), -sin(adjustedAngle + pi / 2)) *
-              (values.ascending * i.toDouble());
-      Color orbColor =
-          i + 3 > orbCount ? darkEmerald.withOpacity(.5) : progressColor;
+      var orbCenter =
+          size.center(Offset.zero) + Offset(-cos(adjustedAngle + pi / 2), -sin(adjustedAngle + pi / 2)) * (values.ascending * i.toDouble());
+      Color orbColor = i + 3 > orbCount ? darkEmerald.withOpacity(.5) : progressColor;
       orbColor = orbColor.withOpacity(i / count);
-      canvas.drawCircle(
-          orbCenter,
-          (i.toDouble() % (count - 1)) * radiusCoefficient,
-          progressPaint(style: PaintingStyle.fill, color: orbColor));
+      canvas.drawCircle(orbCenter, (i.toDouble() % (count - 1)) * radiusCoefficient, progressPaint(style: PaintingStyle.fill, color: orbColor));
     }
   }
 
@@ -137,11 +124,7 @@ class _OrbProgressPainter extends CustomPainter {
     // drawOrbs(canvas, size, 720);
 
     canvas.drawCircle(
-        size.center(Offset.zero),
-        (3 * values.wobble + .1),
-        progressPaint(
-            color: emerald.withOpacity(values.wobble),
-            style: PaintingStyle.fill));
+        size.center(Offset.zero), (3 * values.wobble + .1), progressPaint(color: emerald.withOpacity(values.wobble), style: PaintingStyle.fill));
     // Draw base circle
     // canvas.drawCircle(size.center(Offset.zero), 50, progressPaint(color: emerald.withOpacity(.5)));
     // canvas.drawArc(Rect.fromCircle(center: size.center(Offset.zero), radius: 50), -pi / 2, 2 * pi * progress, false,

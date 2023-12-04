@@ -1,8 +1,8 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:mementohr/data/experience.dart';
-import 'package:mementohr/data/repositories/experience_repository.dart';
-import 'package:mementohr/data/repositories/user_repository.dart';
-import 'package:mementohr/main.dart';
+import 'package:habitbit/data/experience.dart';
+import 'package:habitbit/data/repositories/experience_repository.dart';
+import 'package:habitbit/data/repositories/user_repository.dart';
+import 'package:habitbit/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/habit_entry_repository.dart';
@@ -32,7 +32,7 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
 
   Future _splashPageRequested(SplashPageRequested event, Emitter<UserState> emit) async {
     if (state is UserLoaded) {
-          List<Experience> experienceList = await experienceRepository.getAll();
+      List<Experience> experienceList = await experienceRepository.getAll();
 
       emit(UserLoaded(state.user, experienceList, false));
     }

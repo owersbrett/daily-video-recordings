@@ -1,5 +1,5 @@
-import 'package:mementohr/data/habit_entity.dart';
-import 'package:mementohr/main.dart';
+import 'package:habitbit/data/habit_entity.dart';
+import 'package:habitbit/main.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/habit.dart';

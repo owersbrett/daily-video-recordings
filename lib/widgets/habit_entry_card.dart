@@ -1,10 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:is_audio_playing/is_audio_playing.dart';
-import 'package:mementohr/bloc/experience/experience.dart';
-import 'package:mementohr/bloc/habits/habits.dart';
+import 'package:habitbit/bloc/experience/experience.dart';
+import 'package:habitbit/bloc/habits/habits.dart';
 import 'package:flutter/material.dart';
-import 'package:mementohr/data/repositories/habit_entry_repository.dart';
+import 'package:habitbit/data/repositories/habit_entry_repository.dart';
 
 import '../data/habit.dart';
 import '../data/habit_entity.dart';

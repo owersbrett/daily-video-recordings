@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mementohr/main.dart';
+import 'package:habitbit/main.dart';
 
 import '../util/date_util.dart';
 import 'habit.dart';
@@ -34,12 +34,11 @@ class HabitEntity extends Equatable {
     List<HabitEntry> consecutiveEntries = [];
     int i = 1;
     for (var entry in previousEntries) {
-      if ((DateUtil.isConsecutiveDays(initialDate, entry.createDate) || DateUtil.isSameDay( initialDate, entry.createDate)) && entry.booleanValue) {
-        if (DateUtil.isSameDay( initialDate, entry.createDate)){
+      if ((DateUtil.isConsecutiveDays(initialDate, entry.createDate) || DateUtil.isSameDay(initialDate, entry.createDate)) && entry.booleanValue) {
+        if (DateUtil.isSameDay(initialDate, entry.createDate)) {
         } else {
           consecutiveEntries.add(entry);
           initialDate = entry.createDate;
-
         }
       } else {
         break;

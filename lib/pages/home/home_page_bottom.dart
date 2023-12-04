@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:mementohr/data/bottom_sheet_state.dart';
-import 'package:mementohr/pages/home/mementohr.dart';
+import 'package:habitbit/data/bottom_sheet_state.dart';
+import 'package:habitbit/pages/home/habitbit.dart';
 
-import 'package:mementohr/pages/home/now_data.dart';
-import 'package:mementohr/theme/theme.dart';
+import 'package:habitbit/pages/home/now_data.dart';
+import 'package:habitbit/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../tooltip_text.dart';
@@ -117,7 +117,7 @@ class _HomePageBottomState extends State<HomePageBottom> {
   Widget _list(BuildContext context) {
     if (large) return const VideoPreviewPage();
     if (mid) {
-      return Mementohr(
+      return Habitbit(
         nowData: nowData,
         onStart: () {
           setState(() {

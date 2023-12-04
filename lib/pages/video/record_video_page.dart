@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
-import 'package:mementohr/pages/video/dvr_close_button.dart';
-import 'package:mementohr/service/media_service.dart';
-import 'package:mementohr/theme/theme.dart';
+import 'package:habitbit/pages/video/dvr_close_button.dart';
+import 'package:habitbit/service/media_service.dart';
+import 'package:habitbit/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:video_player/video_player.dart';
