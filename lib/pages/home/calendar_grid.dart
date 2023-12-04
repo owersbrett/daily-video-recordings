@@ -186,17 +186,17 @@ class _CalendarGridState extends State<CalendarGrid> {
     int i = 0;
     for (var entry in list) {
       if (i < 7) {
-        rowOne.add(entry.booleanValue ? habit.streakEmoji : '❌');
+        rowOne.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
       } else if (i < 14) {
-        rowTwo.add(entry.booleanValue ? habit.streakEmoji : '❌');
+        rowTwo.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
       } else if (i < 21) {
-        rowThree.add(entry.booleanValue ? habit.streakEmoji : '❌');
+        rowThree.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
       } else if (i < 28) {
-        rowFour.add(entry.booleanValue ? habit.streakEmoji : '❌');
+        rowFour.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
       } else if (i < 35) {
-        rowFive.add(entry.booleanValue ? habit.streakEmoji : '❌');
+        rowFive.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
       } else if (i <= CalendarGrid.daysCount) {
-        rowSix.add(entry.booleanValue ? habit.streakEmoji : '❌');
+        rowSix.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
       }
       i++;
     }
