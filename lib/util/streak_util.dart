@@ -42,7 +42,7 @@ class StreakUtil {
     } else if (streak == 0 && initialDayIsTrue) {
       return getWeeklyStreak(repo, habit, date.subtract(const Duration(days: 7)), streak, false);
     } else {
-      return 0;
+      return streak;
     }
   }
 
