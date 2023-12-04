@@ -1,3 +1,4 @@
+import 'package:habitbit/bloc/experience/experience.dart';
 import 'package:habitbit/main.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -15,10 +16,10 @@ class StreakUtil {
     }
     switch (habit.frequencyType) {
       case FrequencyType.daily:
-        streak = await getDailyStreak(repo, habit, date);
+        streak = await getDailyStreak(repo, habit, date, true);
         break;
       case FrequencyType.everyOtherDay:
-        streak = await getEveryOtherDayStreak(repo, habit, date);
+        streak = await getEveryOtherDayStreak(repo, habit, date, true);
         break;
       case FrequencyType.weekly:
         streak = await getWeeklyStreak(repo, habit, date);
@@ -29,9 +30,45 @@ class StreakUtil {
     return streak > 0 ? streak : 0;
   }
 
+  static Future<int> getDailyStreak(IHabitEntryRepository repo, Habit habit, DateTime date, bool isToday, [int streak = 0]) async {
+    var habitEntry = await repo.getByHabitIdAndDate(habit.id!, date);
+    if (habitEntry == null) {
+      return streak;
+    } else {
+      if (habitEntry.booleanValue) {
+        streak++;
+        return getDailyStreak(repo, habit, date.subtract(const Duration(days: 1)), false, streak);
+      } else {
+        if (isToday) {
+          return getDailyStreak(repo, habit, date.subtract(const Duration(days: 1)), false, streak);
+        } else {
+          return streak;
+        }
+      }
+    }
+  }
+
+  static Future<int> getEveryOtherDayStreak(IHabitEntryRepository repo, Habit habit, DateTime date, bool isToday, [int streak = 0]) async {
+    var habitEntry = await repo.getByHabitIdAndDate(habit.id!, date);
+    if (habitEntry == null) {
+      return streak;
+    } else {
+      if (habitEntry.booleanValue) {
+        streak++;
+        return getEveryOtherDayStreak(repo, habit, date.subtract(const Duration(days: 2)), isToday, streak);
+      } else {
+        if (isToday) {
+          return getEveryOtherDayStreak(repo, habit, date.subtract(const Duration(days: 2)), false, streak);
+        } else {
+          return streak;
+        }
+      }
+    }
+  }
+
   static Future<int> getWeeklyStreak(IHabitEntryRepository repo, Habit habit, DateTime date, [int streak = 0, bool initialDayIsTrue = true]) async {
     DateTime dateInQuestion = date;
-    HabitEntry? today = await repo.getByIdAndDate(habit.id!, dateInQuestion);
+    HabitEntry? today = await repo.getByHabitIdAndDate(habit.id!, dateInQuestion);
     if (today == null) {
       log(streak.toString());
       return streak;
@@ -43,39 +80,6 @@ class StreakUtil {
       return getWeeklyStreak(repo, habit, date.subtract(const Duration(days: 7)), streak, false);
     } else {
       return streak;
-    }
-  }
-
-  static Future<int> getEveryOtherDayStreak(IHabitEntryRepository repo, Habit habit, DateTime date) async {
-    int value = 0;
-    DateTime previousDay = DateUtil.endOfDay(date.copyWith(day: date.day - 2));
-    HabitEntry? nearestFailure = await repo.getNearestFailure(habit.id!, previousDay);
-    if (nearestFailure == null) {
-      return (await repo.getSuccessfulEntries(habit.id!, date)).length;
-    }
-    HabitEntry? todaysEntry = (await repo.getByIdAndDate(habit.id!, date));
-    if (todaysEntry == null) return 0;
-    int differenceInDays = todaysEntry.createDate.difference(nearestFailure.createDate).inDays;
-    if (todaysEntry.booleanValue) {
-      value = differenceInDays ~/ 2;
-    } else {
-      value = (differenceInDays - 1) ~/ 2;
-    }
-    return value;
-  }
-
-  static Future<int> getDailyStreak(IHabitEntryRepository repo, Habit habit, DateTime date) async {
-    DateTime previousDay = DateUtil.endOfDay(date.copyWith(day: date.day - 1));
-    HabitEntry? nearestFailure = await repo.getNearestFailure(habit.id!, previousDay);
-    if (nearestFailure == null) {
-      return (await repo.getSuccessfulEntries(habit.id!, date)).length;
-    }
-    HabitEntry todaysEntry = (await repo.getByIdAndDate(habit.id!, date))!;
-    int differenceInDays = todaysEntry.createDate.difference(nearestFailure.createDate).inDays;
-    if (todaysEntry.booleanValue) {
-      return differenceInDays;
-    } else {
-      return differenceInDays - 1;
     }
   }
 }

@@ -14,9 +14,9 @@ abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future createForTodayIfDoesntExistForYesterdayTodayOrTomorrow(HabitEntry t);
   Future createForTodayIfDoesntExistBetweenStartDateAndEndDate(HabitEntry t, DateTime startDate, DateTime endDate);
   Future<int> getStreakFromHabitAndDate(Habit id, DateTime currentListDate);
-  Future<HabitEntry?> getByIdAndDate(int id, DateTime date);
+  Future<HabitEntry?> getByHabitIdAndDate(int id, DateTime date);
   Future<List<HabitEntry>?> getByDate(DateTime date);
-  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date);
+  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date, [int days = 1]);
   Future createHabitEntriesForDate(DateTime date);
   Future<List<HabitEntry>> createTodaysHabitEntries(DateTime date);
   Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date);
@@ -130,7 +130,7 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<HabitEntry?> getByIdAndDate(int id, DateTime date) async {
+  Future<HabitEntry?> getByHabitIdAndDate(int id, DateTime date) async {
     var q = await db.query(tableName,
         where: 'habitId = ? AND createDate BETWEEN ? AND ?',
         whereArgs: [id, DateUtil.startOfDay(date).millisecondsSinceEpoch, DateUtil.endOfDay(date).millisecondsSinceEpoch]);
@@ -142,22 +142,23 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date) async {
+  Future<HabitEntry?> getNearestFailure(int habitId, DateTime date, [int days = 1]) async {
+    var eod = DateUtil.startOfDay(date);
     var q = await db.query(tableName,
         where: 'habitId = ? AND createDate < ? AND booleanValue = 0 ORDER BY createDate DESC LIMIT 1',
-        whereArgs: [habitId, DateUtil.endOfDay(date).millisecondsSinceEpoch]);
+        whereArgs: [habitId, eod.millisecondsSinceEpoch]);
     if (q.isEmpty) {
       var q = await db.query(tableName, where: 'habitId = ? AND booleanValue = 1 ORDER BY createDate ASC LIMIT 1', whereArgs: [habitId]);
       if (q.isNotEmpty) {
         var lastSuccess = HabitEntry.fromMap(q.first);
-        var priorDay = DateUtil.startOfDayBefore(lastSuccess.createDate, 2);
-        return lastSuccess.copyWith(
-            id: -1, booleanValue: false, createDate: priorDay, updateDate: priorDay);
+        var priorDay = DateUtil.startOfDayBefore(lastSuccess.createDate, days);
+        return lastSuccess.copyWith(id: -1, booleanValue: false, createDate: priorDay, updateDate: priorDay);
       } else {
         return null;
       }
     } else {
-      return HabitEntry.fromMap(q.first);
+      var entry = HabitEntry.fromMap(q.first);
+      return entry;
     }
   }
 

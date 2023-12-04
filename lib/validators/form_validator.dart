@@ -22,7 +22,7 @@ class FormValidator {
     } else {
       val = val.trim();
     }
-    if (val.characters.length > 1) {
+    if (val.characters.length > 2) {
       return field + " must 1 character long.";
     }
     return null;
