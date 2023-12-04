@@ -54,9 +54,9 @@ class _ReportPageState extends State<ReportPage> with SingleTickerProviderStateM
             );
           },
         ),
-        BlocBuilder<ReportsBloc, ReportsState>(builder: (context, state) {
+        BlocBuilder<HabitsBloc, HabitsState>(builder: (context, state) {
           return CalendarGrid(
-            startDate: state.startInterval,
+            startDate: DateTime.now(), habits: state.habitsMap.values.toList(),
           );
         }),
         CenteredGridScreen(),

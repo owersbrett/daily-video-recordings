@@ -9,7 +9,7 @@ import '../util/date_util.dart';
 
 abstract class IAnalyticsService {
   Future<List<WeeklyReportRow>> getWeeklyReport(DateTime currentDate);
-  Future<List<WeeklyReportRow>> getMonthlyReport(DateTime currentDate);
+  Future<Map<int, List<HabitEntry>>> getMonthlyReport(DateTime currentDate, int habitId);
 }
 
 class AnalyticsService implements IAnalyticsService {
@@ -48,7 +48,7 @@ FROM
   Habit
   LEFT JOIN HabitEntry habit_entry ON habit.id = habit_entry.habitId
 WHERE
-  habit_entry.createDate BETWEEN ? AND ?
+  habit_entry.createDate BETWEEN ? AND ? 
 """, [lastMonday.millisecondsSinceEpoch, nextSunday.millisecondsSinceEpoch]);
       print("comeon now");
       weeklyReportRows = query
@@ -79,16 +79,6 @@ WHERE
                   updateDate: DateTime.fromMillisecondsSinceEpoch(["habitUpdateDate"] as int),
                   unitIncrement: e["unitIncrement"] as int,
                 ),
-                // habitEntryNote: e["habit_entry_note_id"] != null
-                //     ? HabitEntryNote(
-                //         id: e["habit_entry_note_id"] as int,
-                //         habitEntryId: e["habit_entry_id"] as int,
-                //         note: e["note"] as String,
-                //         createDate: DateTime.fromMillisecondsSinceEpoch(["createDate"] as int),
-                //         updateDate: DateTime.fromMillisecondsSinceEpoch(["updateDate"] as int),
-                //         title: '',
-                //       )
-                //     : null,
               ))
           .toList();
       return weeklyReportRows;
@@ -99,9 +89,81 @@ WHERE
   }
 
   @override
-  Future<List<WeeklyReportRow>> getMonthlyReport(DateTime currentDate) {
-    // TODO: implement getMonthlyReport
-    throw UnimplementedError();
+  Future<Map<int, List<HabitEntry>>> getMonthlyReport(DateTime currentDate, int habitId) async {
+    print("ME!!!");
+    var firstDayOnCalendar = DateUtil.startOfMonthsSunday(currentDate);
+    var lastDayOnCalendar = DateUtil.endOfMonthsSaturday(currentDate);
+    print(firstDayOnCalendar);
+    print(lastDayOnCalendar);
+    var query = await db.rawQuery("""
+SELECT
+  habit.id as habit_id,
+  habit.emoji as emoji,
+  habit.stringValue as stringValue,
+  habit.frequencyType as frequencyType,
+  habit.createDate as habitCreateDate,
+  habit.updateDate as habitUpdateDate,
+  habit.userId as userId,
+  habit.unitIncrement as unitIncrement,
+  habit.streakEmoji as streakEmoji,
+  habit.value as value,
+  habit_entry.id as habit_entry_id,
+  habit_entry.createDate as habitEntrycreateDate,
+  habit_entry.updateDate as habitEntryupdateDate,
+  habit_entry.booleanValue as booleanValue,
+  habit_entry.integerValue as integerValue,
+  habit_entry.decimalValue as decimalValue,
+  habit_entry.stringValue as stringValue,
+  habit_entry.unitType as unitType
+FROM
+
+  Habit
+  LEFT JOIN HabitEntry habit_entry ON habit.id = habit_entry.habitId
+WHERE
+  habit_entry.createDate BETWEEN ? AND ? and 
+  habit.id = ?
+ORDER BY
+
+  habit_entry.createDate ASC
+""", [firstDayOnCalendar.millisecondsSinceEpoch, lastDayOnCalendar.millisecondsSinceEpoch, habitId]);
+    Map<int, List<HabitEntry>> habitEntries = {};
+    for (var element in query) {
+      var habitEntry = HabitEntry(
+        id: element["habit_entry_id"] as int,
+        habitId: element["habit_id"] as int,
+        booleanValue: element["booleanValue"] == 1,
+        createDate: DateTime.fromMillisecondsSinceEpoch(element["habitEntrycreateDate"] as int),
+        updateDate: DateTime.fromMillisecondsSinceEpoch(element["habitEntryupdateDate"] as int),
+        unitType: UnitType.fromPrettyString(element['unitType'] as String),
+      );
+      var habit = Habit(
+        id: element["habit_id"] as int,
+        emoji: element["emoji"] as String,
+        stringValue: (element["stringValue"] ?? "") as String,
+        frequencyType: FrequencyType.values.firstWhere((el) => el.toPrettyString() == element["frequencyType"] as String),
+        createDate: DateTime.fromMillisecondsSinceEpoch(element["habitCreateDate"] as int),
+        userId: element["userId"] as int,
+        value: element["value"] as int,
+        valueGoal: (element["valueGoal"] ?? 0) as int,
+        suffix: '',
+        unitType: UnitType.fromPrettyString(element['unitType'] as String),
+        streakEmoji: element["streakEmoji"] as String,
+        hexColor: (element["hexColor"] ?? '') as String,
+        updateDate: DateTime.fromMillisecondsSinceEpoch(element["habitUpdateDate"] as int),
+        unitIncrement: element["unitIncrement"] as int,
+      );
+      if (habitEntries.containsKey(habit.id!)) {
+        habitEntries[habit.id!]!.add(habitEntry);
+      } else {
+        habitEntries[habit.id!] = [habitEntry];
+      }
+    }
+    habitEntries.forEach((key, value) {
+      print("Habit id: " + key.toString());
+      print(value.length);
+    });
+
+    return habitEntries;
   }
 }
 

@@ -261,7 +261,7 @@ class _HabitGridState extends State<HabitGrid> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                              "Week of ${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
+                              "${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
                               style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
                         ],
                       ),
@@ -292,7 +292,10 @@ class _HabitGridState extends State<HabitGrid> {
                               );
                             }
                             return progressIndicators(data.data ?? []);
-                          })
+                          }),
+                             SizedBox(
+                        height: kToolbarHeight,
+                      ),
                     ],
                   ),
                 ),
