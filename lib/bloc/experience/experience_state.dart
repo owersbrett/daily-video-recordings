@@ -1,5 +1,5 @@
-import 'package:habitbit/main.dart';
-import 'package:habitbit/service/admin_service.dart';
+import 'package:habit_planet/main.dart';
+import 'package:habit_planet/service/admin_service.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/experience.dart';

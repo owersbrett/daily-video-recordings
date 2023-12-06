@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:habitbit/theme/theme.dart';
-import 'package:habitbit/util/color_util.dart';
+import 'package:habit_planet/theme/theme.dart';
+import 'package:habit_planet/util/color_util.dart';
 
 import 'orbital_state.dart';
 

@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:habit_planet/pages/home/habit_planet.dart';
 import 'package:flutter/services.dart';
-import 'package:habitbit/data/bottom_sheet_state.dart';
-import 'package:habitbit/pages/home/habitbit.dart';
+import 'package:habit_planet/data/bottom_sheet_state.dart';
 
-import 'package:habitbit/pages/home/now_data.dart';
-import 'package:habitbit/theme/theme.dart';
+
+import 'package:habit_planet/pages/home/now_data.dart';
+import 'package:habit_planet/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../tooltip_text.dart';
@@ -117,7 +118,7 @@ class _HomePageBottomState extends State<HomePageBottom> {
   Widget _list(BuildContext context) {
     if (large) return const VideoPreviewPage();
     if (mid) {
-      return Habitbit(
+      return habit_planet(
         nowData: nowData,
         onStart: () {
           setState(() {

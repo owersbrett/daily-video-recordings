@@ -1,7 +1,7 @@
-// import 'package:habitbit/bloc/experience/experience.dart';
-// import 'package:habitbit/data/habit_entity.dart';
-// import 'package:habitbit/data/repositories/habit_entry_repository.dart';
-// import 'package:habitbit/data/repositories/habit_repository.dart';
+// import 'package:HabitPlanet/bloc/experience/experience.dart';
+// import 'package:HabitPlanet/data/habit_entity.dart';
+// import 'package:HabitPlanet/data/repositories/habit_entry_repository.dart';
+// import 'package:HabitPlanet/data/repositories/habit_repository.dart';
 // import 'package:logging/logging.dart';
 
 // import '../../data/experience.dart';

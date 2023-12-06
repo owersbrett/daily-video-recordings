@@ -1,4 +1,4 @@
-import 'package:habitbit/widgets/custom_progress_indicator.dart';
+import 'package:habit_planet/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

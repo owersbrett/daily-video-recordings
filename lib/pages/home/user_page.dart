@@ -1,7 +1,7 @@
-import 'package:habitbit/pages/home/home_page.dart';
+import 'package:habit_planet/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:habitbit/pages/home/splash_page.dart';
-import 'package:habitbit/pages/video/loading_page.dart';
+import 'package:habit_planet/pages/home/splash_page.dart';
+import 'package:habit_planet/pages/video/loading_page.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/user/user.dart';

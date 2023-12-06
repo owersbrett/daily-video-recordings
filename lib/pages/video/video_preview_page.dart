@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:habitbit/data/multimedia_file.dart';
-import 'package:habitbit/main.dart';
-import 'package:habitbit/navigation/navigation.dart';
-import 'package:habitbit/pages/video/loading_page.dart';
-import 'package:habitbit/pages/video/record_video_page.dart';
-import 'package:habitbit/pages/video/video_swipe_page.dart';
+import 'package:habit_planet/data/multimedia_file.dart';
+import 'package:habit_planet/main.dart';
+import 'package:habit_planet/navigation/navigation.dart';
+import 'package:habit_planet/pages/video/loading_page.dart';
+import 'package:habit_planet/pages/video/record_video_page.dart';
+import 'package:habit_planet/pages/video/video_swipe_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';

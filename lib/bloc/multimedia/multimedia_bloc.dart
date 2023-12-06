@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:habitbit/data/multimedia_file.dart';
-import 'package:habitbit/data/repositories/multimedia_repository.dart';
-import 'package:habitbit/main.dart';
-import 'package:habitbit/service/media_service.dart';
+import 'package:habit_planet/data/multimedia_file.dart';
+import 'package:habit_planet/data/repositories/multimedia_repository.dart';
+import 'package:habit_planet/main.dart';
+import 'package:habit_planet/service/media_service.dart';
 import 'package:uuid/uuid.dart';
 
 import 'multimedia.dart';

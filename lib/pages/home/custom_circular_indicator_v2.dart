@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:habitbit/theme/theme.dart';
-import 'package:habitbit/util/color_util.dart';
+import 'package:habit_planet/theme/theme.dart';
+import 'package:habit_planet/util/color_util.dart';
 
 class CustomProgressIndicator extends StatelessWidget {
   final double progress; // Progress value between 0 and 1

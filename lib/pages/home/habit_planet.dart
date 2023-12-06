@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:habitbit/pages/home/custom_circular_indicator_v2.dart';
-import 'package:habitbit/pages/home/now_data.dart';
-import 'package:habitbit/pages/home/orbital_indicator.dart';
-import 'package:habitbit/pages/home/orbital_page.dart';
-import 'package:habitbit/pages/home/orbital_state.dart';
-import 'package:habitbit/widgets/custom_circular_indicator.dart';
+import 'package:habit_planet/pages/home/custom_circular_indicator_v2.dart';
+import 'package:habit_planet/pages/home/now_data.dart';
+import 'package:habit_planet/pages/home/orbital_indicator.dart';
+import 'package:habit_planet/pages/home/orbital_page.dart';
+import 'package:habit_planet/pages/home/orbital_state.dart';
+import 'package:habit_planet/widgets/custom_circular_indicator.dart';
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
 import '../../navigation/navigation.dart';
 
-class Habitbit extends StatefulWidget {
-  const Habitbit({
+class habit_planet extends StatefulWidget {
+  const habit_planet({
     Key? key,
     required this.onStart,
     required this.nowData,
@@ -19,10 +19,10 @@ class Habitbit extends StatefulWidget {
   final NowData nowData;
 
   @override
-  State<Habitbit> createState() => _HabitbitState();
+  State<habit_planet> createState() => _habit_planetState();
 }
 
-class _HabitbitState extends State<Habitbit> {
+class _habit_planetState extends State<habit_planet> {
   static String experienceTag = "experience-hero";
   DateTime get currentTime => DateTime.now();
   Duration countdownDuration = const Duration(hours: 1);
@@ -70,7 +70,7 @@ class _HabitbitState extends State<Habitbit> {
               children: <Widget>[
                 const Center(
                   child: Text(
-                    'Habitbit',
+                    'habit_planet',
                     style: TextStyle(
                         fontSize: 24, // Adjust the font size as needed
                         fontWeight: FontWeight.bold, // Make the title bold

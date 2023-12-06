@@ -1,4 +1,4 @@
-import 'package:habitbit/util/string_util.dart';
+import 'package:habit_planet/util/string_util.dart';
 
 enum UnitType {
   fluidOunce,

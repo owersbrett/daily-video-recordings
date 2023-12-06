@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:habitbit/bloc/user/user_event.dart';
-import 'package:habitbit/service/admin_service.dart';
-import 'package:habitbit/theme/theme.dart';
+import 'package:habit_planet/bloc/user/user_event.dart';
+import 'package:habit_planet/service/admin_service.dart';
+import 'package:habit_planet/theme/theme.dart';
 
 import '../../bloc/habits/habits.dart';
 import '../../bloc/user/user_bloc.dart';

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:habitbit/data/habit_entity.dart';
+import 'package:habit_planet/data/habit_entity.dart';
 
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';

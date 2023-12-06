@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:habitbit/bloc/user/user_bloc.dart';
-import 'package:habitbit/data/habit_entry.dart';
-import 'package:habitbit/main.dart';
+import 'package:habit_planet/bloc/user/user_bloc.dart';
+import 'package:habit_planet/data/habit_entry.dart';
+import 'package:habit_planet/main.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../bloc/habits/habits.dart';

@@ -1,9 +1,9 @@
-import 'package:habitbit/bloc/experience/experience.dart';
-import 'package:habitbit/data/habit_entity.dart';
-import 'package:habitbit/data/repositories/habit_entry_repository.dart';
-import 'package:habitbit/data/repositories/habit_repository.dart';
+import 'package:habit_planet/bloc/experience/experience.dart';
+import 'package:habit_planet/data/habit_entity.dart';
+import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
+import 'package:habit_planet/data/repositories/habit_repository.dart';
 import 'package:logging/logging.dart';
-import 'package:habitbit/util/date_util.dart';
+import 'package:habit_planet/util/date_util.dart';
 
 import '../../data/experience.dart';
 import '../../data/frequency_type.dart';

@@ -1,8 +1,8 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:habitbit/data/experience.dart';
-import 'package:habitbit/data/repositories/experience_repository.dart';
-import 'package:habitbit/data/repositories/user_repository.dart';
-import 'package:habitbit/main.dart';
+import 'package:habit_planet/data/experience.dart';
+import 'package:habit_planet/data/repositories/experience_repository.dart';
+import 'package:habit_planet/data/repositories/user_repository.dart';
+import 'package:habit_planet/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repositories/habit_entry_repository.dart';

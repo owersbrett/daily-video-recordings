@@ -1,4 +1,4 @@
-import 'package:habitbit/widgets/dropdown_chip.dart';
+import 'package:habit_planet/widgets/dropdown_chip.dart';
 import 'package:flutter/material.dart';
 
 class ReportAppBar extends StatelessWidget {
@@ -21,13 +21,13 @@ class ReportAppBar extends StatelessWidget {
               "Monthly",
               style: TextStyle(fontSize: 14, color: Colors.black),
             ),
-            const SizedBox(
-              width: 4,
-            ),
-            const Text(
-              "Yearly",
-              style: TextStyle(fontSize: 14, color: Colors.black),
-            ),
+            // const SizedBox(
+            //   width: 4,
+            // ),
+            // const Text(
+            //   "Yearly",
+            //   style: TextStyle(fontSize: 14, color: Colors.black),
+            // ),
             Expanded(
               child: Container(),
             ),

@@ -3,20 +3,20 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
-import 'package:habitbit/pages/report/report_page.dart';
+import 'package:habit_planet/pages/report/report_page.dart';
 import 'package:flutter/material.dart';
-import 'package:habitbit/theme/theme.dart';
+import 'package:habit_planet/theme/theme.dart';
 
-import 'package:habitbit/widgets/daily_app_bar.dart';
-import 'package:habitbit/data/bottom_sheet_state.dart';
-import 'package:habitbit/data/db.dart';
-import 'package:habitbit/navigation/navigation.dart';
-import 'package:habitbit/pages/create_habit/create_a_habit.dart';
-import 'package:habitbit/pages/home/home_page_bottom.dart';
-import 'package:habitbit/pages/home/now_data.dart';
-import 'package:habitbit/pages/home/week_and_habits_scroll_view.dart';
-import 'package:habitbit/pages/video/record_video_page.dart';
-import 'package:habitbit/widgets/level_up_overlay.dart';
+import 'package:habit_planet/widgets/daily_app_bar.dart';
+import 'package:habit_planet/data/bottom_sheet_state.dart';
+import 'package:habit_planet/data/db.dart';
+import 'package:habit_planet/navigation/navigation.dart';
+import 'package:habit_planet/pages/create_habit/create_a_habit.dart';
+import 'package:habit_planet/pages/home/home_page_bottom.dart';
+import 'package:habit_planet/pages/home/now_data.dart';
+import 'package:habit_planet/pages/home/week_and_habits_scroll_view.dart';
+import 'package:habit_planet/pages/video/record_video_page.dart';
+import 'package:habit_planet/widgets/level_up_overlay.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:habitbit/bloc/habits/habits.dart';
-import 'package:habitbit/pages/home/custom_circular_indicator_v2.dart';
-import 'package:habitbit/pages/home/orbital_indicator.dart';
-import 'package:habitbit/service/admin_service.dart';
+import 'package:habit_planet/bloc/habits/habits.dart';
+import 'package:habit_planet/pages/home/custom_circular_indicator_v2.dart';
+import 'package:habit_planet/pages/home/orbital_indicator.dart';
+import 'package:habit_planet/service/admin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:habitbit/widgets/today_is_widget.dart';
+import 'package:habit_planet/widgets/today_is_widget.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../bloc/user/user.dart';

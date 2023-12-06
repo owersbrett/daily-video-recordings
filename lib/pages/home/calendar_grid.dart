@@ -1,14 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:flutter/material.dart';
-import 'package:habitbit/bloc/experience/experience.dart';
-import 'package:habitbit/data/habit_entity.dart';
-import 'package:habitbit/data/habit_entry.dart';
-import 'package:habitbit/data/repositories/habit_repository.dart';
-import 'package:habitbit/pages/home/animated_indicator.dart';
-import 'package:habitbit/service/analytics_service.dart';
-import 'package:habitbit/service/database_service.dart';
-import 'package:habitbit/widgets/my_grid.dart';
+import 'package:habit_planet/bloc/experience/experience.dart';
+import 'package:habit_planet/data/habit_entity.dart';
+import 'package:habit_planet/data/habit_entry.dart';
+import 'package:habit_planet/data/repositories/habit_repository.dart';
+import 'package:habit_planet/pages/home/animated_indicator.dart';
+import 'package:habit_planet/service/analytics_service.dart';
+import 'package:habit_planet/service/database_service.dart';
+import 'package:habit_planet/util/color_util.dart';
+import 'package:habit_planet/widgets/my_grid.dart';
 
 import '../../data/habit.dart';
 import '../../data/repositories/habit_entry_repository.dart';
@@ -70,9 +71,10 @@ class _CalendarGridState extends State<CalendarGrid> {
     return FutureBuilder(
         future: RepositoryProvider.of<IAnalyticsService>(context).getMonthlyReport(calendarDate, widget.habits[i].id!),
         builder: (context, data) {
+          List<HabitEntry> compareList = [];
           if (!data.hasData) {
             return Padding(
-              padding: const EdgeInsets.all(32.0),
+              padding: const EdgeInsets.all(16.0),
               child: Container(
                 child: AnimatedVortex(
                   onTap: () {},
@@ -80,10 +82,76 @@ class _CalendarGridState extends State<CalendarGrid> {
               ),
             );
           } else {
-            return Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Container(
-                child: MyGrid(gridItems: convertData(data.data!, widget.habits[i])),
+            Habit habit = widget.habits[i];
+            Map<int, List<HabitEntry>> items = data.data ?? {};
+            List<HabitEntry> longestStreakList = [];
+            int streakCounter = 0;
+
+            if (items.isNotEmpty && items.containsKey(habit.id!)) {
+              var item = items[habit.id!];
+              if (item != null) {
+                item.sort((a, b) => a.createDate.compareTo(b.createDate));
+
+                for (var element in item) {
+                  if (element.booleanValue) {
+                      streakCounter++; // Increment streak counter when a new streak starts
+
+
+                    if (compareList.isEmpty) {
+                    }
+                    compareList.add(element);
+                  } else {
+                    // Check if current streak is the longest
+                    if (compareList.length > longestStreakList.length) {
+                      longestStreakList = List<HabitEntry>.from(compareList);
+                    }
+                    // Reset current streak
+                    compareList.clear();
+                  }
+                }
+
+                // Final check for the last streak
+                if (compareList.length > longestStreakList.length) {
+                  longestStreakList = List<HabitEntry>.from(compareList);
+                }
+              }
+            }
+
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      MyGrid(gridItems: convertData(data.data!, widget.habits[i])),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            " Total: " + widget.habits[i].emoji + " " + streakCounter.toString(),
+                            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Streak: " + widget.habits[i].streakEmoji + " " + longestStreakList.length.toString(),
+                            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             );
           }
@@ -93,11 +161,8 @@ class _CalendarGridState extends State<CalendarGrid> {
   void moveCalendarByMonth(int month) {
     setState(() {
       calendarDate = calendarDate.copyWith(month: calendarDate.month + month);
-
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -136,40 +201,47 @@ class _CalendarGridState extends State<CalendarGrid> {
             ],
           ),
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              addAutomaticKeepAlives: false,
-                itemCount: widget.habits.length,
-                itemBuilder: (ctx, i) {
-                  Habit habit = widget.habits[i];
-                  return Padding(
+              child: SingleChildScrollView(
+            child: Column(
+              children: [
+                for (var i = 0; i < widget.habits.length; i++)
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Material(
-                      elevation: 5,
+                      color: ColorUtil.getColorFromHex(widget.habits[i].hexColor),
+                      borderRadius: BorderRadius.circular(25),
+                      elevation: 15,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          SizedBox(
+                            height: 32,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                widget.habits[i].stringValue,
+                                style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               gridTile(i),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                habit.stringValue,
-                                style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
-                  );
-                }),
-          ),
+                  ),
+                Container(
+                  height: kToolbarHeight * 2,
+                ),
+              ],
+            ),
+          )),
         ],
       ),
     );

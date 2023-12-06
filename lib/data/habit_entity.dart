@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:habitbit/main.dart';
+import 'package:habit_planet/main.dart';
 
 import '../util/date_util.dart';
 import 'habit.dart';

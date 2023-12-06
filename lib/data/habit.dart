@@ -1,13 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:habitbit/pages/create_habit/display_habit_card.dart';
+import 'package:habit_planet/pages/create_habit/display_habit_card.dart';
 import 'package:flutter/material.dart';
 
-import 'package:habitbit/data/frequency_type.dart';
-import 'package:habitbit/data/unit_type.dart';
-import 'package:habitbit/theme/theme.dart';
-import 'package:habitbit/util/color_util.dart';
+import 'package:habit_planet/data/frequency_type.dart';
+import 'package:habit_planet/data/unit_type.dart';
+import 'package:habit_planet/theme/theme.dart';
+import 'package:habit_planet/util/color_util.dart';
 
 import 'user.dart';
 
@@ -17,6 +17,7 @@ class Habit {
     "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL",
     "userId INTEGER",
     "stringValue TEXT",
+    "description TEXT"
     "value INTEGER",
     "unitIncrement INTEGER",
     "valueGoal INTEGER",
@@ -36,6 +37,7 @@ class Habit {
   final int value;
   final int unitIncrement;
   final int valueGoal;
+  final String? description;
 
   final String suffix;
   final UnitType unitType;
@@ -54,6 +56,7 @@ class Habit {
     required this.valueGoal,
     required this.suffix,
     required this.unitType,
+    required this.description,
     required this.frequencyType,
     required this.emoji,
     required this.streakEmoji,
@@ -77,6 +80,7 @@ class Habit {
     String? hexColor,
     DateTime? createDate,
     DateTime? updateDate,
+    String? description,
   }) {
     return Habit(
       id: id ?? this.id,
@@ -93,6 +97,7 @@ class Habit {
       hexColor: hexColor ?? this.hexColor,
       createDate: createDate ?? this.createDate,
       updateDate: updateDate ?? this.updateDate,
+      description: description ?? this.description,
     );
   }
 
@@ -112,6 +117,7 @@ class Habit {
       'hexColor': hexColor,
       'createDate': createDate.millisecondsSinceEpoch,
       'updateDate': updateDate.millisecondsSinceEpoch,
+      'description': description ?? "",
     };
   }
 
@@ -126,6 +132,7 @@ class Habit {
       emoji: "",
       streakEmoji: "",
       hexColor: color.toHex(),
+      description: "",
       createDate: DateTime.now(),
       updateDate: DateTime.now(),
       frequencyType: FrequencyType.daily,
@@ -139,6 +146,7 @@ class Habit {
         stringValue: str,
         value: 0,
         valueGoal: 1,
+        description: "",
         suffix: "",
         unitType: UnitType.count,
         emoji: emoji,
@@ -155,7 +163,8 @@ class Habit {
       id: map['id'] as int,
       userId: map['userId'] as int,
       stringValue: map['stringValue'] as String,
-      value: map['value'] as int,
+      description: map['description'] as String?,
+      value: (map['value'] as int?) ?? 0,
       unitIncrement: map['unitIncrement'] as int,
       valueGoal: map['valueGoal'] as int,
       suffix: map['suffix'] as String,
@@ -184,6 +193,7 @@ class Habit {
 
     return other.id == id &&
         other.userId == userId &&
+        other.description == description &&
         other.stringValue == stringValue &&
         other.value == value &&
         other.unitIncrement == unitIncrement &&
@@ -202,6 +212,7 @@ class Habit {
   int get hashCode {
     return id.hashCode ^
         userId.hashCode ^
+        description.hashCode ^
         stringValue.hashCode ^
         value.hashCode ^
         unitIncrement.hashCode ^

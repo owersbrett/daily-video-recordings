@@ -1,4 +1,4 @@
-package com.owersllc.habitbit
+package com.owersllc.HabitPlanet
 
 import io.flutter.embedding.android.FlutterActivity
 

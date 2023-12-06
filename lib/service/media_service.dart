@@ -2,11 +2,11 @@
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:habitbit/data/multimedia_file.dart';
+import 'package:habit_planet/data/multimedia_file.dart';
 // Add this line for date formatting
 import 'package:camera/camera.dart';
-import 'package:habitbit/main.dart';
-import 'package:habitbit/service/file_directories_service.dart';
+import 'package:habit_planet/main.dart';
+import 'package:habit_planet/service/file_directories_service.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MediaService {

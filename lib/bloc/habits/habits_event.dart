@@ -1,4 +1,4 @@
-import 'package:habitbit/bloc/experience/experience.dart';
+import 'package:habit_planet/bloc/experience/experience.dart';
 
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';

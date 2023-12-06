@@ -1,9 +1,8 @@
-import 'package:habitbit/data/habit_entry.dart';
+import 'package:habit_planet/data/habit_entry.dart';
 
 class DateUtil {
-
-  static String monthName(DateTime dateTime){
-    switch(dateTime.month){
+  static String monthName(DateTime dateTime) {
+    switch (dateTime.month) {
       case 1:
         return "January";
       case 2:
@@ -12,19 +11,19 @@ class DateUtil {
         return "March";
       case 4:
         return "April";
-      case 5: 
+      case 5:
         return "May";
       case 6:
         return "June";
-      case 7: 
+      case 7:
         return "July";
       case 8:
         return "August";
-      case 9: 
+      case 9:
         return "September";
       case 10:
         return "October";
-      case 11: 
+      case 11:
         return "November";
       case 12:
         return "December";
@@ -32,6 +31,7 @@ class DateUtil {
         return "January";
     }
   }
+
   static bool isSameDay(DateTime date1, DateTime date2) {
     return date1.year == date2.year && date1.month == date2.month && date1.day == date2.day;
   }
@@ -93,9 +93,11 @@ class DateUtil {
     }
     return sunday;
   }
-  static DateTime endOfMonth(DateTime date){
+
+  static DateTime endOfMonth(DateTime date) {
     return DateTime(date.year, date.month + 1, 0);
   }
+
   static DateTime endOfMonthsSaturday(DateTime date) {
     DateTime lastDayOfMonth = endOfMonth(date);
     DateTime saturday = lastDayOfMonth;
@@ -140,21 +142,20 @@ class DateUtil {
     }
     return nextSunday;
   }
-static bool firstWeekOfMonthOrBeforeMonth(DateTime createDate, List<HabitEntry> entries) {
-  // Find the first Sunday of the month or the last Sunday of the previous month
-  DateTime firstSunday = DateUtil.startOfMonthsSunday(createDate);
-  if (createDate.month != firstSunday.month) {
-    firstSunday = DateUtil.startOfMonthsSunday(createDate.subtract(Duration(days: 28)));
+
+  static bool firstWeekOfMonthOrBeforeMonth(DateTime createDate, List<HabitEntry> entries) {
+    // Find the first Sunday of the month or the last Sunday of the previous month
+    DateTime firstSunday = DateUtil.startOfMonthsSunday(createDate);
+    if (createDate.month != firstSunday.month) {
+      firstSunday = DateUtil.startOfMonthsSunday(createDate.subtract(Duration(days: 28)));
+    }
+
+    // Determine the Saturday after the first Sunday
+    DateTime saturdayAfterFirstSunday = firstSunday.add(Duration(days: 6));
+
+    // Check if createDate is within the first week range
+    return createDate.isAfter(firstSunday.subtract(Duration(days: 1))) && createDate.isBefore(saturdayAfterFirstSunday.add(Duration(days: 1)));
   }
-
-  // Determine the Saturday after the first Sunday
-  DateTime saturdayAfterFirstSunday = firstSunday.add(Duration(days: 6));
-
-  // Check if createDate is within the first week range
-  return createDate.isAfter(firstSunday.subtract(Duration(days: 1))) &&
-         createDate.isBefore(saturdayAfterFirstSunday.add(Duration(days: 1)));
-}
-
 
   static bool secondWeekOfMonth(DateTime createDate) {
     DateTime firstMonday = DateUtil.previousMonday(createDate);

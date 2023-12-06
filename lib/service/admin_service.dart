@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:habitbit/data/level.dart';
-import 'package:habitbit/data/repositories/habit_repository.dart';
-import 'package:habitbit/main.dart';
+import 'package:habit_planet/data/level.dart';
+import 'package:habit_planet/data/repositories/habit_repository.dart';
+import 'package:habit_planet/main.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/experience/experience.dart';

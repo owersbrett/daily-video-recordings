@@ -1,14 +1,14 @@
-import 'package:habitbit/bloc/experience/experience.dart';
-import 'package:habitbit/bloc/habits/habits.dart';
-import 'package:habitbit/bloc/reports/reports.dart';
-import 'package:habitbit/data/repositories/domain_repository.dart';
-import 'package:habitbit/data/repositories/experience_repository.dart';
-import 'package:habitbit/data/repositories/habit_entry_note_repository.dart';
-import 'package:habitbit/data/repositories/habit_entry_repository.dart';
-import 'package:habitbit/data/repositories/habit_repository.dart';
-import 'package:habitbit/data/repositories/user_repository.dart';
+import 'package:habit_planet/bloc/experience/experience.dart';
+import 'package:habit_planet/bloc/habits/habits.dart';
+import 'package:habit_planet/bloc/reports/reports.dart';
+import 'package:habit_planet/data/repositories/domain_repository.dart';
+import 'package:habit_planet/data/repositories/experience_repository.dart';
+import 'package:habit_planet/data/repositories/habit_entry_note_repository.dart';
+import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
+import 'package:habit_planet/data/repositories/habit_repository.dart';
+import 'package:habit_planet/data/repositories/user_repository.dart';
 
-import 'package:habitbit/pages/home/user_page.dart';
+import 'package:habit_planet/pages/home/user_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite_common/sqlite_api.dart';
@@ -129,7 +129,7 @@ class _DailyVideoRemindersState extends State<DailyVideoReminders> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Habitbit',
+        title: 'Habit Planet',
         theme: theme,
         home: const UserPage(),
       ),

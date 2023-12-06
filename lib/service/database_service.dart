@@ -1,15 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
-import 'package:habitbit/main.dart';
+import 'package:habit_planet/main.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:habitbit/data/habit.dart';
-import 'package:habitbit/data/habit_entry.dart';
-import 'package:habitbit/data/habit_entry_note.dart';
-import 'package:habitbit/data/multimedia.dart';
-import 'package:habitbit/data/user.dart';
-import 'package:habitbit/data/user_level.dart';
+import 'package:habit_planet/data/habit.dart';
+import 'package:habit_planet/data/habit_entry.dart';
+import 'package:habit_planet/data/habit_entry_note.dart';
+import 'package:habit_planet/data/multimedia.dart';
+import 'package:habit_planet/data/user.dart';
+import 'package:habit_planet/data/user_level.dart';
 
 import '../data/domain.dart';
 import '../data/experience.dart';
@@ -19,7 +19,7 @@ import '../data/memento.dart';
 class DatabaseService {
   static final DatabaseService _singleton = DatabaseService._internal();
   // toggle to update database
-  static const version = 10;
+  static const version = 13;
   // static const newIphone = 9;
   // static const oldIphone = 9;
 
@@ -61,6 +61,11 @@ class DatabaseService {
   }
 
   static Future updateDatabase(Database db) async {
+    await db.rawQuery("""
+ALTER TABLE Habit ADD COLUMN value INT
+""");
+    await db.rawQuery("""
+""");
     // await onCreate(db, version);
 //     String sql = """
 
@@ -85,7 +90,8 @@ class DatabaseService {
   }
 
   static FutureOr<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
-    await createTables(db);
+    // await createTables(db);
+    await updateDatabase(db);
   }
 
   static FutureOr<void> onDowngrade(Database db, int oldVersion, int newVersion) async {

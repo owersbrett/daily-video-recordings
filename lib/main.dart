@@ -1,15 +1,15 @@
 import 'package:flutter/services.dart';
-import 'package:habitbit/data/repositories/domain_repository.dart';
-import 'package:habitbit/data/repositories/experience_repository.dart';
-import 'package:habitbit/data/repositories/habit_entry_note_repository.dart';
-import 'package:habitbit/data/repositories/user_repository.dart';
-import 'package:habitbit/pages/home/app_wrapper.dart';
+import 'package:habit_planet/data/repositories/domain_repository.dart';
+import 'package:habit_planet/data/repositories/experience_repository.dart';
+import 'package:habit_planet/data/repositories/habit_entry_note_repository.dart';
+import 'package:habit_planet/data/repositories/user_repository.dart';
+import 'package:habit_planet/pages/home/app_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:camera/camera.dart';
-import 'package:habitbit/service/file_directories_service.dart';
+import 'package:habit_planet/service/file_directories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 

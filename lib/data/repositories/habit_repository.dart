@@ -1,5 +1,5 @@
-import 'package:habitbit/data/repositories/_repository.dart';
-import 'package:habitbit/main.dart';
+import 'package:habit_planet/data/repositories/_repository.dart';
+import 'package:habit_planet/main.dart';
 import 'package:sqflite/sqflite.dart';
 import '../habit.dart';
 import '../habit_entity.dart';

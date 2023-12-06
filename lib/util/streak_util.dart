@@ -1,5 +1,5 @@
-import 'package:habitbit/bloc/experience/experience.dart';
-import 'package:habitbit/main.dart';
+import 'package:habit_planet/bloc/experience/experience.dart';
+import 'package:habit_planet/main.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../data/frequency_type.dart';

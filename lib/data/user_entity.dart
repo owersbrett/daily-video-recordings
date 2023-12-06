@@ -1,5 +1,5 @@
-import 'package:habitbit/data/habit_entity.dart';
-import 'package:habitbit/data/multimedia.dart';
+import 'package:habit_planet/data/habit_entity.dart';
+import 'package:habit_planet/data/multimedia.dart';
 
 import 'user.dart';
 

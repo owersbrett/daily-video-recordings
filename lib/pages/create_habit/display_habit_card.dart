@@ -1,7 +1,7 @@
-import 'package:habitbit/data/habit.dart';
-import 'package:habitbit/pages/create_habit/typewriter_widget.dart';
+import 'package:habit_planet/data/habit.dart';
+import 'package:habit_planet/pages/create_habit/typewriter_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:habitbit/service/admin_service.dart';
+import 'package:habit_planet/service/admin_service.dart';
 import '../../widgets/custom_progress_indicator.dart';
 import '../../data/habit_entity.dart';
 import '../../widgets/stylized_checkbox.dart';

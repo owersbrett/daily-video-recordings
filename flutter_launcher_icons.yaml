@@ -1,3 +1,6 @@
+# flutter pub run flutter_launcher_icons -f flutter_launcher_icons.yaml
+
+
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
 

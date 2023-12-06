@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:requestLegacyExternalStorage="true"
-        android:label="habitbit"
+        android:label="HabitPlanet"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

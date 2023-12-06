@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:habitbit/main.dart';
+import 'package:habit_planet/main.dart';
 
 class NowData {
   DateTime startTime;

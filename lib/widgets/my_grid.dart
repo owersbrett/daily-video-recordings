@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:habitbit/theme/theme.dart';
+import 'package:habit_planet/theme/theme.dart';
 
 class MyGrid extends StatelessWidget {
   const MyGrid({required this.gridItems, super.key});
@@ -18,8 +18,10 @@ class MyGrid extends StatelessWidget {
                       List<String> split = e.split(" ");
                       if (split.length > 1 && split[1] == "true") {
                         return Container(
-                          decoration: BoxDecoration(border: Border.all(width: 1), color: darkEmerald,),
-                          
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1),
+                            color: darkEmerald,
+                          ),
                           child: Center(
                             child: Text(split.first),
                           ),
@@ -28,7 +30,7 @@ class MyGrid extends StatelessWidget {
                         );
                       } else {
                         return Container(
-                          decoration: BoxDecoration(border: Border.all(width: 1), color: darkRuby),
+                          decoration: BoxDecoration(border: Border.all(width: 1), color: Colors.white),
                           child: Center(
                             child: Text(split.first),
                           ),

@@ -1,14 +1,14 @@
-import 'package:habitbit/pages/create_habit/display_habit_card.dart';
-import 'package:habitbit/util/color_util.dart';
+import 'package:habit_planet/pages/create_habit/display_habit_card.dart';
+import 'package:habit_planet/util/color_util.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
-import 'package:habitbit/data/frequency_type.dart';
-import 'package:habitbit/pages/create_habit/color_picker_dialog.dart';
-import 'package:habitbit/pages/video/dvr_close_button.dart';
-import 'package:habitbit/theme/theme.dart';
-import 'package:habitbit/widgets/custom_form_field.dart';
-import 'package:habitbit/widgets/stylized_checkbox.dart';
+import 'package:habit_planet/data/frequency_type.dart';
+import 'package:habit_planet/pages/create_habit/color_picker_dialog.dart';
+import 'package:habit_planet/pages/video/dvr_close_button.dart';
+import 'package:habit_planet/theme/theme.dart';
+import 'package:habit_planet/widgets/custom_form_field.dart';
+import 'package:habit_planet/widgets/stylized_checkbox.dart';
 
 import '../../bloc/habits/habits.dart';
 import '../../data/habit.dart';

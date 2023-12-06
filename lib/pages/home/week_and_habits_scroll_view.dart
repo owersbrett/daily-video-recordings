@@ -1,14 +1,14 @@
 import 'package:flutter/services.dart';
-import 'package:habitbit/data/habit_entity.dart';
-import 'package:habitbit/data/habit_entry.dart';
-import 'package:habitbit/data/repositories/habit_entry_repository.dart';
-import 'package:habitbit/pages/home/animated_indicator.dart';
-import 'package:habitbit/pages/home/custom_circular_indicator_v2.dart';
-import 'package:habitbit/pages/video/loading_page.dart';
-import 'package:habitbit/widgets/habit_entry_card.dart';
+import 'package:habit_planet/data/habit_entity.dart';
+import 'package:habit_planet/data/habit_entry.dart';
+import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
+import 'package:habit_planet/pages/home/animated_indicator.dart';
+import 'package:habit_planet/pages/home/custom_circular_indicator_v2.dart';
+import 'package:habit_planet/pages/video/loading_page.dart';
+import 'package:habit_planet/widgets/habit_entry_card.dart';
 import 'package:flutter/material.dart';
-import 'package:habitbit/pages/create_habit/create_a_habit.dart';
-import 'package:habitbit/pages/create_habit/update_a_habit.dart';
+import 'package:habit_planet/pages/create_habit/create_a_habit.dart';
+import 'package:habit_planet/pages/create_habit/update_a_habit.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';

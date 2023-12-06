@@ -1,9 +1,9 @@
-import 'package:habitbit/data/repositories/habit_entry_repository.dart';
-import 'package:habitbit/service/analytics_service.dart';
-import 'package:habitbit/widgets/custom_circular_indicator.dart';
+import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
+import 'package:habit_planet/service/analytics_service.dart';
+import 'package:habit_planet/widgets/custom_circular_indicator.dart';
 import 'package:to_csv/to_csv.dart' as toCsv;
-import 'package:habitbit/bloc/reports/reports.dart';
-import 'package:habitbit/widgets/custom_progress_indicator.dart';
+import 'package:habit_planet/bloc/reports/reports.dart';
+import 'package:habit_planet/widgets/custom_progress_indicator.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/experience/experience.dart';
@@ -260,8 +260,7 @@ class _HabitGridState extends State<HabitGrid> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                              "${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
+                          Text("${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
                               style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
                         ],
                       ),
@@ -293,7 +292,7 @@ class _HabitGridState extends State<HabitGrid> {
                             }
                             return progressIndicators(data.data ?? []);
                           }),
-                             SizedBox(
+                      SizedBox(
                         height: kToolbarHeight,
                       ),
                     ],

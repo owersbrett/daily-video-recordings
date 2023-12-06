@@ -1,4 +1,4 @@
-name: habitbit
+name: habit_planet
 description: A new Flutter project for daily video reminders.
 version: 1.0.0+4
 publish_to: 'none' # Prevent accidental publishing to pub.dev
@@ -51,6 +51,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+
+
 
 flutter:
   uses-material-design: true

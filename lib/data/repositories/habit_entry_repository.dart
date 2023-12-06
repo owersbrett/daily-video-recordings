@@ -1,6 +1,6 @@
-import 'package:habitbit/data/frequency_type.dart';
-import 'package:habitbit/data/unit_type.dart';
-import 'package:habitbit/util/streak_util.dart';
+import 'package:habit_planet/data/frequency_type.dart';
+import 'package:habit_planet/data/unit_type.dart';
+import 'package:habit_planet/util/streak_util.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../util/date_util.dart';

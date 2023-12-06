@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:habitbit/bloc/reports/reports.dart';
+import 'package:habit_planet/bloc/reports/reports.dart';
 
 import '../../data/habit_entity.dart';
 import '../../data/habit_entry.dart';

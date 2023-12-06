@@ -1,4 +1,4 @@
-import 'package:habitbit/data/experience.dart';
+import 'package:habit_planet/data/experience.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/user.dart';

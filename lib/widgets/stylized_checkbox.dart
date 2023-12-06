@@ -1,6 +1,6 @@
-import 'package:habitbit/theme/theme.dart';
+import 'package:habit_planet/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:habitbit/tooltip_text.dart';
+import 'package:habit_planet/tooltip_text.dart';
 
 class StylizedCheckbox extends StatelessWidget {
   final bool isChecked;
