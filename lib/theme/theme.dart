@@ -27,6 +27,10 @@ const Color gold = Color(0xFFD4AF37); // A shade of gold
 const Color lightGold = Color(0xFFE8C55F); // A lighter shade of gold
 const Color darkGold = Color(0xFFA78B2C); // A darker shade of gold
 
+const Color onyx = Color(0xFF353839); // A shade of onyx
+const Color lightOnyx = Color(0xFF5F6163); // A lighter shade of onyx
+const Color darkOnyx = Color(0xFF1F2123); // A darker shade of onyx
+
 const Color lightBackgroundColor = Color(0xff232A35);
 const Color backgroundColor = Color(0xff232A35);
 const Color darkBackgroundColor = Color(0xff232A35);

@@ -19,7 +19,7 @@ import '../data/memento.dart';
 class DatabaseService {
   static final DatabaseService _singleton = DatabaseService._internal();
   // toggle to update database
-  static const version = 13;
+  static const version = 14;
   // static const newIphone = 9;
   // static const oldIphone = 9;
 

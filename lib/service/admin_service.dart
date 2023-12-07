@@ -76,7 +76,7 @@ class AdminService {
     habits.add(Habit.fromString(userId, "Meditate", "🧘", "🕉️"));
     habits.add(Habit.fromString(userId, "Learn Something New", "🎓", "📖"));
     habits.add(Habit.fromString(userId, "Journaling Before Bed", "✍️", "📔"));
-    habits.add(Habit.fromString(userId, "Goal Setting", "🎯", "📈"));
+
     habits.add(Habit.fromString(userId, "Goal Review", "🎯", "📈"));
     habits.add(Habit.fromString(userId, "In Bed By 9", "🛌", "🌙"));
     habits.add(Habit.fromString(userId, "Give Thanks To God", "🙏", "💖"));

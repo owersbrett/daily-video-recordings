@@ -1,37 +1,89 @@
-import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
-import 'package:habit_planet/service/analytics_service.dart';
-import 'package:habit_planet/widgets/custom_circular_indicator.dart';
-import 'package:to_csv/to_csv.dart' as toCsv;
-import 'package:habit_planet/bloc/reports/reports.dart';
-import 'package:habit_planet/widgets/custom_progress_indicator.dart';
+// @WEEKLYTAB
+
+// Imports organized alphabetically for better readability
 import 'package:flutter/material.dart';
+import 'package:habit_planet/bloc/experience/experience.dart';
+import 'package:habit_planet/bloc/reports/reports.dart';
+import 'package:habit_planet/bloc/user/user.dart';
+import 'package:habit_planet/data/frequency_type.dart';
+import 'package:habit_planet/data/habit.dart';
+import 'package:habit_planet/data/habit_entry.dart';
+import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
+import 'package:habit_planet/pages/home/animated_indicator.dart';
+import 'package:habit_planet/pages/video/dvr_close_button.dart';
+import 'package:habit_planet/service/analytics_service.dart';
+import 'package:habit_planet/theme/theme.dart';
+import 'package:habit_planet/util/color_util.dart';
+import 'package:habit_planet/util/date_util.dart';
+import 'package:habit_planet/widgets/custom_circular_indicator.dart';
+import 'package:habit_planet/widgets/custom_progress_indicator.dart';
+import 'package:path/path.dart';
+import 'package:to_csv/to_csv.dart' as toCsv;
 
-import '../bloc/experience/experience.dart';
-import '../bloc/user/user.dart';
-import '../data/frequency_type.dart';
-import '../data/habit.dart';
-import '../data/habit_entry.dart';
-import '../pages/home/animated_indicator.dart';
-import '../pages/video/dvr_close_button.dart';
-import '../util/date_util.dart';
+import '../bloc/habits/habits.dart';
 
-class HabitGrid extends StatefulWidget {
+// Constants for UI dimensions
+const double cellHeight = 42;
+const double firstCellWidth = 75;
+const double cellWidth = 42;
+const double cellFontSize = 20;
+const double firstCellFontSize = 24;
+const double progressIndicatorFontSize = 16;
+
+class WeeklyReportGrid extends StatefulWidget {
   final List<Habit> habits;
   final DateTime startInterval;
   final DateTime endInterval;
 
-  const HabitGrid({super.key, required this.habits, required this.startInterval, required this.endInterval});
+  const WeeklyReportGrid({super.key, required this.habits, required this.startInterval, required this.endInterval});
 
   @override
-  State<HabitGrid> createState() => _HabitGridState();
+  _WeeklyReportGridState createState() => _WeeklyReportGridState();
 }
 
-class _HabitGridState extends State<HabitGrid> {
-  final List<String> daysOfWeek = ['⏳', 'M', 'T', 'W', 'T', 'F', 'S', 'S'];
+class _WeeklyReportGridState extends State<WeeklyReportGrid> {
+  Habit? selectedHabit;
 
-  Container cell(String value, [bool first = false, bool header = false]) {
+  Map<int, List<HabitEntry>>? habitEntries;
+  
+  List<WeeklyReportRow>? weeklyReportData; // Used to track which habit is selected for the habit description
+  // Using a static list for days of the week to avoid recalculating
+  void tapHabit(Habit habit) {
+    print('tap habit');
+    setState(() {
+      if (habit.id == habit.id) {
+        selectedHabit = null;
+      } else {
+        selectedHabit = habit;
+      }
+    });
+  }
+
+  static const List<String> daysOfWeek = ['⏳', 'M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
+
+  // Refactored Cell widget for reuse
+  Widget _cell(String value, Color color, {bool isFirst = false, bool isHeader = false}) {
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        color: color,
+      ),
+      height: cellHeight,
+      width: isFirst ? firstCellWidth : cellWidth,
+      alignment: Alignment.center,
+      child: Text(
+        value,
+        style: TextStyle(color: Colors.black, fontSize: isFirst ? firstCellFontSize : cellFontSize, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Container cell(String value, Color color, [bool first = false, bool header = false]) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        border: Border.all(color: Colors.black),
+      ),
       height: 42,
       width: first ? 75 : 42,
       child: Center(
@@ -109,7 +161,7 @@ class _HabitGridState extends State<HabitGrid> {
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: daysOfWeek.map((day) => cell(day, i++ == 1, true)).toList(),
+          children: daysOfWeek.map((day) => cell(day, colorOfDay(day), i++ == 1, true)).toList(),
         ),
       ),
       for (List<Widget> row in habitRows(habitEntries))
@@ -120,26 +172,54 @@ class _HabitGridState extends State<HabitGrid> {
     ];
   }
 
+  Color colorOfDay(String day) {
+    switch (day) {
+      case "M":
+        return selectedHabit?.createDate.weekday == DateTime.monday ? Colors.green : Colors.white;
+      case "T":
+        return selectedHabit?.createDate.weekday == DateTime.tuesday ? Colors.green : Colors.white;
+      case "W":
+        return selectedHabit?.createDate.weekday == DateTime.wednesday ? Colors.green : Colors.white;
+      case "Th":
+        return selectedHabit?.createDate.weekday == DateTime.thursday ? Colors.green : Colors.white;
+      case "F":
+        return selectedHabit?.createDate.weekday == DateTime.friday ? Colors.green : Colors.white;
+      case "S":
+        return selectedHabit?.createDate.weekday == DateTime.saturday ? Colors.green : Colors.white;
+      case "Su":
+        return selectedHabit?.createDate.weekday == DateTime.sunday ? Colors.green : Colors.white;
+      default:
+        return Colors.white;
+    }
+  }
+
   List<List<Widget>> habitRows(Map<int, List<HabitEntry>> entries) {
     List<List<Widget>> rows = [];
     for (Habit habit in widget.habits) {
       List<HabitEntry> entriesForHabit = entries[habit.id] ?? [];
       entriesForHabit.sort((a, b) => a.createDate.compareTo(b.createDate));
-      rows.add(habitRow(habit, entriesForHabit));
+      rows.add(_habitRow(habit, entriesForHabit));
     }
     return rows;
   }
 
-  List<Widget> habitRow(Habit habit, List<HabitEntry> entries) {
-    List<Widget> rowCells = [];
-    rowCells.add(cell(habit.emoji, true));
+  List<Widget> _habitRow(Habit habit, List<HabitEntry> entries) {
+    Color color = selectedHabit?.id == habit.id ? darkEmerald.withOpacity(.7) : Colors.white;
+    List<Widget> rowCells = [
+      GestureDetector(
+        onTap: () {
+          tapHabit(habit);
+        },
+        child: _cell(habit.emoji, color, isFirst: true),
+      ),
+    ];
     for (var entry in entries) {
-      rowCells.add(cell(getCellValue(entry, habit)));
+      rowCells.add(GestureDetector(onTap: () => tapHabit(habit), child: _cell(_getCellValue(entry, habit), color)));
     }
     return rowCells;
   }
 
-  String getCellValue(HabitEntry entry, Habit habit) {
+  String _getCellValue(HabitEntry entry, Habit habit) {
     int differenceInDays = habit.createDate.difference(entry.createDate).inDays.abs();
     bool sameDayOfWeek = habit.createDate.weekday == entry.createDate.weekday;
     switch (habit.frequencyType) {
@@ -174,7 +254,7 @@ class _HabitGridState extends State<HabitGrid> {
     List<String> rowCells = [];
     rowCells.add(habit.emoji);
     for (var entry in entries) {
-      rowCells.add(getCellValue(entry, habit));
+      rowCells.add(_getCellValue(entry, habit));
     }
     return rowCells;
   }
@@ -185,7 +265,8 @@ class _HabitGridState extends State<HabitGrid> {
         future: RepositoryProvider.of<IHabitEntryRepository>(context).getHabitEntriesForDateInterval(
             DateUtil.startOfDay(widget.startInterval), DateUtil.startOfDay(widget.endInterval).subtract(Duration(microseconds: 1))),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          habitEntries = snapshot.data;
+          if (snapshot.connectionState == ConnectionState.waiting && habitEntries == null) {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
@@ -196,7 +277,7 @@ class _HabitGridState extends State<HabitGrid> {
                   heroTag: "Reports",
                   onPressed: () {
                     List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-                    List<List<String>> rows = habitRowsCSV(snapshot.data);
+                    List<List<String>> rows = habitRowsCSV(habitEntries);
                     rows.insert(0, headers);
                     toCsv.myCSV(headers, rows);
                   },
@@ -285,16 +366,18 @@ class _HabitGridState extends State<HabitGrid> {
                       FutureBuilder(
                           future: RepositoryProvider.of<IAnalyticsService>(context).getWeeklyReport(DateTime.now()),
                           builder: (context, data) {
+                            weeklyReportData = data.data;
                             if (!data.hasData) {
                               return AnimatedVortex(
                                 onTap: () {},
                               );
                             }
-                            return progressIndicators(data.data ?? []);
+                            return progressIndicators(weeklyReportData ?? []);
                           }),
                       SizedBox(
-                        height: kToolbarHeight,
+                        height: kToolbarHeight / 4,
                       ),
+                      _descriptions(snapshot.data ?? {}, context),
                     ],
                   ),
                 ),
@@ -305,4 +388,40 @@ class _HabitGridState extends State<HabitGrid> {
       ),
     );
   }
+}
+
+Widget _descriptions(Map<int, List<HabitEntry>> map, BuildContext context) {
+  // Access the HabitsBloc state only once to improve performance
+  var habitsMap = BlocProvider.of<HabitsBloc>(context).state.habitsMap;
+
+  // Using List.generate for better readability and performance
+  var children = List<Widget>.generate(habitsMap.length, (index) {
+    var habitId = habitsMap.keys.elementAt(index);
+    var habit = habitsMap[habitId];
+
+    // Guard clause for null habit (optional, based on your data guarantees)
+    if (habit == null) return SizedBox.shrink();
+
+    // Calculate entry count efficiently
+    var entryCount = map[habitId]?.length ?? 0;
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, top: 8, right: 16, bottom: 8),
+      child: Material(
+        borderRadius: BorderRadius.circular(10),
+        color: ColorUtil.getColorFromHex(habit.hexColor),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("${habit.emoji} ${habit.stringValue}", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+        ),
+      ),
+    );
+  });
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: children,
+  );
 }

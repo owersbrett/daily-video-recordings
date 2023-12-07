@@ -1,3 +1,4 @@
+// @Monthly calendar grid
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:flutter/material.dart';
@@ -94,11 +95,9 @@ class _CalendarGridState extends State<CalendarGrid> {
 
                 for (var element in item) {
                   if (element.booleanValue) {
-                      streakCounter++; // Increment streak counter when a new streak starts
+                    streakCounter++; // Increment streak counter when a new streak starts
 
-
-                    if (compareList.isEmpty) {
-                    }
+                    if (compareList.isEmpty) {}
                     compareList.add(element);
                   } else {
                     // Check if current streak is the longest
@@ -119,7 +118,7 @@ class _CalendarGridState extends State<CalendarGrid> {
 
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(32.0),
+                padding: const EdgeInsets.only(left: 32.0, right:32, top: 16, bottom: 32),
                 child: Container(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -129,23 +128,51 @@ class _CalendarGridState extends State<CalendarGrid> {
                         height: 16,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            " Total: " + widget.habits[i].emoji + " " + streakCounter.toString(),
-                            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                          Material(
+                            elevation: 10,
+                            borderRadius: BorderRadius.circular(10),
+                            color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(1),
+                            shadowColor: ColorUtil.getShadowOfHex(widget.habits[i].hexColor).withOpacity(.5),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Total",
+                                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    widget.habits[i].emoji + " " + streakCounter.toString(),
+                                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Streak: " + widget.habits[i].streakEmoji + " " + longestStreakList.length.toString(),
-                            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Material(
+                            elevation: 10,
+                            borderRadius: BorderRadius.circular(10),
+                            color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(1),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Streak " + widget.habits[i].streakEmoji + " " + longestStreakList.length.toString(),
+                                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -208,23 +235,35 @@ class _CalendarGridState extends State<CalendarGrid> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Material(
-                      color: ColorUtil.getColorFromHex(widget.habits[i].hexColor),
+                      color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(.5),
                       borderRadius: BorderRadius.circular(25),
                       elevation: 15,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SizedBox(
-                            height: 32,
+                            height: 16,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.habits[i].stringValue,
-                                style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 32, right: 32.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(10),
+                                    elevation: 10,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 16.0, right: 16, top: 8, bottom: 8),
+                                      child: Text(
+                                        widget.habits[i].stringValue,
+                                        style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

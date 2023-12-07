@@ -22,7 +22,6 @@ class AnalyticsService implements IAnalyticsService {
     DateTime nextSunday = DateUtil.previousMonday(currentDate);
     DateTime lastMonday = DateUtil.nextSunday(currentDate);
 
-    print("comeon now");
     try {
       var query = await db.rawQuery("""
 SELECT 
@@ -51,7 +50,6 @@ FROM
 WHERE
   habit_entry.createDate BETWEEN ? AND ? 
 """, [lastMonday.millisecondsSinceEpoch, nextSunday.millisecondsSinceEpoch]);
-      print("comeon now");
       weeklyReportRows = query
           .map((e) => WeeklyReportRow(
                 habitEntries: [

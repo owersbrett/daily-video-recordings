@@ -70,7 +70,7 @@ class _habit_planetState extends State<habit_planet> {
               children: <Widget>[
                 const Center(
                   child: Text(
-                    'habit_planet',
+                    'Habit Planet',
                     style: TextStyle(
                         fontSize: 24, // Adjust the font size as needed
                         fontWeight: FontWeight.bold, // Make the title bold

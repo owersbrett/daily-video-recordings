@@ -58,4 +58,16 @@ class ColorUtil {
     );
   }
 
+  static getShadowOfHex(String hexColor, [double amount = .1]) {
+
+    Color color = getColorFromHex(hexColor);
+
+    assert(amount >= 0 && amount <= 1, 'Amount should be between 0 and 1');
+
+  final hsl = HSLColor.fromColor(color);
+  final hslDarker = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+
+  return hslDarker.toColor();
+  }
+
 }

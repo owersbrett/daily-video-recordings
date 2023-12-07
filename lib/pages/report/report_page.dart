@@ -1,7 +1,7 @@
 import 'package:habit_planet/bloc/reports/reports.dart';
 import 'package:habit_planet/pages/home/annual_report.dart';
 import 'package:habit_planet/pages/home/calendar_grid.dart';
-import 'package:habit_planet/widgets/habit_grid.dart';
+import 'package:habit_planet/widgets/weekly_report_grid.dart';
 import 'package:flutter/material.dart';
 import '../../bloc/habits/habits.dart';
 import '../../bloc/user/user.dart';
@@ -43,7 +43,7 @@ class _ReportPageState extends State<ReportPage> with SingleTickerProviderStateM
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
-                    child: HabitGrid(
+                    child: WeeklyReportGrid(
                       habits: state.habits,
                       startInterval: state.startInterval,
                       endInterval: state.endInterval,
