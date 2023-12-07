@@ -8,7 +8,7 @@
             "name": "HabitPlanet",
             "request": "launch",
             "type": "dart",
-            "deviceId": "00008120-0018096A14D8C01E"
+            // "deviceId": "00008120-0018096A14D8C01E"
         },
         {
             "name": "6.7",

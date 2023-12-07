@@ -15,29 +15,23 @@ class WeekdayHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        // Calculate the size based on the phone's height
-
-        return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min, // Set the main axis size to the minimum
-            children: <Widget>[
-              Text(
-                dayOfWeek,
-                style: TextStyle(fontSize: expanded ? 20 : 16, color: textColor, fontWeight: expanded ? FontWeight.bold : FontWeight.normal),
-              ),
-              const SizedBox(height: 8), //
-              CustomProgressIndicator(
-                size: expanded ? ProgressIndicatorSize.medium : ProgressIndicatorSize.small,
-                value: score.toDouble(),
-                label: dayOfMonth,
-                textColor: textColor,
-              ),
-            ],
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min, // Set the main axis size to the minimum
+        children: <Widget>[
+          Text(
+            dayOfWeek,
+            style: TextStyle(fontSize: expanded ? 20 : 16, color: textColor, fontWeight: expanded ? FontWeight.bold : FontWeight.normal),
           ),
-        );
-      },
+          const SizedBox(height: 8), //
+          CustomProgressIndicator(
+            size: expanded ? ProgressIndicatorSize.medium : ProgressIndicatorSize.small,
+            value: score.toDouble(),
+            label: dayOfMonth,
+            textColor: textColor,
+          ),
+        ],
+      ),
     );
   }
 }

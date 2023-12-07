@@ -20,6 +20,7 @@ class Habit {
     "description TEXT"
     "value INTEGER",
     "unitIncrement INTEGER",
+    "value INTEGER",
     "valueGoal INTEGER",
     "suffix TEXT",
     "unitType TEXT",
