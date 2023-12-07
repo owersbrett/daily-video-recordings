@@ -36,13 +36,13 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Please permit the app access to the Camera</string>
+	<string>Please permit the app access to the Camera, in order to create to capture video for mementos.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Please permit the app access to the Microphone</string>
+	<string>Please permit the app access to the Microphone, in order to capture audio for mementos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Please permit the app access to the Photo Library Additions</string>
+	<string>Please permit the app access to the Photo Library Additions in order to upload content into the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Please permit the app access to the Photo Library</string>
+	<string>Please permit the app access to the Photo Library in order to uppload content into the app.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIFileSharingEnabled</key>

@@ -32,10 +32,10 @@ dependencies:
   sqflite: any # It's better to specify a version number for production apps.
   path_provider: ^2.1.1 # Used for finding commonly used locations on the filesystem.
   # //TODO screenshots
-  flutter_ffmpeg: any # A package that might be used for video processing.
   grpc: ^3.2.4
   protobuf: ^3.1.0
   path: ^1.8.3
+  ffmpeg_kit_flutter:
   flutter_launcher_icons: ^0.13.1
   # Add other dependencies you might need for your project.
 

@@ -1,5 +1,5 @@
 //TODO screenshots
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:habit_planet/data/multimedia_file.dart';
@@ -34,15 +34,11 @@ class MediaService {
 
   static Future<void> _captureThumbnail(String videoPath, String thumbnailPath) async {
     //TODO screenshots
-    final FlutterFFmpeg _flutterFFmpeg = FlutterFFmpeg();
 
     // FFmpeg command to capture the thumbnail
-    int rc = await _flutterFFmpeg.execute('-i $videoPath -ss 00:00:01.000 -vframes 1 $thumbnailPath');
-    if (rc == 0) {
-      log("Thumbnail created at $thumbnailPath");
-    } else {
-      log("Thumbnail creation failed with exit code $rc");
-    }
+    await FFmpegKit.execute('-i $videoPath -ss 00:00:01.000 -vframes 1 $thumbnailPath').then((value) => null, onError: (error) {
+      log("Error capturing thumbnail: $error");
+    });
   }
 
   static Future setThumbnail(File file) async {
@@ -154,7 +150,6 @@ class MediaService {
       throw Exception('No clips to merge.');
     }
 
-    final FlutterFFmpeg _flutterFFmpeg = FlutterFFmpeg();
 
     String inputCommand = clips.map((clip) => "-i '${clip.path}'").join(' ');
 
@@ -164,18 +159,13 @@ class MediaService {
 
     String command = "$inputCommand -filter_complex '$filterComplexVideo;$filterComplexAudio' -map '[video]' -map '[audio]' $outputPath";
 
-    int rc = await _flutterFFmpeg.execute(command).then((rc) {
+    await FFmpegKit.execute(command).then((rc) {
       return rc;
     }, onError: (err) {
       log("FFmpeg error: $err");
       return -1;
     });
 
-    if (rc == 0) {
-      log("Successfully merged clips");
-    } else {
-      log("Failed to merge clips with return code: $rc");
-    }
     return outputPath;
   }
 }
