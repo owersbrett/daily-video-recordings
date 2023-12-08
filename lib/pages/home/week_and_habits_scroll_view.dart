@@ -17,6 +17,7 @@ import '../../data/habit.dart';
 import '../../navigation/navigation.dart';
 import '../../util/date_util.dart';
 import '../../widgets/weekday_hero.dart';
+import 'date_scrolling_widget.dart';
 
 class WeekAndHabitsScrollView extends StatelessWidget {
   const WeekAndHabitsScrollView({super.key, required this.habitsState});
@@ -144,18 +145,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              wdh(threeDaysAgo, context),
-              wdh(twoDaysAgo, context),
-              wdh(yesterday, context),
-              wdh(currentDay, context),
-              wdh(tomorrow, context),
-              wdh(twoDaysAhead, context),
-              wdh(threeDaysAhead, context)
-            ],
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          ),
+          DateScrollingWidget(currentDate: currentDay),
           Expanded(
             child: FutureBuilder(
               future: RepositoryProvider.of<IHabitEntryRepository>(context).getByDate(habitsState.currentDate),

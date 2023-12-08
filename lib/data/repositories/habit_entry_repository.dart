@@ -209,10 +209,6 @@ class HabitEntryRepository implements IHabitEntryRepository {
 
   @override
   Future<double> getHabitEntryPercentagesForDay(DateTime date) async {
-    // This is important
-    // grab all the habits to determine which ones are daily, every other day, weekly, etc
-    // Then try to grab successful ones for that day that should exist
-    // If they don't exist but should, back fill.
     var habits = (await db.query(Habit.tableName)).map((e) => Habit.fromMap(e)).toList();
     var entries = (await getByDate(date)) ?? [];
     int numerator = entries.fold(0, (previousValue, element) => previousValue + (element.booleanValue ? 1 : 0));

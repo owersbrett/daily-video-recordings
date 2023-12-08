@@ -34,6 +34,7 @@ dependencies:
   # //TODO screenshots
   grpc: ^3.2.4
   protobuf: ^3.1.0
+  carousel_slider:
   path: ^1.8.3
   ffmpeg_kit_flutter:
   flutter_launcher_icons: ^0.13.1
