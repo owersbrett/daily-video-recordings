@@ -30,7 +30,7 @@ class _InfiniteDateWheelState extends State<InfiniteDateWheel> {
   Widget wdh(DateTime date, BuildContext context, DateTime currentDate) {
     // Your widget for displaying the date here
     return FutureBuilder(
-        future: RepositoryProvider.of<IHabitEntryRepository>(context).getHabitEntryPercentagesForWeekSurroundingDate(date),
+        future: RepositoryProvider.of<IHabitEntryRepository>(context).getHabitEntryPercentagesForDay(date),
         builder: (context, snapshot) {
           return GestureDetector(
             onTap: () {

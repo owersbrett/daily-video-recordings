@@ -36,7 +36,7 @@ class WeekAndHabitsScrollView extends StatelessWidget {
   DateTime get threeDaysAhead => twoDaysAhead.copyWith(day: twoDaysAhead.day + 1);
 
   Widget wdh(DateTime weekdayDate, BuildContext context) => FutureBuilder(
-      future: RepositoryProvider.of<IHabitEntryRepository>(context).getHabitEntryPercentagesForWeekSurroundingDate(weekdayDate),
+      future: RepositoryProvider.of<IHabitEntryRepository>(context).getHabitEntryPercentagesForDay(weekdayDate),
       builder: (context, snapshot) {
         return GestureDetector(
           onTap: () {

@@ -1,5 +1,6 @@
 import 'package:habit_planet/data/frequency_type.dart';
 import 'package:habit_planet/data/unit_type.dart';
+import 'package:habit_planet/util/habit_util.dart';
 import 'package:habit_planet/util/streak_util.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -19,7 +20,7 @@ abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future<HabitEntry?> getNearestFailure(int habitId, DateTime date, [int days = 1]);
   Future createHabitEntriesForDate(DateTime date);
   Future<List<HabitEntry>> createTodaysHabitEntries(DateTime date);
-  Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date);
+  Future<double> getHabitEntryPercentagesForDay(DateTime date);
 
   Future<Map<int, List<HabitEntry>>> getHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
   Future<List<HabitEntry>> getOrderedHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
@@ -207,19 +208,21 @@ class HabitEntryRepository implements IHabitEntryRepository {
   }
 
   @override
-  Future<double> getHabitEntryPercentagesForWeekSurroundingDate(DateTime date) async {
-    List<double> percentages = [];
-    DateTime start = DateUtil.startOfDay(date);
-    DateTime end = DateUtil.endOfDay(date);
-    var q = await db.query(tableName, where: 'createDate BETWEEN ? AND ?', whereArgs: [start.millisecondsSinceEpoch, end.millisecondsSinceEpoch]);
-    int success = q.fold(0, (previousValue, element) => previousValue + (element['booleanValue'] as int));
-    if (q.isNotEmpty) {
-      percentages.add(success / q.length);
+  Future<double> getHabitEntryPercentagesForDay(DateTime date) async {
+    // This is important
+    // grab all the habits to determine which ones are daily, every other day, weekly, etc
+    // Then try to grab successful ones for that day that should exist
+    // If they don't exist but should, back fill.
+    var habits = (await db.query(Habit.tableName)).map((e) => Habit.fromMap(e)).toList();
+    var entries = (await getByDate(date)) ?? [];
+    int numerator = entries.fold(0, (previousValue, element) => previousValue + (element.booleanValue ? 1 : 0));
+    int denominator = HabitUtil.getTodaysFrequencyCount(habits, date);
+    if (denominator > 0) {
+      return numerator / denominator;
     } else {
-      percentages.add(0);
+      return 0;
     }
 
-    return percentages.first;
   }
 
   @override
