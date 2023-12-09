@@ -25,4 +25,4 @@ class HabitUtil {
     }
     return count;
   }
-}
+} 

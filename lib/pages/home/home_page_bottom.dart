@@ -137,6 +137,7 @@ class _HomePageBottomState extends State<HomePageBottom> {
       child: Container(
         decoration: const BoxDecoration(color: Colors.black),
         height: sheetHeight(context),
+        width: MediaQuery.of(context).size.width ,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[

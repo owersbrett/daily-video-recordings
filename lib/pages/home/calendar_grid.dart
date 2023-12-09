@@ -15,6 +15,7 @@ import 'package:habit_planet/widgets/my_grid.dart';
 import '../../data/habit.dart';
 import '../../data/repositories/habit_entry_repository.dart';
 import '../../util/date_util.dart';
+import '../../util/habit_entry_util.dart';
 
 class CalendarGrid extends StatefulWidget {
   final DateTime startDate;
@@ -90,35 +91,27 @@ class _CalendarGridState extends State<CalendarGrid> {
 
             if (items.isNotEmpty && items.containsKey(habit.id!)) {
               var item = items[habit.id!];
-              if (item != null) {
-                item.sort((a, b) => a.createDate.compareTo(b.createDate));
-
-                for (var element in item) {
-                  if (element.booleanValue) {
-                    streakCounter++; // Increment streak counter when a new streak starts
-
-                    if (compareList.isEmpty) {}
-                    compareList.add(element);
-                  } else {
-                    // Check if current streak is the longest
-                    if (compareList.length > longestStreakList.length) {
-                      longestStreakList = List<HabitEntry>.from(compareList);
-                    }
-                    // Reset current streak
-                    compareList.clear();
+              item = addHabitEntriesWhereMissing(item ?? [], habit);
+              item.sort((a, b) => a.createDate.compareTo(b.createDate));
+              for (var element in item) {
+                print(element.createDate);
+                if (element.booleanValue) {
+                  compareList.add(element);
+                } else {
+                  // Check if current streak is the longest
+                  if (compareList.length > longestStreakList.length) {
+                    longestStreakList = List<HabitEntry>.from(compareList);
                   }
-                }
-
-                // Final check for the last streak
-                if (compareList.length > longestStreakList.length) {
-                  longestStreakList = List<HabitEntry>.from(compareList);
+                  // Reset current streak
+                  compareList.clear();
                 }
               }
             }
+            streakCounter = longestStreakList.length;
 
             return Center(
               child: Padding(
-                padding: const EdgeInsets.only(left: 32.0, right:32, top: 16, bottom: 32),
+                padding: const EdgeInsets.only(left: 32.0, right: 32, top: 16, bottom: 32),
                 child: Container(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
