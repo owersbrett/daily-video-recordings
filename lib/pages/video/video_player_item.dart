@@ -7,6 +7,7 @@ import 'package:habit_planet/pages/video/delete_dialog.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../bloc/habits/habits.dart';
+import '../../theme/theme.dart';
 import 'dvr_close_button.dart';
 
 class VideoPlayerItem extends StatefulWidget {
@@ -128,7 +129,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   Widget _videoSlider() {
     return Expanded(
       child: Slider(
-        activeColor: Colors.white,
+        activeColor: emerald,
         inactiveColor: Colors.white.withOpacity(.5),
         value: secondsElapsed.toDouble(),
         min: 0,

@@ -412,7 +412,15 @@ Widget _descriptions(Map<int, List<HabitEntry>> map, BuildContext context) {
         color: ColorUtil.getColorFromHex(habit.hexColor),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text("${habit.emoji} ${habit.stringValue}", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8))),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("${habit.emoji} ${habit.stringValue}", style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
+              )),
+          ),
         ),
       ),
     );

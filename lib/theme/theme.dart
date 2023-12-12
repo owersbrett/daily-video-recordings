@@ -9,8 +9,6 @@ const Color opal = Color(0xFFA8C3BC); // A shade of opal
 const Color lightOpal = Color(0xFFD3E0DB); // A lighter shade of opal
 const Color darkOpal = Color(0xFF7A8C89); // A darker shade of opal
 
-
-
 const Color sapphire = Color(0xFF0F52BA); // A shade of ruby
 const Color lightSapphire = Color(0xFF4D7EBB); // A lighter shade of ruby
 const Color darkSapphire = Color(0xFF0A3A6B); // A darker shade of ruby
@@ -69,8 +67,11 @@ final ThemeData theme = ThemeData(
   ),
 
   appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
-  progressIndicatorTheme:
-      ProgressIndicatorThemeData(color: emerald, refreshBackgroundColor: emerald.withOpacity(.3), linearTrackColor: emerald.withOpacity(.3)),
+  progressIndicatorTheme: ProgressIndicatorThemeData(
+    color: emerald,
+    refreshBackgroundColor: emerald.withOpacity(.3),
+    linearTrackColor: emerald.withOpacity(.3),
+  ),
   dropdownMenuTheme: const DropdownMenuThemeData(textStyle: TextStyle(color: Colors.white)),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(

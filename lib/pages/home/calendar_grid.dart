@@ -111,7 +111,7 @@ class _CalendarGridState extends State<CalendarGrid> {
 
             return Center(
               child: Padding(
-                padding: const EdgeInsets.only(left: 32.0, right: 32, top: 16, bottom: 32),
+                padding: const EdgeInsets.only(left: 24.0, right: 24, top: 16, bottom: 32),
                 child: Container(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

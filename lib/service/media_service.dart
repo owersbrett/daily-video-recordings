@@ -1,4 +1,6 @@
 //TODO screenshots
+// import 'dart:js_util';
+
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -17,12 +19,18 @@ class MediaService {
     String formattedDate = DateTime.now().millisecondsSinceEpoch.toString();
     String path = directory.path + FileDirectoriesService.videosPath;
 
-    path += videoId + "-" + formattedDate;
+    path += "$videoId-$formattedDate";
 
-    String mp4Path = path + ".mp4";
-    await MediaService.mergeClipsAndGetPath(videoClips, mp4Path);
+    String mp4Path = "$path.mp4";
+    if (videoClips.length == 1) {
+      File file = File(videoClips.first.path);
+      await file.copy(mp4Path);
+      await file.delete();
+    } else {
+      mp4Path = await MediaService.mergeClipsAndGetPath(videoClips, mp4Path);
+    }
     // String txtPath = path + ".txt";
-    String jpgPath = path + ".jpg";
+    String jpgPath = "$path.jpg";
     File mp4 = File(mp4Path);
     File jpg = File(jpgPath);
     await _captureThumbnail(mp4Path, jpgPath);
@@ -149,21 +157,20 @@ class MediaService {
     if (clips.isEmpty) {
       throw Exception('No clips to merge.');
     }
-
+    if (clips.length == 1) {
+      return clips.first.path;
+    }
 
     String inputCommand = clips.map((clip) => "-i '${clip.path}'").join(' ');
 
     // Construct filter_complex for both video and audio
-    String filterComplexVideo = clips.asMap().keys.map((i) => "[$i:v]").join('') + "concat=n=${clips.length}:v=1:a=0[video]";
-    String filterComplexAudio = clips.asMap().keys.map((i) => "[$i:a]").join('') + "concat=n=${clips.length}:v=0:a=1[audio]";
+    String filterComplexVideo = "${clips.asMap().keys.map((i) => "[$i:v]").join('')}concat=n=${clips.length}:v=1:a=0[video]";
+    String filterComplexAudio = "${clips.asMap().keys.map((i) => "[$i:a]").join('')}concat=n=${clips.length}:v=0:a=1[audio]";
 
     String command = "$inputCommand -filter_complex '$filterComplexVideo;$filterComplexAudio' -map '[video]' -map '[audio]' $outputPath";
 
-    await FFmpegKit.execute(command).then((rc) {
-      return rc;
-    }, onError: (err) {
+    await FFmpegKit.execute(command).then((rc) {}, onError: (err) {
       log("FFmpeg error: $err");
-      return -1;
     });
 
     return outputPath;

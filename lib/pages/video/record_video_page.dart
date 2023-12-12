@@ -343,7 +343,11 @@ class _RecordVideoPageState extends State<RecordVideoPage> {
                     ),
                   ),
                 ),
-                _isSaving ? const Center(child: LinearProgressIndicator()) : Container(),
+                _isSaving
+                    ? const Center(
+                        child: LinearProgressIndicator(),
+                      )
+                    : Container(),
               ],
             ),
           ),

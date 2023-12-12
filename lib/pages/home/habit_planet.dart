@@ -7,10 +7,11 @@ import 'package:habit_planet/pages/home/orbital_state.dart';
 import 'package:habit_planet/widgets/custom_circular_indicator.dart';
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
+import '../../data/repositories/habit_entry_repository.dart';
 import '../../navigation/navigation.dart';
 
-class habit_planet extends StatefulWidget {
-  const habit_planet({
+class HabitPlanet extends StatefulWidget {
+  const HabitPlanet({
     Key? key,
     required this.onStart,
     required this.nowData,
@@ -19,10 +20,10 @@ class habit_planet extends StatefulWidget {
   final NowData nowData;
 
   @override
-  State<habit_planet> createState() => _habit_planetState();
+  State<HabitPlanet> createState() => _HabitPlanetState();
 }
 
-class _habit_planetState extends State<habit_planet> {
+class _HabitPlanetState extends State<HabitPlanet> {
   static String experienceTag = "experience-hero";
   DateTime get currentTime => DateTime.now();
   Duration countdownDuration = const Duration(hours: 1);
@@ -37,20 +38,35 @@ class _habit_planetState extends State<habit_planet> {
     return percentage.clamp(0, 100); // Ensures the value is between 0 and 100
   }
 
-  Hero hero(double percentageToNextLevel, [Size size = const Size(300, 300), int level = 1]) => Hero(
-      tag: experienceTag,
-      child: BlocBuilder<HabitsBloc, HabitsState>(
-        builder: (context, state) {
-          return OrbitalIndicator(
-            currentTicks: state.todaysHabitEntries.fold(0, (previousValue, element) => (previousValue + (element.booleanValue ? 1 : 0))),
-            progress: percentageToNextLevel,
-            key: const ValueKey("weekday-hero"),
-            centerText: level.toString(),
-            totalTicks: state.todaysHabitEntries.length,
-            size: size,
-          );
-        },
-      ));
+  Hero hero(double percentageToNextLevel, [Size size = const Size(300, 300), int level = 1]) {
+    return Hero(
+        tag: experienceTag,
+        child: FutureBuilder(
+          future: RepositoryProvider.of<IHabitEntryRepository>(context).getTodaysNumeratorAndDemoninator(DateTime.now()),
+          builder: (context, data) {
+            int numerator = 0;
+            int denominator = 1;
+            if (data.hasData) {
+              numerator = data.data?[0] ?? 0;
+              denominator = data.data?[1] ?? 1;
+              if (denominator == 0) {
+                denominator = 1;
+              }
+            }
+
+            print("ME");
+            return OrbitalIndicator(
+              currentTicks: numerator,
+              progress: percentageToNextLevel,
+              key: const ValueKey("weekday-hero"),
+              centerText: level.toString(),
+              totalTicks: denominator,
+              size: size,
+            );
+          },
+        ));
+  }
+
   Widget orbitalIndicatorPage(double percentageToNextLevel, int level) => OrbitalPage(
         tag: experienceTag,
         progress: percentageToNextLevel,

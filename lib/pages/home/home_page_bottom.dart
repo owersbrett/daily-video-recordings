@@ -4,7 +4,6 @@ import 'package:habit_planet/pages/home/habit_planet.dart';
 import 'package:flutter/services.dart';
 import 'package:habit_planet/data/bottom_sheet_state.dart';
 
-
 import 'package:habit_planet/pages/home/now_data.dart';
 import 'package:habit_planet/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +117,7 @@ class _HomePageBottomState extends State<HomePageBottom> {
   Widget _list(BuildContext context) {
     if (large) return const VideoPreviewPage();
     if (mid) {
-      return habit_planet(
+      return HabitPlanet(
         nowData: nowData,
         onStart: () {
           setState(() {
@@ -137,11 +136,12 @@ class _HomePageBottomState extends State<HomePageBottom> {
       child: Container(
         decoration: const BoxDecoration(color: Colors.black),
         height: sheetHeight(context),
-        width: MediaQuery.of(context).size.width ,
+        width: MediaQuery.of(context).size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Expanded(
+              flex: mid || large ? 7 : 4,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -172,7 +172,6 @@ class _HomePageBottomState extends State<HomePageBottom> {
                   )
                 ],
               ),
-              flex: mid || large ? 7 : 4,
             ),
             Expanded(
               flex: mid || large ? 3 : 2,

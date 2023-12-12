@@ -21,10 +21,13 @@ abstract class IHabitEntryRepository implements Repository<HabitEntry> {
   Future createHabitEntriesForDate(DateTime date);
   Future<List<HabitEntry>> createTodaysHabitEntries(DateTime date);
   Future<double> getHabitEntryPercentagesForDay(DateTime date);
+  Future<int> getHabitsForDay(DateTime date);
+  Future<int> getSuccessfulEntriesForDay(DateTime date);
 
   Future<Map<int, List<HabitEntry>>> getHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
   Future<List<HabitEntry>> getOrderedHabitEntriesForDateInterval(DateTime startDate, DateTime endDate);
   Future<List<HabitEntry>> getSuccessfulEntries(int habitId, DateTime date);
+  Future<List<int>> getTodaysNumeratorAndDemoninator(DateTime date);
 }
 
 class HabitEntryRepository implements IHabitEntryRepository {
@@ -218,7 +221,6 @@ class HabitEntryRepository implements IHabitEntryRepository {
     } else {
       return 0;
     }
-
   }
 
   @override
@@ -280,5 +282,31 @@ class HabitEntryRepository implements IHabitEntryRepository {
     } else {
       return q.map((e) => HabitEntry.fromMap(e)).toList();
     }
+  }
+
+  @override
+  Future<int> getHabitsForDay(DateTime date) async {
+    var habits = (await db.query(Habit.tableName)).map((e) => Habit.fromMap(e)).toList();
+
+    return HabitUtil.getTodaysFrequencyCount(habits, date);
+  }
+
+  @override
+  Future<int> getSuccessfulEntriesForDay(DateTime date) async {
+    var entries = (await getByDate(date)) ?? [];
+    int successfulCount = 0;
+    for (var entry in entries) {
+      if (entry.booleanValue) {
+        successfulCount++;
+      }
+    }
+    return successfulCount;
+  }
+  
+  @override
+  Future<List<int>> getTodaysNumeratorAndDemoninator(DateTime date) async {
+    int numerator = await getSuccessfulEntriesForDay(date);
+    int denominator = await getHabitsForDay(date);
+    return [numerator, denominator];
   }
 }
