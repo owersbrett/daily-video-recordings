@@ -16,7 +16,7 @@ class HabitUtil {
           }
           break;
         case FrequencyType.weekly:
-          if (habit.createDate.weekday % 7 == 0){
+          if (habit.createDate.weekday == date.weekday){
             count++;
           }
           break;
