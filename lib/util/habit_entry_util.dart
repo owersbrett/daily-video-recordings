@@ -10,7 +10,7 @@ class HabitEntryUtil {
       } else {
         backfilledEntries.add(entries.first.copyWith(createDate: startDate, updateDate: startDate, booleanValue: false));
       }
-      startDate.add(Duration(days: 1)); 
+      startDate.add(const Duration(days: 1)); 
 
     }
     return backfilledEntries;

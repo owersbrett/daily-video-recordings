@@ -49,8 +49,8 @@ class HabitEntry {
     return HabitEntry(
       habitId: habit.id!,
       unitType: habit.unitType,
-      createDate: date.add(Duration(hours: 1)),
-      updateDate: date.add(Duration(hours: 1)), booleanValue: false,
+      createDate: date.add(const Duration(hours: 1)),
+      updateDate: date.add(const Duration(hours: 1)), booleanValue: false,
     );
   }
 

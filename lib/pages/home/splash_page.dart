@@ -90,14 +90,14 @@ class _SplashPageState extends State<SplashPage> {
                       HapticFeedback.lightImpact();
                       BlocProvider.of<UserBloc>(context).add(SplashPageClosed());
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.close,
                       color: ruby,
                     ),
                   ),
                 ),
                 if (habitsToAdd.isNotEmpty)
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                 if (habitsToAdd.isNotEmpty)
@@ -108,40 +108,40 @@ class _SplashPageState extends State<SplashPage> {
                       onPressed: () {
                         BlocProvider.of<HabitsBloc>(context).add(AddHabits(habitsToAdd, DateTime.now(), widget.user.id!, close));
                       },
-                      child: Icon(Icons.check),
+                      child: const Icon(Icons.check),
                     ),
                   ),
               ],
             ),
             body: Padding(
-              padding: EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(24.0),
               child: ListView(
                 children: [
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text("Welcome!", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
                     ],
                   ),
-                  Text(
+                  const Text(
                     "Select habits you'd like to track.",
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 4,
                   ),
-                  Text(
+                  const Text(
                     "Don't worry, you can always add custom habits later.",
                     style: TextStyle(fontSize: 10),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Wrap(
                     children: items(),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: kToolbarHeight,
                   )
                 ],

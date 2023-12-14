@@ -6,6 +6,8 @@ import '../../data/repositories/habit_entry_repository.dart';
 import '../../widgets/weekday_hero.dart';
 
 class InfiniteDateWheel extends StatefulWidget {
+  const InfiniteDateWheel({super.key});
+
   @override
   _InfiniteDateWheelState createState() => _InfiniteDateWheelState();
 }
@@ -62,7 +64,7 @@ class _InfiniteDateWheelState extends State<InfiniteDateWheel> {
       listenWhen: (previous, current) {
         return previous.currentDate != current.currentDate;
       },
-      child: Container(
+      child: SizedBox(
         height: kToolbarHeight * 2.5,
         child: BlocBuilder<HabitsBloc, HabitsState>(
           builder: (context, state) {
@@ -72,7 +74,7 @@ class _InfiniteDateWheelState extends State<InfiniteDateWheel> {
               itemBuilder: (BuildContext context, int index) {
                 // Calculate the date for each item
                 final date = DateTime.now().subtract(Duration(days: 3 - index));
-                return Container(
+                return SizedBox(
                   height: kToolbarHeight * 2.5,
                   child: wdh(date, context, currentDate),
                 );

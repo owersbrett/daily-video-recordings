@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:habit_planet/theme/theme.dart';
-import 'package:habit_planet/util/color_util.dart';
 
 class CustomProgressIndicator extends StatelessWidget {
   final double progress; // Progress value between 0 and 1
@@ -15,16 +13,15 @@ class CustomProgressIndicator extends StatelessWidget {
   final double eccentricity; // 0 : 1 --- 0 : 360 // 0 : 1 --- 0 : 360
   final int count;
 
-  CustomProgressIndicator(
-      {required this.progress,
+  const CustomProgressIndicator(
+      {super.key, required this.progress,
       required this.orbitalAngle,
       required this.spin,
       required this.ascending,
       required this.count,
       required this.inclination,
       required this.eccentricity,
-      required this.wobble,
-      required ValueKey<String> key});
+      required this.wobble});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +38,7 @@ class CustomProgressIndicator extends StatelessWidget {
             inclination: inclination,
             eccentricity: eccentricity),
       ),
-      size: Size(300, 300),
+      size: const Size(300, 300),
     );
   }
 }

@@ -164,7 +164,7 @@ ALTER TABLE Habit ADD COLUMN value INT
     try {
       await db.execute(sql);
     } catch (e) {
-      log("Sql try error: " + e.toString());
+      log("Sql try error: $e");
     }
   }
 
@@ -173,9 +173,9 @@ ALTER TABLE Habit ADD COLUMN value INT
   static String getCreateTableString(List<String> schemaList, String tableName) {
     String schemaString = "";
     for (var element in schemaList) {
-      schemaString += element + ", ";
+      schemaString += "$element, ";
     }
     schemaString = schemaString.substring(0, schemaString.length - 2);
-    return "CREATE TABLE " + tableName + "(" + schemaString + ");";
+    return "CREATE TABLE $tableName($schemaString);";
   }
 }

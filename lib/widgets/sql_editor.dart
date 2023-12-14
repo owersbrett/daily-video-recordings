@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:habit_planet/bloc/user/user_bloc.dart';
-import 'package:habit_planet/data/habit_entry.dart';
 import 'package:habit_planet/main.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../bloc/habits/habits.dart';
 import '../bloc/user/user.dart';
-import '../data/habit.dart';
 import '../service/database_service.dart';
 import '../theme/theme.dart';
 
@@ -20,7 +16,6 @@ class SQLEditor extends StatefulWidget {
 
 class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMixin {
   final TextEditingController _queryController = TextEditingController();
-  String _result = '';
 
   List<Map<String, dynamic>> _queryResult = [];
 
@@ -49,7 +44,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
   }
 
   late TabController _tabController;
-  List<String> _commandHistory = [];
+  final List<String> _commandHistory = [];
 
   @override
   void initState() {
@@ -65,7 +60,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
 
   void addCommandToHistory(String command) {
     setState(() {
-      if (_commandHistory.length > 0) {
+      if (_commandHistory.isNotEmpty) {
         if (_commandHistory.last != command) {
           _commandHistory.add(command);
         }
@@ -89,9 +84,9 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
         child: TextButton(
           child: Text(
             text,
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
           ),
-          onPressed: () => _queryController.text = _queryController.text + ' $text',
+          onPressed: () => _queryController.text = '${_queryController.text} $text',
         ),
       ),
     );
@@ -171,14 +166,14 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
 
   List<Widget> _queryRows() {
     if (_queryResult.isEmpty) {
-      return [Text("Queries appear here")];
+      return [const Text("Queries appear here")];
     }
 
     // Create a list of widgets for each row in the query result
     List<Widget> rowWidgets = _queryResult.map((Map<String, dynamic> row) {
       return Card(
         child: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,14 +195,14 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
   }
 
   Widget responseWidget(Map<String, dynamic> response) {
-    return Container(height: 250, child: Text(response.toString()));
+    return SizedBox(height: 250, child: Text(response.toString()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'sqlflite 2.3.0',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
@@ -239,7 +234,6 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
                   FocusScope.of(context).unfocus();
                   setState(() {
                     _queryController.text = '';
-                    _result = '';
                   });
                 },
                 child: const Text(
@@ -252,7 +246,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
         ],
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(text: 'Query'),
             Tab(text: 'Schema'),
             Tab(text: 'History'),
@@ -272,7 +266,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
                       child: ListView(
                         children: [
                           TextField(
-                            style: TextStyle(color: Colors.black),
+                            style: const TextStyle(color: Colors.black),
                             controller: _queryController,
                             keyboardType: TextInputType.text,
                             onSubmitted: (value) {
@@ -292,7 +286,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0, left: 8, bottom: 8),
-                            child: Container(
+                            child: SizedBox(
                               height: 50,
                               child: ListView(
                                 scrollDirection: Axis.horizontal,
@@ -302,7 +296,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: Container(
+                            child: SizedBox(
                               height: 50,
                               child: ListView(
                                 scrollDirection: Axis.horizontal,
@@ -312,7 +306,7 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0, left: 8, bottom: 8),
-                            child: Container(
+                            child: SizedBox(
                               height: 50,
                               child: ListView(
                                 scrollDirection: Axis.horizontal,
@@ -357,9 +351,9 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
                             collapsedIconColor: Colors.black,
                             iconColor: Colors.black,
                             backgroundColor: emerald,
-                            title: Text(tables[index]['name'], style: TextStyle(color: Colors.black)),
+                            title: Text(tables[index]['name'], style: const TextStyle(color: Colors.black)),
                             children: [
-                              Container(
+                              SizedBox(
                                 height: 200,
                                 child: ListView.builder(
                                   shrinkWrap: true,
@@ -368,9 +362,9 @@ class _SQLEditorState extends State<SQLEditor> with SingleTickerProviderStateMix
                                     return ListTile(
                                       title: Text(
                                         columns[index]['name'],
-                                        style: TextStyle(color: Colors.black, fontSize: 16),
+                                        style: const TextStyle(color: Colors.black, fontSize: 16),
                                       ),
-                                      subtitle: Text(columns[index]['type'], style: TextStyle(color: Colors.black, fontSize: 14)),
+                                      subtitle: Text(columns[index]['type'], style: const TextStyle(color: Colors.black, fontSize: 14)),
                                     );
                                   },
                                 ),

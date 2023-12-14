@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:habit_planet/pages/video/dvr_close_button.dart';
-import 'package:habit_planet/service/media_service.dart';
 import 'package:habit_planet/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';

@@ -138,7 +138,7 @@ class _AnimatedVortexState extends State<AnimatedVortex> with TickerProviderStat
           inclination: inclinationAnimation.value,
           eccentricity: eccentricityAnimation.value,
           wobble: wobbleAnimation.value,
-          key: ValueKey("custom_circular_indicator"),
+          key: const ValueKey("custom_circular_indicator"),
         ),
       ),
     );

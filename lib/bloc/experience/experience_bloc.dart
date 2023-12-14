@@ -1,5 +1,4 @@
 import 'package:habit_planet/data/repositories/experience_repository.dart';
-import 'package:habit_planet/main.dart';
 
 import 'experience.dart';
 

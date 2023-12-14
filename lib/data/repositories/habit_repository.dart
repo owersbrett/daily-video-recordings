@@ -58,8 +58,8 @@ class HabitRepository implements IHabitRepository {
   Future<Map<int, HabitEntity>> getHabitEntities(int userId, [DateTime? startingRange, DateTime? endingRange]) async {
     Map<int, HabitEntity> habitEntityMap = {};
     DateTime now = DateTime.now();
-    DateTime weekAgo = now.subtract(Duration(days: 7));
-    DateTime weekAhead = now.add(Duration(days: 7));
+    DateTime weekAgo = now.subtract(const Duration(days: 7));
+    DateTime weekAhead = now.add(const Duration(days: 7));
 
     StringBuffer buffer = StringBuffer();
     buffer.write("SELECT ");

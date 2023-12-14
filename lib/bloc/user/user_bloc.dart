@@ -70,12 +70,13 @@ class UserBloc extends HydratedBloc<UserEvent, UserState> {
 
   @override
   UserState? fromJson(Map<String, dynamic> json) {
-    return UserLoaded(User.fromMap(json), [], json["hasSeenSplashPage"]);
+    return UserLoaded(User.fromMap(json), const [], json["hasSeenSplashPage"]);
   }
 
   @override
   Map<String, dynamic>? toJson(UserState state) {
     Map<String, dynamic> map = state.user.toMap();
     map["hasSeenSplashPage"] = state.hasSeenSplashPage;
+    return null;
   }
 }

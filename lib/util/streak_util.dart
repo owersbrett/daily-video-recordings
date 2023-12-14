@@ -1,12 +1,9 @@
-import 'package:habit_planet/bloc/experience/experience.dart';
 import 'package:habit_planet/main.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../data/frequency_type.dart';
 import '../data/habit.dart';
 import '../data/habit_entry.dart';
 import '../data/repositories/habit_entry_repository.dart';
-import 'date_util.dart';
 
 class StreakUtil {
   static Future<int> getStreakFromHabit(IHabitEntryRepository repo, Habit habit, DateTime date) async {

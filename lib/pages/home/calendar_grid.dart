@@ -3,19 +3,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:habit_planet/bloc/experience/experience.dart';
-import 'package:habit_planet/data/habit_entity.dart';
 import 'package:habit_planet/data/habit_entry.dart';
-import 'package:habit_planet/data/repositories/habit_repository.dart';
 import 'package:habit_planet/pages/home/animated_indicator.dart';
 import 'package:habit_planet/service/analytics_service.dart';
-import 'package:habit_planet/service/database_service.dart';
 import 'package:habit_planet/util/color_util.dart';
 import 'package:habit_planet/widgets/my_grid.dart';
 
 import '../../data/habit.dart';
-import '../../data/repositories/habit_entry_repository.dart';
 import '../../util/date_util.dart';
-import '../../util/habit_entry_util.dart';
 
 class CalendarGrid extends StatefulWidget {
   final DateTime startDate;
@@ -112,65 +107,62 @@ class _CalendarGridState extends State<CalendarGrid> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 24.0, right: 24, top: 16, bottom: 32),
-                child: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      MyGrid(gridItems: convertData(data.data!, widget.habits[i])),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        children: [
-                          Material(
-                            elevation: 10,
-                            borderRadius: BorderRadius.circular(10),
-                            color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(1),
-                            shadowColor: ColorUtil.getShadowOfHex(widget.habits[i].hexColor).withOpacity(.5),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Total",
-                                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Text(
-                                    widget.habits[i].emoji + " " + streakCounter.toString(),
-                                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MyGrid(gridItems: convertData(data.data!, widget.habits[i])),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        Material(
+                          elevation: 10,
+                          borderRadius: BorderRadius.circular(10),
+                          color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(1),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Total",
+                                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                                Text(
+                                  "${widget.habits[i].emoji} $streakCounter",
+                                  style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Material(
-                            elevation: 10,
-                            borderRadius: BorderRadius.circular(10),
-                            color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(1),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Streak " + widget.habits[i].streakEmoji + " " + longestStreakList.length.toString(),
-                                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Material(
+                          elevation: 10,
+                          borderRadius: BorderRadius.circular(10),
+                          color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(1),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Streak ${widget.habits[i].streakEmoji} ${longestStreakList.length}",
+                                  style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             );
@@ -197,9 +189,9 @@ class _CalendarGridState extends State<CalendarGrid> {
                 moveCalendarByMonth(-1);
               });
             },
-            child: Icon(Icons.arrow_circle_left_rounded),
+            child: const Icon(Icons.arrow_circle_left_rounded),
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
           FloatingActionButton(
@@ -207,7 +199,7 @@ class _CalendarGridState extends State<CalendarGrid> {
             onPressed: () {
               moveCalendarByMonth(1);
             },
-            child: Icon(Icons.arrow_circle_right_rounded),
+            child: const Icon(Icons.arrow_circle_right_rounded),
           ),
         ],
       ),
@@ -226,15 +218,16 @@ class _CalendarGridState extends State<CalendarGrid> {
               children: [
                 for (var i = 0; i < widget.habits.length; i++)
                   Padding(
+                    key: ValueKey("Habit ${widget.habits[i].id}"),
                     padding: const EdgeInsets.all(8.0),
                     child: Material(
-                      color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(.5),
+                      color: ColorUtil.getColorFromHex(widget.habits[i].hexColor).withOpacity(1),
                       borderRadius: BorderRadius.circular(25),
                       elevation: 15,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 16,
                           ),
                           Padding(
@@ -250,7 +243,7 @@ class _CalendarGridState extends State<CalendarGrid> {
                                       padding: const EdgeInsets.only(left: 16.0, right: 16, top: 8, bottom: 8),
                                       child: Text(
                                         widget.habits[i].stringValue,
-                                        style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+                                        style: const TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -290,17 +283,17 @@ class _CalendarGridState extends State<CalendarGrid> {
     int i = 0;
     for (var entry in list) {
       if (i < 7) {
-        rowOne.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
+        rowOne.add("${entry.createDate.day} ${entry.booleanValue}");
       } else if (i < 14) {
-        rowTwo.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
+        rowTwo.add("${entry.createDate.day} ${entry.booleanValue}");
       } else if (i < 21) {
-        rowThree.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
+        rowThree.add("${entry.createDate.day} ${entry.booleanValue}");
       } else if (i < 28) {
-        rowFour.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
+        rowFour.add("${entry.createDate.day} ${entry.booleanValue}");
       } else if (i < 35) {
-        rowFive.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
+        rowFive.add("${entry.createDate.day} ${entry.booleanValue}");
       } else if (i <= CalendarGrid.daysCount) {
-        rowSix.add(entry.createDate.day.toString() + " " + entry.booleanValue.toString());
+        rowSix.add("${entry.createDate.day} ${entry.booleanValue}");
       }
       i++;
     }
@@ -310,7 +303,7 @@ class _CalendarGridState extends State<CalendarGrid> {
 
 class DataCell extends StatelessWidget {
   final String value;
-  DataCell({required this.value});
+  const DataCell({super.key, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -320,8 +313,8 @@ class DataCell extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          '$value', // Display day number
-          style: TextStyle(fontSize: 24),
+          value, // Display day number
+          style: const TextStyle(fontSize: 24),
         ),
       ),
     );
@@ -332,7 +325,7 @@ class DayCell extends StatelessWidget {
   final HabitEntry habitEntry;
   final Habit habit;
 
-  DayCell({required this.habitEntry, required this.habit});
+  const DayCell({super.key, required this.habitEntry, required this.habit});
 
   @override
   Widget build(BuildContext context) {
@@ -342,8 +335,8 @@ class DayCell extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          '${habit.emoji}', // Display day number
-          style: TextStyle(fontSize: 24),
+          habit.emoji, // Display day number
+          style: const TextStyle(fontSize: 24),
         ),
       ),
     );

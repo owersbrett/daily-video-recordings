@@ -1,4 +1,3 @@
-import 'package:habit_planet/main.dart';
 import 'package:habit_planet/service/admin_service.dart';
 import 'package:equatable/equatable.dart';
 
@@ -46,17 +45,21 @@ class ExperienceState extends Equatable {
         }
       });
 
-  String getCurrentLevel() {
+  int getCurrentLevel() {
     int level = 0;
     int points = sumOfAllExperience();
     for (var i = 0; i < levels.length; i++) {
       if (points >= levels[i].pointsToUnlock) {
         level = levels[i].id;
       } else {
-        return 1.toString();
+        return 1;
       }
     }
-    return level.toString();
+    return level;
+  }
+
+  String getCurrentLevelString() {
+    return getCurrentLevel().toString();
   }
 
   int currentLevelsPointsToUnlock() {
@@ -83,18 +86,18 @@ class ExperienceState extends Equatable {
 
   double percentageToNextLevel() {
     int allExp = sumOfAllExperience();
-    int _currentLevel = currentLevel();
-    int sumOfLevelsToLevel = sumOfLevelToLevel(_currentLevel);
+    int currentLevel = _currentLevel();
+    int sumOfLevelsToLevel = sumOfLevelToLevel(currentLevel);
     if (allExp + currentLevelsPointsToUnlock() == sumOfLevelsToLevel) {
       return 0;
     }
-    int numerator = (allExp - sumOfLevelToLevel(_currentLevel - 1));
-    int denominator = sumOfLevelsToLevel - sumOfLevelToLevel(_currentLevel - 1);
+    int numerator = (allExp - sumOfLevelToLevel(currentLevel - 1));
+    int denominator = sumOfLevelsToLevel - sumOfLevelToLevel(currentLevel - 1);
     double percentage = numerator / denominator;
     return percentage;
   }
 
-  int currentLevel() {
+  int _currentLevel() {
     int level = 0;
     int points = sumOfAllExperience();
     int pointCounter = 0;

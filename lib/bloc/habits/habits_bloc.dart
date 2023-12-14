@@ -33,11 +33,9 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       DateTime now = event.currentDate;
       List<DateTime> interval = getInterval(now);
       Map<int, HabitEntity> habitEntities = await _getHabitEntries(event.userId, interval[0], interval[1]);
-      var x = await habitEntryRepository.createHabitEntriesForDate(now);
+      await habitEntryRepository.createHabitEntriesForDate(now);
 
       habitEntities = await _getHabitEntries(event.userId, interval[0], interval[1]);
-      print(x);
-      print(habitEntities);
       emit(HabitsLoaded(habitEntities, event.currentDate));
     } catch (e) {
       log(e.toString());
@@ -72,7 +70,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
           // await habitEntryRepository.createForTodayIfDoesntExistBetweenStartDateAndEndDate(t, beginningOfSixDaysAgo, endOfSixDaysFromNow);
           break;
         default:
-          log("FrequencyType not implemented: " + habit.frequencyType.toString());
+          log("FrequencyType not implemented: ${habit.frequencyType}");
       }
     }
   }
@@ -92,7 +90,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       emit(HabitsLoaded(habitEntities, state.currentDate));
       event.onClose?.call();
     } catch (e) {
-      Logger.root.severe("Error adding habits: " + e.toString());
+      Logger.root.severe("Error adding habits: $e");
     }
   }
 
@@ -107,7 +105,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
 
       emit(HabitsLoaded(habitEntities, state.currentDate));
     } else {
-      Logger.root.severe("Error adding habit: " + event.habit.toString());
+      Logger.root.severe("Error adding habit: ${event.habit}");
     }
   }
 
@@ -118,7 +116,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       await validateHabitEntries(event.habit, habitEntities);
       emit(HabitsLoaded(habitEntities, state.currentDate));
     } else {
-      Logger.root.severe("Error updating habit: " + event.habit.toString());
+      Logger.root.severe("Error updating habit: ${event.habit}");
     }
   }
 
@@ -139,7 +137,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       habits = await _getHabitEntries(event.userId, intervals[0], intervals[1]);
       emit(HabitsLoaded(habits, state.currentDate));
     } else {
-      Logger.root.severe("Error deleting habit: " + event.habit.toString());
+      Logger.root.severe("Error deleting habit: ${event.habit}");
     }
   }
 
@@ -160,7 +158,7 @@ class HabitsBloc extends Bloc<HabitsEvent, HabitsState> {
       }
       emit(HabitsLoaded(habitEntities, state.currentDate));
     } else {
-      Logger.root.severe("Error updating habit entry: " + event.habitEntry.toString());
+      Logger.root.severe("Error updating habit entry: ${event.habitEntry}");
     }
   }
 }

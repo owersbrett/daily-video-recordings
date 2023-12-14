@@ -3,7 +3,6 @@ import 'package:habit_planet/data/habit_entity.dart';
 import 'package:habit_planet/data/habit_entry.dart';
 import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
 import 'package:habit_planet/pages/home/animated_indicator.dart';
-import 'package:habit_planet/pages/home/custom_circular_indicator_v2.dart';
 import 'package:habit_planet/pages/video/loading_page.dart';
 import 'package:habit_planet/widgets/habit_entry_card.dart';
 import 'package:flutter/material.dart';
@@ -109,29 +108,27 @@ class WeekAndHabitsScrollView extends StatelessWidget {
       ];
     }
     List<Widget> entries = todaysHabitEntries
-        .map((e) => Container(
-              child: GestureDetector(
-                key: Key("${e.habitId}:${e.id}"),
-                onTap: () {
-                  if (habitsState.getHabit(e.habitId) != null) {
-                    HapticFeedback.lightImpact();
-                    Navigation.createRoute(
-                        UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);
-                  }
-                },
-                child: HabitEntryCard(
-                  habit: habitsMap[e.habitId] ?? Habit.empty(),
-                  habitEntry: e,
-                  currentListDate: currentDay,
-                ),
-              ),
-            ))
+        .map((e) => GestureDetector(
+          key: Key("${e.habitId}:${e.id}"),
+          onTap: () {
+            if (habitsState.getHabit(e.habitId) != null) {
+              HapticFeedback.lightImpact();
+              Navigation.createRoute(
+                  UpdateHabitPage(dateToAddHabit: habitsState.currentDate, habit: habitsState.getHabit(e.habitId)!), context);
+            }
+          },
+          child: HabitEntryCard(
+            habit: habitsMap[e.habitId] ?? Habit.empty(),
+            habitEntry: e,
+            currentListDate: currentDay,
+          ),
+        ))
         .toList();
-    entries.add(Container(
+    entries.add(GestureDetector(
       child: AnimatedVortex(
         onTap: () {
           HapticFeedback.heavyImpact();
-
+    
           Navigation.createRoute(CreateHabitPage(dateToAddHabit: habitsState.currentDate), context);
         },
       ),

@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:habit_planet/theme/theme.dart';
 
 class MyGrid extends StatelessWidget {
@@ -22,20 +20,20 @@ class MyGrid extends StatelessWidget {
                             border: Border.all(width: 1),
                             color: darkEmerald,
                           ),
+                          width: 40,
+                          height: 40,
                           child: Center(
                             child: Text(split.first),
                           ),
-                          width: 40,
-                          height: 40,
                         );
                       } else {
                         return Container(
                           decoration: BoxDecoration(border: Border.all(width: 1), color: Colors.white),
+                          width: 40,
+                          height: 40,
                           child: Center(
                             child: Text(split.first),
                           ),
-                          width: 40,
-                          height: 40,
                         );
                       }
                     }).toList(),

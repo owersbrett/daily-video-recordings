@@ -36,17 +36,17 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
 
   bool hasCompletedHabit = false;
   bool hasFocusedOnFrequency = false;
-  TextEditingController _colorTextEdittingController = TextEditingController();
+  final TextEditingController _colorTextEdittingController = TextEditingController();
   bool hasFocusedOnColor = false;
   Habit habit = Habit.empty(ColorUtil.randomColor());
   bool get complete => progress == 100;
   int get progress {
-    int _progress = 0;
-    if (habit.stringValue.isNotEmpty) _progress += 35;
-    if (habit.hexColor.isNotEmpty) _progress += 35;
-    if (habit.emoji.isNotEmpty) _progress += 30;
+    int progress = 0;
+    if (habit.stringValue.isNotEmpty) progress += 35;
+    if (habit.hexColor.isNotEmpty) progress += 35;
+    if (habit.emoji.isNotEmpty) progress += 30;
 
-    return _progress;
+    return progress;
   }
 
   Widget formField() {
@@ -188,7 +188,7 @@ class _CreateHabitPageState extends State<CreateHabitPage> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.save,
                     color: Colors.white,
                   )),

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:habit_planet/main.dart';
 
 import '../util/date_util.dart';
 import 'habit.dart';
@@ -32,7 +31,6 @@ class HabitEntity extends Equatable {
     previousEntries.sort((a, b) => b.createDate.compareTo(a.createDate));
     DateTime initialDate = fromDate;
     List<HabitEntry> consecutiveEntries = [];
-    int i = 1;
     for (var entry in previousEntries) {
       if ((DateUtil.isConsecutiveDays(initialDate, entry.createDate) || DateUtil.isSameDay(initialDate, entry.createDate)) && entry.booleanValue) {
         if (DateUtil.isSameDay(initialDate, entry.createDate)) {

@@ -6,7 +6,6 @@ import 'package:habit_planet/main.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/experience/experience.dart';
-import '../data/frequency_type.dart';
 import '../data/habit.dart';
 import '../data/repositories/experience_repository.dart';
 

@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
@@ -13,10 +12,8 @@ import 'package:habit_planet/data/db.dart';
 import 'package:habit_planet/navigation/navigation.dart';
 import 'package:habit_planet/pages/create_habit/create_a_habit.dart';
 import 'package:habit_planet/pages/home/home_page_bottom.dart';
-import 'package:habit_planet/pages/home/now_data.dart';
 import 'package:habit_planet/pages/home/week_and_habits_scroll_view.dart';
 import 'package:habit_planet/pages/video/record_video_page.dart';
-import 'package:habit_planet/widgets/level_up_overlay.dart';
 
 import '../../bloc/experience/experience.dart';
 import '../../bloc/habits/habits.dart';
@@ -91,12 +88,12 @@ class _HomePageState extends State<HomePage> {
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.white.withOpacity(1), // Shadow color
-                                      offset: Offset(-2, 2),
+                                      offset: const Offset(-2, 2),
                                       blurRadius: 6, // Shadow blur radius
                                       spreadRadius: -3, // Negative spread radius to create inset effect
                                     ),
                                     BoxShadow(
-                                      offset: Offset(1, 1),
+                                      offset: const Offset(1, 1),
                                       color: Colors.black.withOpacity(0.2), // Shadow color
 
                                       blurRadius: 6, // Shadow blur radius
@@ -115,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                                 showCreateDropdown = !showCreateDropdown;
                               });
                             },
-                            child: Tooltip(
+                            child: const Tooltip(
                               message: TooltipText.clickAdd,
                               child: Icon(Icons.add_circle),
                             ),

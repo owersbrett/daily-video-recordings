@@ -3,7 +3,6 @@ import 'package:habit_planet/data/habit_entity.dart';
 
 import '../../data/habit.dart';
 import '../../data/habit_entry.dart';
-import '../../util/date_util.dart';
 
 abstract class ReportsState implements Equatable {
   Map<int, List<HabitEntry>> get weekOfHabitEntries => {};

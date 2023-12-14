@@ -1,20 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:habit_planet/bloc/habits/habits.dart';
-import 'package:habit_planet/pages/home/custom_circular_indicator_v2.dart';
-import 'package:habit_planet/pages/home/orbital_indicator.dart';
-import 'package:habit_planet/service/admin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:habit_planet/widgets/today_is_widget.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../bloc/user/user.dart';
-import '../navigation/navigation.dart';
-import '../service/database_service.dart';
 import '../tooltip_text.dart';
 import '../util/date_util.dart';
-import 'sql_editor.dart';
 
 class DailyAppBar extends StatefulWidget {
   const DailyAppBar({super.key, required this.icon, required this.currentDate});
@@ -50,14 +43,14 @@ class _DailyAppBarState extends State<DailyAppBar> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
+                          SizedBox(
                             height: 300,
                             child: CupertinoDatePicker(
                               mode: CupertinoDatePickerMode.date,
                               initialDateTime: currentDay,
                               onDateTimeChanged: (DateTime newDate) {
                                 setState(() {
-                                  currentDay = newDate.add(Duration(hours: 1));
+                                  currentDay = newDate.add(const Duration(hours: 1));
                                 });
                               },
                             ),
@@ -65,7 +58,7 @@ class _DailyAppBarState extends State<DailyAppBar> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Container(
+                              SizedBox(
                                 height: 100,
                                 child: CupertinoButton(
                                   onPressed: () {
@@ -82,7 +75,7 @@ class _DailyAppBarState extends State<DailyAppBar> {
                                   ),
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 100,
                                 child: CupertinoButton(
                                   onPressed: () {
@@ -149,7 +142,7 @@ class _DailyAppBarState extends State<DailyAppBar> {
                   HapticFeedback.mediumImpact();
                   BlocProvider.of<UserBloc>(context).add(SplashPageRequested());
                 },
-                child: Icon(Icons.mood_rounded),
+                child: const Icon(Icons.mood_rounded),
               ),
             ),
             Expanded(

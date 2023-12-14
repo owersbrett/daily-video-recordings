@@ -132,7 +132,7 @@ class Experience {
       points: habitEntry.integerValue ?? (habitEntry.booleanValue ? 25 : 0),
       createdAt: habitEntry.createDate,
       updatedAt: habitEntry.updateDate,
-      description: habit.stringValue + " " + habitEntry.integerValue.toString() + " " + habit.suffix,
+      description: "${habit.stringValue} ${habitEntry.integerValue} ${habit.suffix}",
       domainId: 0,
     );
   }

@@ -4,7 +4,7 @@ class Navigation {
   static Future<Future<T?>> createRoute<T>(Widget destination, BuildContext context,
       [AnimationEnum animationEnum = AnimationEnum.fromRight, Object payload = true]) async {
     PageRouteBuilder<T> pageRoute;
-    Widget _safeArea(Widget child) => Container(
+    Widget safeArea(Widget child) => Container(
           color: const Color(0xFF0C2838),
           child: child,
         );
@@ -24,7 +24,7 @@ class Navigation {
 
             return FadeTransition(
               opacity: animation.drive(tween),
-              child: _safeArea(child),
+              child: safeArea(child),
             );
           },
         );
@@ -44,7 +44,7 @@ class Navigation {
 
             return SlideTransition(
               position: animation.drive(tween),
-              child: _safeArea(child),
+              child: safeArea(child),
             );
           },
         );
@@ -65,7 +65,7 @@ class Navigation {
 
             return SlideTransition(
               position: animation.drive(tween),
-              child: _safeArea(child),
+              child: safeArea(child),
             );
           },
         );
@@ -85,7 +85,7 @@ class Navigation {
 
             return SlideTransition(
               position: animation.drive(tween),
-              child: _safeArea(child),
+              child: safeArea(child),
             );
           },
         );
@@ -106,7 +106,7 @@ class Navigation {
 
           return FadeTransition(
             opacity: animation.drive(tween),
-            child: _safeArea(child),
+            child: safeArea(child),
           );
         },
       );

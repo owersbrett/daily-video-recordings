@@ -9,10 +9,7 @@ import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
 import '../data/habit.dart';
 import '../data/habit_entity.dart';
 import '../data/habit_entry.dart';
-import '../main.dart';
-import '../util/date_util.dart';
 import 'stylized_checkbox.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 
 class HabitEntryCard extends StatefulWidget {
   const HabitEntryCard({super.key, required this.habit, required this.habitEntry, required this.currentListDate});
@@ -33,11 +30,10 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
   bool noteExpanded = false;
   bool get _completed => widget.habitEntry.booleanValue;
 
-  void _onCheck(bool? value) async {
+  void _onCheck(bool? value) {
     HapticFeedback.mediumImpact();
     DateTime now = DateTime.now();
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
-    DateTime startOfDay = DateTime(now.year, now.month, now.day, 0, 0, 0);
     if (widget.currentListDate.isAfter(endOfDay)) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("You're a liar, that's in the future."),
@@ -54,9 +50,11 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
       if (!widget.habitEntry.booleanValue) {
         audioPlayer.setPlayerMode(PlayerMode.lowLatency);
         audioPlayer.setVolume(0.2);
-        if (!(await isAudioPlaying.isAudioPlaying() ?? true)) {
-          audioPlayer.play(AssetSource("audio/shimmer.wav"), volume: .02);
-        }
+        isAudioPlaying.isAudioPlaying().then((audioPlaying) {
+          if (audioPlaying ?? false) {
+            audioPlayer.play(AssetSource("audio/shimmer.wav"), volume: .02);
+          }
+        });
       }
       BlocProvider.of<HabitsBloc>(context).add(UpdateHabitEntry(habit, widget.habitEntry.copyWith(booleanValue: !widget.habitEntry.booleanValue),
           BlocProvider.of<ExperienceBloc>(context), widget.currentListDate));
@@ -82,73 +80,71 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
       child: Material(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
-            child: Material(
-              borderRadius: BorderRadius.circular(10),
-              elevation: 5,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.black.withOpacity(.5), width: 2),
-                  gradient: LinearGradient(
-                    colors: [
-                      HexColor.fromHex(habit.hexColor).withOpacity(.5),
-                      HexColor.fromHex(habit.hexColor).withOpacity(.3),
-                    ],
-                    stops: [_completed ? .5 : 0.5, gradientStop],
-                    begin: Alignment.topLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 24,
-                                  ),
-                                  _titleRow(),
-                                  const SizedBox(
-                                    height: 24,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16, top: 16, bottom: 16),
-                              child: StylizedCheckbox(
-                                key: Key(habit.stringValue),
-                                isChecked: _completed,
-                                color: HexColor.fromHex(habit.hexColor),
-                                onTap: () => _onCheck(_completed),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    BlocBuilder<HabitsBloc, HabitsState>(
-                      builder: (context, state) {
-                        return streakRow(state.habitMap[habit.id]);
-                      },
-                    ),
-                    Positioned(
-                        left: 8,
-                        bottom: 8,
-                        child: Text(
-                          habit.frequencyType.toUiString(),
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
-                        )),
+          child: Material(
+            borderRadius: BorderRadius.circular(10),
+            elevation: 5,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.black.withOpacity(.5), width: 2),
+                gradient: LinearGradient(
+                  colors: [
+                    HexColor.fromHex(habit.hexColor).withOpacity(.5),
+                    HexColor.fromHex(habit.hexColor).withOpacity(.3),
                   ],
+                  stops: [_completed ? .5 : 0.5, gradientStop],
+                  begin: Alignment.topLeft,
+                  end: Alignment.centerRight,
                 ),
+              ),
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                                _titleRow(),
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16, top: 16, bottom: 16),
+                            child: StylizedCheckbox(
+                              key: Key(habit.stringValue),
+                              isChecked: _completed,
+                              color: HexColor.fromHex(habit.hexColor),
+                              onTap: () => _onCheck(_completed),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  BlocBuilder<HabitsBloc, HabitsState>(
+                    builder: (context, state) {
+                      return streakRow(state.habitMap[habit.id]);
+                    },
+                  ),
+                  Positioned(
+                      left: 8,
+                      bottom: 8,
+                      child: Text(
+                        habit.frequencyType.toUiString(),
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black),
+                      )),
+                ],
               ),
             ),
           ),
@@ -174,7 +170,7 @@ class _HabitEntryCardState extends State<HabitEntryCard> {
                   if (snapshot.hasData) {
                     return Text(((snapshot.data ?? 0)).toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
                   } else {
-                    return Text(_completed ? "1" : "0", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
+                    return Text(_completed ? "1" : "0", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold));
                   }
                 },
               ),

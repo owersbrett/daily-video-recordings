@@ -1,11 +1,8 @@
-import 'dart:ffi' as ffi;
 
 import 'package:flutter/material.dart';
 
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:habit_planet/theme/theme.dart';
-import 'package:habit_planet/util/color_util.dart';
 
 import 'orbital_state.dart';
 
@@ -18,7 +15,7 @@ class OrbitalIndicator extends StatefulWidget {
 
   bool get fullScreen => size.width > 300;
 
-  OrbitalIndicator(
+  const OrbitalIndicator(
       {required this.progress,
       required this.size,
       required this.totalTicks,

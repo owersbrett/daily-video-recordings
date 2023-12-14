@@ -36,9 +36,9 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
   bool _completed = false;
 
   bool get checked {
-    bool _checked = false;
+    bool checked = false;
 
-    return _checked;
+    return checked;
   }
 
   void _onCheck(bool? value) {
@@ -92,7 +92,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
                             : CustomProgressIndicator(
                                 size: ProgressIndicatorSize.medium,
                                 value: widget.progress.toDouble(),
-                                label: widget.progress.toStringAsPrecision(3) + "%",
+                                label: "${widget.progress.toStringAsPrecision(3)}%",
                               ),
                       ),
                     ],
@@ -102,7 +102,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
               Positioned(
                 top: 0,
                 left: 8,
-                child: Text(widget.streakEmoji + "365", style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold)),
+                child: Text("${widget.streakEmoji}365", style: const TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold)),
               ),
               Positioned(
                   left: 8,
@@ -144,7 +144,7 @@ class _DisplayHabitCardState extends State<DisplayHabitCard> {
           child: habitString.isEmpty
               ? TypewriterWidget(
                   textList: AdminService.get50Habits(0, true).map((e) => e.stringValue).toList(),
-                  typingSpeed: Duration(milliseconds: 100),
+                  typingSpeed: const Duration(milliseconds: 100),
                 )
               : Text(
                   habitString,

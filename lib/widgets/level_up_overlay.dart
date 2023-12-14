@@ -19,7 +19,7 @@ class _LevelUpOverlayState extends State<LevelUpOverlay> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: Duration(seconds: 3))
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 3))
       ..addListener(() {
         setState(() {});
       })
@@ -94,7 +94,7 @@ class _EmojiRain extends StatelessWidget {
             opacity: 1 - animation.value, // Clamp opacity between 0 and 1
             child: Text(
               emoji,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 30,
                 decoration: TextDecoration.none, // Ensure no underline
               ),

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:habit_planet/pages/home/custom_circular_indicator_v2.dart';
 import 'package:habit_planet/pages/home/now_data.dart';
 import 'package:habit_planet/pages/home/orbital_indicator.dart';
 import 'package:habit_planet/pages/home/orbital_page.dart';
-import 'package:habit_planet/pages/home/orbital_state.dart';
-import 'package:habit_planet/widgets/custom_circular_indicator.dart';
 import '../../bloc/experience/experience.dart';
-import '../../bloc/habits/habits.dart';
 import '../../data/repositories/habit_entry_repository.dart';
 import '../../navigation/navigation.dart';
 
@@ -53,8 +49,6 @@ class _HabitPlanetState extends State<HabitPlanet> {
                 denominator = 1;
               }
             }
-
-            print("ME");
             return OrbitalIndicator(
               currentTicks: numerator,
               progress: percentageToNextLevel,
@@ -77,7 +71,7 @@ class _HabitPlanetState extends State<HabitPlanet> {
   Widget build(BuildContext context) {
     return BlocBuilder<ExperienceBloc, ExperienceState>(
       builder: (context, state) {
-        var level = state.currentLevel();
+        var level = state.getCurrentLevel();
         var percentageToNextLevel = state.percentageToNextLevel();
         return Container(
           padding: const EdgeInsets.all(10), // Add padding if needed
@@ -113,7 +107,7 @@ class _HabitPlanetState extends State<HabitPlanet> {
                   onTap: () {
                     Navigation.createRoute(orbitalIndicatorPage(percentageToNextLevel, level), context, AnimationEnum.fadeIn);
                   },
-                  child: hero(percentageToNextLevel, Size(300, 300), level),
+                  child: hero(percentageToNextLevel, const Size(300, 300), level),
                 ),
                 const SizedBox(height: 8),
                 const Column(

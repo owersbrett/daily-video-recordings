@@ -40,12 +40,12 @@ class _UpdateHabitPageState extends State<UpdateHabitPage> {
   Habit habit = Habit.empty();
   bool get complete => progress == 100;
   int get progress {
-    int _progress = 100;
+    int progress = 100;
     if (habit.stringValue.isEmpty) {
-      _progress -= 50;
+      progress -= 50;
     }
 
-    return _progress;
+    return progress;
   }
 
   Widget formField() {

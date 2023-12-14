@@ -11,8 +11,8 @@ class HabitPageBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
-              children: days,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: days,
             ),
             Expanded(
               child: ListView(children: habits),

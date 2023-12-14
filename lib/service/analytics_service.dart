@@ -83,7 +83,7 @@ WHERE
           .toList();
       return weeklyReportRows;
     } catch (e) {
-      print("-----------------------------" + e.toString());
+      print("-----------------------------$e");
       return [];
     }
   }
@@ -160,7 +160,7 @@ ORDER BY
         }
       }
       habitEntries.forEach((key, value) {
-        print("Habit id: " + key.toString());
+        print("Habit id: $key");
         print(value.length);
       });
 

@@ -3,7 +3,6 @@
 
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:habit_planet/data/multimedia_file.dart';
 // Add this line for date formatting
 import 'package:camera/camera.dart';
@@ -53,7 +52,7 @@ class MediaService {
     String videoPath = file.path;
     log('file path: $videoPath');
 
-    String thumbnailPath = getFileDirectory(videoPath) + "/" + getFileNameWithoutExtension(videoPath) + ".jpg";
+    String thumbnailPath = "${getFileDirectory(videoPath)}/${getFileNameWithoutExtension(videoPath)}.jpg";
     log('thumbnail path: $thumbnailPath');
     await _captureThumbnail(videoPath, thumbnailPath);
   }

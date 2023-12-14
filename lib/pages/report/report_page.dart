@@ -1,13 +1,10 @@
 import 'package:habit_planet/bloc/reports/reports.dart';
-import 'package:habit_planet/pages/home/annual_report.dart';
 import 'package:habit_planet/pages/home/calendar_grid.dart';
 import 'package:habit_planet/widgets/weekly_report_grid.dart';
 import 'package:flutter/material.dart';
 import '../../bloc/habits/habits.dart';
 import '../../bloc/user/user.dart';
-import '../../data/habit_entry.dart';
 import '../../util/date_util.dart';
-import '../home/backswipe.dart';
 import '../video/dvr_close_button.dart';
 
 class ReportPage extends StatefulWidget {
@@ -32,15 +29,10 @@ class _ReportPageState extends State<ReportPage> with SingleTickerProviderStateM
   List<Widget> tabs() => [
         BlocBuilder<ReportsBloc, ReportsState>(
           builder: (context, state) {
-            Map<int, List<HabitEntry>> weekOfHabitEntries = {};
-
-            if (state is ReportsLoaded) {
-              weekOfHabitEntries = state.weekOfHabitEntries;
-            }
             return Column(
               children: [
                 Expanded(
-                  child: Container(
+                  child: SizedBox(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child: WeeklyReportGrid(
@@ -83,7 +75,7 @@ class _ReportPageState extends State<ReportPage> with SingleTickerProviderStateM
               Expanded(
                 child: TabBar(
                   controller: tabController,
-                  tabs: [
+                  tabs: const [
                     Tab(text: "Weekly"),
                     Tab(text: "Monthly"),
                     // Tab(text: "Yearly"),

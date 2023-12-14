@@ -9,18 +9,14 @@ import 'package:habit_planet/data/frequency_type.dart';
 import 'package:habit_planet/data/habit.dart';
 import 'package:habit_planet/data/habit_entry.dart';
 import 'package:habit_planet/data/repositories/habit_entry_repository.dart';
-import 'package:habit_planet/pages/home/animated_indicator.dart';
-import 'package:habit_planet/pages/video/dvr_close_button.dart';
 import 'package:habit_planet/service/analytics_service.dart';
 import 'package:habit_planet/theme/theme.dart';
 import 'package:habit_planet/util/color_util.dart';
 import 'package:habit_planet/util/date_util.dart';
 import 'package:habit_planet/widgets/custom_circular_indicator.dart';
 import 'package:habit_planet/widgets/custom_progress_indicator.dart';
-import 'package:path/path.dart';
 import 'package:to_csv/to_csv.dart' as toCsv;
 
-import '../bloc/habits/habits.dart';
 
 // Constants for UI dimensions
 const double cellHeight = 42;
@@ -42,7 +38,7 @@ class WeeklyReportGrid extends StatefulWidget {
 }
 
 class _WeeklyReportGridState extends State<WeeklyReportGrid> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   Habit? selectedHabit;
 
   Map<int, List<HabitEntry>>? habitEntries;
@@ -50,7 +46,6 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
   List<WeeklyReportRow>? weeklyReportData; // Used to track which habit is selected for the habit description
   // Using a static list for days of the week to avoid recalculating
   void tapHabit(Habit habit) {
-    print('tap habit');
     setState(() {
       if (habit.id == habit.id) {
         selectedHabit = null;
@@ -63,7 +58,7 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
   static const List<String> daysOfWeek = ['⏳', 'M', 'T', 'W', 'Th', 'F', 'S', 'Su'];
 
   // Refactored Cell widget for reuse
-  Widget _cell(String value, Color color, {bool isFirst = false, bool isHeader = false}) {
+  Widget _cell(String value, Color color, {bool isFirst = false}) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
@@ -118,7 +113,7 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
             children: [
               CustomProgressIndicator(
                 value: state.percentageToNextLevel() * 100,
-                label: "Lvl " + state.currentLevel().toString(),
+                label: "Lvl ${state.getCurrentLevelString()}",
                 textColor: Colors.black,
                 size: ProgressIndicatorSize.medium,
               ),
@@ -126,7 +121,7 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
                 height: 12,
               ),
               Text(
-                (state.percentageToNextLevel() * 100).toStringAsPrecision(2) + "%",
+                "${(state.percentageToNextLevel() * 100).toStringAsPrecision(2)}%",
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
               )
             ],
@@ -264,7 +259,7 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: RepositoryProvider.of<IHabitEntryRepository>(context).getHabitEntriesForDateInterval(
-            DateUtil.startOfDay(widget.startInterval), DateUtil.startOfDay(widget.endInterval).subtract(Duration(microseconds: 1))),
+            DateUtil.startOfDay(widget.startInterval), DateUtil.startOfDay(widget.endInterval).subtract(const Duration(microseconds: 1))),
         builder: (context, snapshot) {
           habitEntries = snapshot.data;
           if (snapshot.connectionState == ConnectionState.waiting && habitEntries == null) {
@@ -282,9 +277,9 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
                       rows.insert(0, headers);
                       toCsv.myCSV(headers, rows);
                     },
-                    child: Icon(Icons.download),
+                    child: const Icon(Icons.download),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                   FloatingActionButton(
@@ -293,9 +288,9 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
                       BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
                           widget.startInterval.subtract(const Duration(days: 7)), widget.endInterval.subtract(const Duration(days: 7))));
                     },
-                    child: Icon(Icons.arrow_circle_left_rounded),
+                    child: const Icon(Icons.arrow_circle_left_rounded),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                   FloatingActionButton(
@@ -304,7 +299,7 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
                       BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
                           widget.startInterval.add(const Duration(days: 7)), widget.endInterval.add(const Duration(days: 7))));
                     },
-                    child: Icon(Icons.arrow_circle_right_rounded),
+                    child: const Icon(Icons.arrow_circle_right_rounded),
                   ),
                 ],
               ),
@@ -315,70 +310,68 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
                     Column(
                       children: [
                         Expanded(
-                          child: Container(
-                            child: ListView.builder(
-                              controller: _scrollController,
-                              itemCount: widget.habits.length + 2,
-                              itemBuilder: (context, index) {
-                                switch (index) {
-                                  case 0:
-                                    return Padding(
-                                      key: ValueKey("Title"),
-                                      padding: const EdgeInsets.only(bottom: 16.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                              "${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
-                                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
-                                        ],
-                                      ),
-                                    );
-                                  case 1:
-                                    return Row(
-                                      key: ValueKey("Grid"),
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: widget.habits.length + 2,
+                            itemBuilder: (context, index) {
+                              switch (index) {
+                                case 0:
+                                  return Padding(
+                                    key: const ValueKey("Title"),
+                                    padding: const EdgeInsets.only(bottom: 16.0),
+                                    child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: Colors.black),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              ..._grid(snapshot.data),
-                                            ],
-                                          ),
-                                        ),
+                                        Text(
+                                            "${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
+                                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
                                       ],
-                                    );
-                                  default:
-                                    int i = index - 2;
-                                    Habit habit = widget.habits[i];
-                                    return Padding(
-                                      key: ValueKey(habit),
-                                      padding: EdgeInsets.only(
-                                          left: 16.0, top: 8, right: 16, bottom: habit == widget.habits.last ? kToolbarHeight * 1.5 : 8),
-                                      child: Material(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: ColorUtil.getColorFromHex(habit.hexColor),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8))),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Text("${habit.emoji} ${habit.stringValue}",
-                                                      style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
-                                                )),
-                                          ),
+                                    ),
+                                  );
+                                case 1:
+                                  return Row(
+                                    key: const ValueKey("Grid"),
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.black),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            ..._grid(snapshot.data),
+                                          ],
                                         ),
                                       ),
-                                    );
-                                }
-                              },
-                            ),
+                                    ],
+                                  );
+                                default:
+                                  int i = index - 2;
+                                  Habit habit = widget.habits[i];
+                                  return Padding(
+                                    key: ValueKey(habit),
+                                    padding: EdgeInsets.only(
+                                        left: 16.0, top: 8, right: 16, bottom: habit == widget.habits.last ? kToolbarHeight * 1.5 : 8),
+                                    child: Material(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: ColorUtil.getColorFromHex(habit.hexColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                              decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8))),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text("${habit.emoji} ${habit.stringValue}",
+                                                    style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                              }
+                            },
                           ),
                         ),
                       ],
@@ -399,8 +392,8 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
         .toList();
 
     return Column(
-      children: indicators,
       mainAxisSize: MainAxisSize.min,
+      children: indicators,
     );
   }
 }

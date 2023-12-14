@@ -89,7 +89,7 @@ class DateUtil {
     DateTime firstDayOfMonth = startOfMonth(date);
     DateTime sunday = firstDayOfMonth;
     while (sunday.weekday != DateTime.sunday) {
-      sunday = startOfDay(sunday.subtract(Duration(days: 1)));
+      sunday = startOfDay(sunday.subtract(const Duration(days: 1)));
     }
     return sunday;
   }
@@ -102,7 +102,7 @@ class DateUtil {
     DateTime lastDayOfMonth = endOfMonth(date);
     DateTime saturday = lastDayOfMonth;
     while (saturday.weekday != DateTime.saturday) {
-      saturday = endOfDay(saturday.add(Duration(days: 1)));
+      saturday = endOfDay(saturday.add(const Duration(days: 1)));
     }
     return saturday;
   }
@@ -130,7 +130,7 @@ class DateUtil {
   static DateTime previousMonday(DateTime currentDate) {
     DateTime previousMonday = currentDate;
     while (previousMonday.weekday != DateTime.monday) {
-      previousMonday = DateUtil.startOfDay(previousMonday.subtract(Duration(days: 1)));
+      previousMonday = DateUtil.startOfDay(previousMonday.subtract(const Duration(days: 1)));
     }
     return previousMonday;
   }
@@ -138,7 +138,7 @@ class DateUtil {
   static DateTime nextSunday(DateTime currentDate) {
     DateTime nextSunday = currentDate;
     while (nextSunday.weekday != DateTime.sunday) {
-      nextSunday = DateUtil.startOfDay(nextSunday.add(Duration(days: 1)));
+      nextSunday = DateUtil.startOfDay(nextSunday.add(const Duration(days: 1)));
     }
     return nextSunday;
   }
@@ -147,20 +147,20 @@ class DateUtil {
     // Find the first Sunday of the month or the last Sunday of the previous month
     DateTime firstSunday = DateUtil.startOfMonthsSunday(createDate);
     if (createDate.month != firstSunday.month) {
-      firstSunday = DateUtil.startOfMonthsSunday(createDate.subtract(Duration(days: 28)));
+      firstSunday = DateUtil.startOfMonthsSunday(createDate.subtract(const Duration(days: 28)));
     }
 
     // Determine the Saturday after the first Sunday
-    DateTime saturdayAfterFirstSunday = firstSunday.add(Duration(days: 6));
+    DateTime saturdayAfterFirstSunday = firstSunday.add(const Duration(days: 6));
 
     // Check if createDate is within the first week range
-    return createDate.isAfter(firstSunday.subtract(Duration(days: 1))) && createDate.isBefore(saturdayAfterFirstSunday.add(Duration(days: 1)));
+    return createDate.isAfter(firstSunday.subtract(const Duration(days: 1))) && createDate.isBefore(saturdayAfterFirstSunday.add(const Duration(days: 1)));
   }
 
   static bool secondWeekOfMonth(DateTime createDate) {
     DateTime firstMonday = DateUtil.previousMonday(createDate);
-    DateTime secondMonday = firstMonday.add(Duration(days: 7));
-    DateTime thirdMonday = secondMonday.add(Duration(days: 7));
+    DateTime secondMonday = firstMonday.add(const Duration(days: 7));
+    DateTime thirdMonday = secondMonday.add(const Duration(days: 7));
     if (createDate.isAfter(secondMonday) && createDate.isBefore(thirdMonday)) {
       return true;
     }
@@ -169,11 +169,9 @@ class DateUtil {
 
   static bool thirdWeekOfMonth(DateTime createDate) {
     DateTime firstMonday = DateUtil.previousMonday(createDate);
-    DateTime secondMonday = firstMonday.add(Duration(days: 7));
-    DateTime thirdMonday = secondMonday.add(Duration(days: 7));
-    DateTime fourthMonday = thirdMonday.add(Duration(days: 7));
-    DateTime fifthMonday = fourthMonday.add(Duration(days: 7));
-    DateTime sixthMonday = fifthMonday.add(Duration(days: 7));
+    DateTime secondMonday = firstMonday.add(const Duration(days: 7));
+    DateTime thirdMonday = secondMonday.add(const Duration(days: 7));
+    DateTime fourthMonday = thirdMonday.add(const Duration(days: 7));
     if (createDate.isAfter(thirdMonday) && createDate.isBefore(fourthMonday)) {
       return true;
     }
@@ -182,10 +180,10 @@ class DateUtil {
 
   static bool fourthWeekOfMonth(DateTime createDate) {
     DateTime firstMonday = DateUtil.previousMonday(createDate);
-    DateTime secondMonday = firstMonday.add(Duration(days: 7));
-    DateTime thirdMonday = secondMonday.add(Duration(days: 7));
-    DateTime fourthMonday = thirdMonday.add(Duration(days: 7));
-    DateTime fifthMonday = fourthMonday.add(Duration(days: 7));
+    DateTime secondMonday = firstMonday.add(const Duration(days: 7));
+    DateTime thirdMonday = secondMonday.add(const Duration(days: 7));
+    DateTime fourthMonday = thirdMonday.add(const Duration(days: 7));
+    DateTime fifthMonday = fourthMonday.add(const Duration(days: 7));
     if (createDate.isAfter(fourthMonday) && createDate.isBefore(fifthMonday)) {
       return true;
     }
@@ -194,11 +192,11 @@ class DateUtil {
 
   static bool fifthWeekOfMonth(DateTime createDate) {
     DateTime firstMonday = DateUtil.previousMonday(createDate);
-    DateTime secondMonday = firstMonday.add(Duration(days: 7));
-    DateTime thirdMonday = secondMonday.add(Duration(days: 7));
-    DateTime fourthMonday = thirdMonday.add(Duration(days: 7));
-    DateTime fifthMonday = fourthMonday.add(Duration(days: 7));
-    DateTime sixthMonday = fifthMonday.add(Duration(days: 7));
+    DateTime secondMonday = firstMonday.add(const Duration(days: 7));
+    DateTime thirdMonday = secondMonday.add(const Duration(days: 7));
+    DateTime fourthMonday = thirdMonday.add(const Duration(days: 7));
+    DateTime fifthMonday = fourthMonday.add(const Duration(days: 7));
+    DateTime sixthMonday = fifthMonday.add(const Duration(days: 7));
     if (createDate.isAfter(fifthMonday) && createDate.isBefore(sixthMonday)) {
       return true;
     }

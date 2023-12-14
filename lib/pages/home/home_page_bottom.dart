@@ -224,10 +224,8 @@ class _HomePageBottomState extends State<HomePageBottom> {
           _buildVerticalProgressBar(
               value5,
               darkGold,
-              nowData.formattedMonth(DateTime.now()) +
-                  " - " +
-                  nowData.formattedMonth(DateTime(DateTime.now().year, DateTime.now().month + 1, 1).subtract(const Duration(days: 1)))),
-          _buildVerticalProgressBar(value6, darkEmerald, nowData.formattedDate + " / 365 Days"),
+              "${nowData.formattedMonth(DateTime.now())} - ${nowData.formattedMonth(DateTime(DateTime.now().year, DateTime.now().month + 1, 1).subtract(const Duration(days: 1)))}"),
+          _buildVerticalProgressBar(value6, darkEmerald, "${nowData.formattedDate} / 365 Days"),
         ],
       ),
     );

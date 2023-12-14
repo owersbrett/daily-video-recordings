@@ -209,7 +209,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                           downloadVideo();
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       deleteIcon()
