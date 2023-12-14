@@ -42,10 +42,11 @@ class WeeklyReportGrid extends StatefulWidget {
 }
 
 class _WeeklyReportGridState extends State<WeeklyReportGrid> {
+  ScrollController _scrollController = ScrollController();
   Habit? selectedHabit;
 
   Map<int, List<HabitEntry>>? habitEntries;
-  
+
   List<WeeklyReportRow>? weeklyReportData; // Used to track which habit is selected for the habit description
   // Using a static list for days of the week to avoid recalculating
   void tapHabit(Habit habit) {
@@ -270,45 +271,121 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
             return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
-            floatingActionButton: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FloatingActionButton(
-                  heroTag: "Reports",
-                  onPressed: () {
-                    List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-                    List<List<String>> rows = habitRowsCSV(habitEntries);
-                    rows.insert(0, headers);
-                    toCsv.myCSV(headers, rows);
-                  },
-                  child: Icon(Icons.download),
+              floatingActionButton: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FloatingActionButton(
+                    heroTag: "Reports",
+                    onPressed: () {
+                      List<String> headers = ["Habit", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                      List<List<String>> rows = habitRowsCSV(habitEntries);
+                      rows.insert(0, headers);
+                      toCsv.myCSV(headers, rows);
+                    },
+                    child: Icon(Icons.download),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  FloatingActionButton(
+                    heroTag: "Left",
+                    onPressed: () {
+                      BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
+                          widget.startInterval.subtract(const Duration(days: 7)), widget.endInterval.subtract(const Duration(days: 7))));
+                    },
+                    child: Icon(Icons.arrow_circle_left_rounded),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  FloatingActionButton(
+                    heroTag: "Right",
+                    onPressed: () {
+                      BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
+                          widget.startInterval.add(const Duration(days: 7)), widget.endInterval.add(const Duration(days: 7))));
+                    },
+                    child: Icon(Icons.arrow_circle_right_rounded),
+                  ),
+                ],
+              ),
+              body: Container(
+                color: Colors.white,
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            child: ListView.builder(
+                              controller: _scrollController,
+                              itemCount: widget.habits.length + 2,
+                              itemBuilder: (context, index) {
+                                switch (index) {
+                                  case 0:
+                                    return Padding(
+                                      key: ValueKey("Title"),
+                                      padding: const EdgeInsets.only(bottom: 16.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                              "${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
+                                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
+                                        ],
+                                      ),
+                                    );
+                                  case 1:
+                                    return Row(
+                                      key: ValueKey("Grid"),
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: Colors.black),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              ..._grid(snapshot.data),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  default:
+                                    int i = index - 2;
+                                    Habit habit = widget.habits[i];
+                                    return Padding(
+                                      key: ValueKey(habit),
+                                      padding: EdgeInsets.only(
+                                          left: 16.0, top: 8, right: 16, bottom: habit == widget.habits.last ? kToolbarHeight * 1.5 : 8),
+                                      child: Material(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: ColorUtil.getColorFromHex(habit.hexColor),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8))),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text("${habit.emoji} ${habit.stringValue}",
+                                                      style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
+                                                )),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: 16,
-                ),
-                FloatingActionButton(
-                  heroTag: "Left",
-                  onPressed: () {
-                    BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
-                        widget.startInterval.subtract(const Duration(days: 7)), widget.endInterval.subtract(const Duration(days: 7))));
-                  },
-                  child: Icon(Icons.arrow_circle_left_rounded),
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                FloatingActionButton(
-                  heroTag: "Right",
-                  onPressed: () {
-                    BlocProvider.of<ReportsBloc>(context).add(FetchReports(BlocProvider.of<UserBloc>(context).state.user.id!,
-                        widget.startInterval.add(const Duration(days: 7)), widget.endInterval.add(const Duration(days: 7))));
-                  },
-                  child: Icon(Icons.arrow_circle_right_rounded),
-                ),
-              ],
-            ),
-            body: gridBody(snapshot, context),
-          );
+              ));
         });
   }
 
@@ -326,110 +403,4 @@ class _WeeklyReportGridState extends State<WeeklyReportGrid> {
       mainAxisSize: MainAxisSize.min,
     );
   }
-
-  Container gridBody(AsyncSnapshot<Map<int, List<HabitEntry>>> snapshot, BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: Container(
-                  child: ListView(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("${widget.startInterval.month}/${widget.startInterval.day} - ${widget.endInterval.month}/${widget.endInterval.day}",
-                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                            ),
-                            child: Column(
-                              children: [
-                                ..._grid(snapshot.data),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      FutureBuilder(
-                          future: RepositoryProvider.of<IAnalyticsService>(context).getWeeklyReport(DateTime.now()),
-                          builder: (context, data) {
-                            weeklyReportData = data.data;
-                            if (!data.hasData) {
-                              return AnimatedVortex(
-                                onTap: () {},
-                              );
-                            }
-                            return progressIndicators(weeklyReportData ?? []);
-                          }),
-                      SizedBox(
-                        height: kToolbarHeight / 4,
-                      ),
-                      _descriptions(snapshot.data ?? {}, context),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Widget _descriptions(Map<int, List<HabitEntry>> map, BuildContext context) {
-  // Access the HabitsBloc state only once to improve performance
-  var habitsMap = BlocProvider.of<HabitsBloc>(context).state.habitsMap;
-
-  // Using List.generate for better readability and performance
-  var children = List<Widget>.generate(habitsMap.length, (index) {
-    var habitId = habitsMap.keys.elementAt(index);
-    var habit = habitsMap[habitId];
-
-    // Guard clause for null habit (optional, based on your data guarantees)
-    if (habit == null) return SizedBox.shrink();
-
-    // Calculate entry count efficiently
-    var entryCount = map[habitId]?.length ?? 0;
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0, top: 8, right: 16, bottom: 8),
-      child: Material(
-        borderRadius: BorderRadius.circular(10),
-        color: ColorUtil.getColorFromHex(habit.hexColor),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("${habit.emoji} ${habit.stringValue}", style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
-              )),
-          ),
-        ),
-      ),
-    );
-  });
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.start,
-    mainAxisSize: MainAxisSize.min,
-    children: children,
-  );
 }
