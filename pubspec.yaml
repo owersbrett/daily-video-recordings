@@ -1,6 +1,6 @@
 name: habit_planet
 description: A new Flutter project for daily video reminders.
-version: 1.0.1+4
+version: 1.0.3+4
 publish_to: 'none' # Prevent accidental publishing to pub.dev
 
 environment:
