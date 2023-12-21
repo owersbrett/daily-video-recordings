@@ -51,7 +51,7 @@ class ExperienceState extends Equatable {
     for (var i = 0; i < levels.length; i++) {
       if (points >= levels[i].pointsToUnlock) {
         level = levels[i].id;
-      } else {
+      } else if (level == 0) {
         return 1;
       }
     }
